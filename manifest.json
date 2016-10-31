@@ -1,0 +1,30 @@
+{
+	"manifest_version": 2,
+	"name": "MFCAssistant",
+	"version": "1.0.0",
+	"minimum_chrome_version": "54.0.0.0",
+	"permissions": [
+		"activeTab"
+	],
+	"web_accessible_resources": [
+		"js/games/*.js",
+		"js/*.js",
+		"css/jquery-ui/*/images/*.png",
+		"css/jquery-ui/*/*.css",
+		"css/*.css"
+	],
+	"content_scripts": [
+		{
+			"run_at": "document_end",
+			"js": [
+				"js/content.js"
+			],
+			"matches": [
+				"http://www.myfreecams.com/*",
+				"https://www.myfreecams.com/*"
+			],
+			"all_frames": true
+		}
+	]
+}
+

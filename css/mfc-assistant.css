@@ -1,0 +1,70 @@
+/* Form styles
+ *********************************************/		
+
+.ma-dialog-body {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: center;
+} 
+ 
+.ma-dialog-body fieldset {
+	display: block;
+	width: 320px;
+	margin: 10px;
+	text-align: left;
+	box-sizing: border-box;
+	flex: flex-basis;
+}
+
+.ma-dialog-body legend,
+.ma-dialog-body label {
+	font-weight: bold;
+}
+
+.ma-dialog-body label,
+.ma-dialog-body input[type="text"],
+.ma-dialog-body select {
+	display: block;
+	width: 100%;
+	margin-top: 5px;
+}
+
+.ma-dialog-body textarea {
+	display: block;
+	width: 100%;
+	height: 50px;
+	margin-top: 5px;
+}
+
+.ma-dialog-body input[type="checkbox"],
+.ma-dialog-body input[type="radio"] {
+	margin-top: 5px;
+	margin-left: 15px;
+}
+
+.ma-dialog-body p.buttons {
+	text-align: center;
+}
+
+/* Layout
+ *********************************************/		
+#chat_contents {
+	height: auto !important;
+	top: 40px;
+	bottom: 0px;
+}
+
+.ma-buttons {
+    display: inline-block;
+    height: 35px;
+    line-height: 35px;
+    vertical-align: middle;
+    margin: 2px auto;
+    padding: 0px;
+	padding-left: 5px;
+	padding-right: 5px;
+	z-index: 99;
+}
+
