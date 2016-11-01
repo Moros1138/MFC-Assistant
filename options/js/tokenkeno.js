@@ -31,6 +31,8 @@ var MATokenKeno = (function () {
 		$('#matk-number-of-prizes').val( settings.prizes );
 		$('#matk-repost-delay').val( settings.repostDelay );
 
+		$('#mark-max-tokens').val(calcMaxTokens());
+		
 		$('body').on('keyup', '#matk-msg-text', function() {
 			updateSettings();
 		});
@@ -65,6 +67,9 @@ var MATokenKeno = (function () {
 
 		localStorage.maKenoSettings = JSON.stringify(settings);
 		
+		// re-calculate the max
+		$('#mark-max-tokens').val(calcMaxTokens());
+		
 	}
 	
 	/**
@@ -77,6 +82,25 @@ var MATokenKeno = (function () {
 		
 	}
 	
+	function calcMaxTokens() {
+		
+		if(!isNaN(settings.start) && !isNaN(settings.end) && settings.start != null && settings.end != null) {
+			
+			var total = 0;
+			
+			for(i=settings.start; i<=settings.end;i++) {
+				total += i;
+			}
+			$('#mark-max-tokens').toggleClass('btn-danger', false);
+			return total;
+			
+		}
+		
+		$('#mark-max-tokens').toggleClass('btn-danger', true);
+		return 'Error: Start or End is not a number';
+		
+	}
+
 	/* Start Keno
 	 ******************************************************/
 	function start() {
