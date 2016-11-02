@@ -74,18 +74,8 @@ var MAssistOptions = (function() {
 		$('body').on('click', 'input[name="ma-send-messages"]', function() {
 			updateSettings();
 		});
-		
-		chrome.tabs.query({currentWindow: false}, function(tabs) {
-			
-			for(var i=0; i < tabs.length; i++) {
-				if(tabs[i].url !== undefined) {
-					if(0 === tabs[i].url.indexOf('http://www.myfreecams.com')) {
-						chrome.tabs.sendMessage(tabs[i].id, {from: 'options-page', subject: 'ma:update-settings', s: settings});
-					}
-				}
-			}
-			
-		});
+
+		sendToTab({from: 'options-page', subject: 'ma:update-settings', s: settings});		
 		
 	}
 	
@@ -100,18 +90,7 @@ var MAssistOptions = (function() {
 		};
 
 		localStorage.maSettings = JSON.stringify(settings);
-
-		chrome.tabs.query({currentWindow: false}, function(tabs) {
-			
-			for(var i=0; i < tabs.length; i++) {
-				if(tabs[i].url !== undefined) {
-					if(0 === tabs[i].url.indexOf('http://www.myfreecams.com')) {
-						chrome.tabs.sendMessage(tabs[i].id, {from: 'options-page', subject: 'ma:update-settings', s: settings});
-					}
-				}
-			}
-			
-		});
+		sendToTab({from: 'options-page', subject: 'ma:update-settings', s: settings});
 		
 	}
 
@@ -221,7 +200,7 @@ var MAssistOptions = (function() {
 			}
 			
 			tipMsg += '</p>';
-			console.log('here');
+
 			$('#chatbox').append(tipMsg);
 			$("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
 			
