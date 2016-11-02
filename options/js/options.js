@@ -112,6 +112,42 @@ var MAssistOptions = (function() {
 		});
 		
 	}
+
+	/**
+	 * Show a jquery ui dialog
+	 ******************************************************************/
+	function dialog(message, title, yesCallback, noCallback) {
+		
+		$('#modal-dialog p').html(message);
+		$('#modal-dialog').dialog({
+			modal: true,
+			title: title,
+			buttons: [{
+				text: 'Yes',
+				click: yesCallback
+			},{
+				text: 'No',
+				click: noCallback
+			}],
+			autoOpen: true,
+			open: function(e,ui) {
+				
+				$('.ui-dialog').find("button").each(function() {
+					$(this).toggleClass('btn');
+
+					if($(this).html() == 'Yes') {
+						$(this).toggleClass('btn-primary');
+					}
+
+					if($(this).html() == 'No') {
+						$(this).toggleClass('btn-info');
+					}
+					
+				});
+			}
+		});
+
+	}
 	
 	/**
 	 * Listen for messages from "content"
@@ -173,17 +209,29 @@ var MAssistOptions = (function() {
 	 * This sends a message to the content script
 	 ******************************************************************/
 	function fakeTip(num) {
-		chrome.tabs.query({currentWindow: false}, function(tabs) {
-			
-			for(var i=0; i < tabs.length; i++) {
-				if(tabs[i].url !== undefined) {
-					if(0 === tabs[i].url.indexOf('http://www.myfreecams.com')) {
-						chrome.tabs.sendMessage(tabs[i].id, {from: 'options-page', subject: 'ma:fake-tip', tip_amount: num});
+
+		dialog('You are about to inject a fake tip! This is intended to be used for testing purposes and is only visible to you!<br><br>You are not actually tipping the model!', 'Fake Tip',
+			function() {
+				
+				chrome.tabs.query({currentWindow: false}, function(tabs) {
+					
+					for(var i=0; i < tabs.length; i++) {
+						if(tabs[i].url !== undefined) {
+							if(0 === tabs[i].url.indexOf('http://www.myfreecams.com')) {
+								chrome.tabs.sendMessage(tabs[i].id, {from: 'options-page', subject: 'ma:fake-tip', tip_amount: num});
+							}
+						}
 					}
-				}
+					
+				});
+				
+				$(this).dialog('close');
+			},
+			function() {
+				$(this).dialog('close');
 			}
-			
-		});
+		);
+
 	}
 
 	/**
@@ -260,7 +308,8 @@ var MAssistOptions = (function() {
 	
 	return {
 		init: init,
-		sendMsg: sendMsg
+		sendMsg: sendMsg,
+		dialog: dialog
 	};
 	
 })();

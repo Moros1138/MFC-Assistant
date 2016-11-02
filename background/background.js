@@ -4,6 +4,7 @@
  * Adapted from Adam Feuer's example
  * https://adamfeuer.com/notes/2013/01/26/chrome-extension-making-browser-action-icon-open-options-page/
  ******************************************************************/
+
 function openOrFocusOptionsPage() {
 	
 	var extensionURL = {

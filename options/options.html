@@ -15,6 +15,7 @@
 		<script src="js/options.js"></script>
 		<script src="js/tipwars.js"></script>
 		<script src="js/tokenkeno.js"></script>
+		<script src="js/saved-messages.js"></script>
 		
 		<style>
 .shortcut {
@@ -27,6 +28,52 @@
 	height: 300px;
 	overflow: hidden;
 	overflow-y: auto;
+}
+
+#saved-messages {
+	width: 100%;
+	list-style-type: none;
+	background: #eee;
+	margin: 0px;
+	padding: 10px;
+}
+
+#saved-messages .sortable {
+	width: 100%;
+	padding: 10px;
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	padding-bottom: 15px;
+	background: #eee;
+}
+
+#saved-messages .sortable li {
+	background: #dedede;
+	border: 1px solid #000;
+	text-align: center;
+	cursor: move;
+	clear: both;
+	margin-top: 5px;
+	padding: 4px;
+	box-sizing: border-box;
+}
+
+#saved-messages .sortable li .handle h3 {
+	margin: 5px;
+}
+
+#saved-messages .sortable li .edit-box {
+	margin-top: 5px;
+	box-sizing: border-box;
+}
+
+#saved-messages .sortable li .collapsed {
+	display: none;
+}
+
+.ui-dialog-titlebar-close {
+	display: none;
 }
 		</style>
 		
@@ -48,6 +95,7 @@
 					<ul class="nav navbar-nav">
 						<li><a href="#chat">Chat</a></li>
 						<li><a href="#options">Options</a></li>
+						<li><a href="#savedMsg">Saved Messages</a></li>
 						<li class="dropdown">
 							<a href="#games" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Games <span class="caret"></span></a>
 							<ul class="dropdown-menu">
@@ -77,6 +125,16 @@
 		
 		<div class="container">
 
+			<hr class="featurette-divider">
+			<div id="savedMsg" class="shortcut"></div>
+			<h2 class="sub-header">Saved Message</h2>
+			<div id="saved-messages">
+				<ul class="sortable"></ul>
+				<p style="text-align: center;">
+					<button type="button" id="add-message" class="pb-setting btn btn-sm btn-default"><span class="glyphicon glyphicon-plus">&nbsp;</span> Add Message</button><br>
+				</p>
+			</div>
+			
 			<hr class="featurette-divider">
 			<div id="options" class="shortcut"></div>
 			<h2 class="sub-header">Options</h2>
@@ -213,6 +271,10 @@
 			</fieldset>
 			
 		</div> <!-- /container -->
+		
+		<div id="modal-dialog" style="display: none;">
+			<p></p>
+		</div>
 		
 	</body>
 </html>
