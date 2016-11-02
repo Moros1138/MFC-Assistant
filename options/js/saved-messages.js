@@ -26,7 +26,36 @@ var MASavedMessages = (function () {
 		
 	}
 	
-	function updateSettings() {
+	function updateSettings(elem) {
+		
+		if(elem !== undefined) {
+			
+			// id
+			if($(elem).prop("name") == 'saved-messages-id[]') {
+				$(elem).parent().parent().parent().data('id', $(elem).val());
+			}
+			
+			// desc
+			if($(elem).prop("name") == 'saved-messages-desc[]') {
+				$(elem).parent().prev().find('h3').html($(elem).val());
+				$(elem).parent().parent().parent().data('desc', $(elem).val());
+			}
+			
+			// msg
+			if($(elem).prop("name") == 'saved-messages-msg[]') {
+				$(elem).parent().parent().parent().data('msg', $(elem).val());
+			}
+			
+			// delay
+			if($(elem).prop("name") == 'saved-messages-delay[]') {
+				if($(elem).checkNaN()) {
+					$(elem).parent().parent().parent().data('delay', 0);
+				} else {
+					$(elem).parent().parent().parent().data('delay', $(elem).val());
+				}
+			}			
+
+		}
 		
 		settings.messages = [];
 		
@@ -42,7 +71,7 @@ var MASavedMessages = (function () {
 			});
 			
 		});
-		
+
 		localStorage.maSavedMessagesSettings = JSON.stringify(settings);
 		
 	}
@@ -105,13 +134,20 @@ var MASavedMessages = (function () {
 		'<button type="button" class="btn btn-sm btn-info post-now" data-id="'+savedMsg.id+'"><span class="glyphicon glyphicon-send"></span> <span>Post Now</span></button>',
 	'</div>',
 	'<div class="edit-box">',
+		
 		'<input type="hidden" name="saved-messages-id[]" value="'+savedMsg.id+'">',
-		'<label>Message Description:</label>',
-		'<input class="form-control" type="text" name="saved-messages-desc[]" value="'+savedMsg.desc+'" placeholder="Type in a short description...">',
-		'<label>Message:</label>',
-		'<textarea class="form-control" name="saved-messages-msg[]" placeholder="Type in your saved message here...">'+savedMsg.msg+'</textarea>',
-		'<label>Delay Time (in minutes):</label>',
-		'<input class="form-control" type="text" name="saved-messages-delay[]" value="'+savedMsg.delay+'" placeholder="Type in the delay (in minutes)...">',
+		'<p>',
+			'<label>Message Description:</label>',
+			'<input class="form-control" type="text" name="saved-messages-desc[]" value="'+savedMsg.desc+'" placeholder="Type in a short description...">',
+		'</p>',
+		'<p>',
+			'<label>Message:</label>',
+			'<textarea class="form-control" name="saved-messages-msg[]" placeholder="Type in your saved message here...">'+savedMsg.msg+'</textarea>',
+		'</p>',
+		'<p>',
+			'<label>Delay Time (in minutes):</label>',
+			'<input class="form-control" type="text" name="saved-messages-delay[]" value="'+savedMsg.delay+'" placeholder="Type in the delay (in minutes)...">',
+		'</p>',
 	'</div>',
 '</li>'
 		].join(''));
@@ -192,34 +228,8 @@ var MASavedMessages = (function () {
 		 * Update the messages when keys are released
 		 ******************************************************************/
 		$('#saved-messages .sortable').on('keyup', '.edit-box input[type="text"],.edit-box textarea', function() {
-			
-			// id
-			if($(this).prop("name") == 'saved-messages-id[]') {
-				$(this).parent().parent().data('id', $(this).val());
-			}
-			
-			// desc
-			if($(this).prop("name") == 'saved-messages-desc[]') {
-				$(this).parent().prev().find('h3').html($(this).val());
-				$(this).parent().parent().data('desc', $(this).val());
-			}
-			
-			// msg
-			if($(this).prop("name") == 'saved-messages-msg[]') {
-				$(this).parent().parent().data('msg', $(this).val());
-			}
-			
-			// delay
-			if($(this).prop("name") == 'saved-messages-delay[]') {
-				if($(this).checkNaN()) {
-					$(this).parent().parent().data('delay', 0);
-				} else {
-					$(this).parent().parent().data('delay', $(this).val());
-				}
-				
-			}
-			
-			updateSettings();
+
+			updateSettings(this);
 			
 		});
 		
