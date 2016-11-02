@@ -6,7 +6,7 @@ var MANavigation = (function() {
 		'#chat',
 		'#options',
 		'#savedMsg',
-		'#tipwars',
+		'#tipwar',
 		'#tokenkeno'
 	];
 	
