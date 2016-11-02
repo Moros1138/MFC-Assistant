@@ -4,7 +4,7 @@
 	"version": "1.0.5",
 	"background": {
 		"html": [
-			"options.options.html"
+			"options/options.html"
 		],
 		"scripts": [
 			"background/background.js"
@@ -24,7 +24,6 @@
 			"all_frames": true
 		}
 	],
-	//"options_page": "options/options.html",
 	"browser_action": {
 		"default_title": "MFC Assistant"
 	},
