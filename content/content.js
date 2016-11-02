@@ -1,6 +1,4 @@
-
 if(!opener) {
-
 
 function injectJs(link) {
 	var scr = document.createElement("script");
@@ -10,7 +8,7 @@ function injectJs(link) {
 }
 
 if (0 === window.location.href.indexOf('http://www.myfreecams.com/_html/top.html')) {
-	
+
 	injectJs("content/mfc-assistant.js");
 	
 	document.body.addEventListener('ma:chat-message', function(e) {
@@ -34,7 +32,6 @@ if (0 === window.location.href.indexOf('http://www.myfreecams.com/_html/top.html
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, response) {
-
 
 	if(0 === window.location.href.indexOf('http://www.myfreecams.com/_html/top.html')) {
 
@@ -62,6 +59,5 @@ chrome.runtime.onMessage.addListener(function (request, sender, response) {
 	return true;
 		
 });
-
 
 }

@@ -1,5 +1,24 @@
+jQuery.fn.extend({
+	checkNaN: function() {
+		
+		var num = parseInt($(this).val());
+		
+		if(!isNaN(num) && num != '') {
+			
+			$(this).toggleClass('btn-danger', false);
+			
+		} else {
+			
+			$(this).toggleClass('btn-danger', true);
+			$(this).val('Error: This field needs to be a number is not a number');
 
-
+			$(this).click(function() {
+				$(this).val('');
+			});
+			
+		}
+	}
+});
 
 var MAssistOptions = (function() {
 
@@ -54,9 +73,17 @@ var MAssistOptions = (function() {
 			updateSettings();
 		});
 		
-		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-			chrome.tabs.sendMessage(tabs[0].id, {from: 'options-page', subject: 'ma:update-settings', s: settings});
-		});		
+		chrome.tabs.query({currentWindow: false}, function(tabs) {
+			
+			for(var i=0; i < tabs.length; i++) {
+				if(tabs[i].url !== undefined) {
+					if(0 === tabs[i].url.indexOf('http://www.myfreecams.com')) {
+						chrome.tabs.sendMessage(tabs[i].id, {from: 'options-page', subject: 'ma:update-settings', s: settings});
+					}
+				}
+			}
+			
+		});
 		
 	}
 	
@@ -71,9 +98,17 @@ var MAssistOptions = (function() {
 		};
 
 		localStorage.maSettings = JSON.stringify(settings);
-		
-		chrome.tabs.query({active: true, currentWindow: false}, function(tabs) {
-			chrome.tabs.sendMessage(tabs[0].id, {from: 'options-page', subject: 'ma:update-settings', s: settings});
+
+		chrome.tabs.query({currentWindow: false}, function(tabs) {
+			
+			for(var i=0; i < tabs.length; i++) {
+				if(tabs[i].url !== undefined) {
+					if(0 === tabs[i].url.indexOf('http://www.myfreecams.com')) {
+						chrome.tabs.sendMessage(tabs[i].id, {from: 'options-page', subject: 'ma:update-settings', s: settings});
+					}
+				}
+			}
+			
 		});
 		
 	}
@@ -83,6 +118,10 @@ var MAssistOptions = (function() {
 	 ******************************************************************/
 	chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 		
+		if(request.from != 'content') {
+			return;
+		}
+		
 		/**
 		 * Fire our local ma:chat-message event passing mfcMsg
 		 *
@@ -91,6 +130,8 @@ var MAssistOptions = (function() {
 		 ******************************************************************/
 		if(request.subject == 'ma:chat-message') {
 			$('body').trigger('ma:chat-message', [ request.mfcMsg ]);
+			$('#chatbox').append('<p><b>'+request.mfcMsg.Data.nm+':</b> '+filterEmotes(request.mfcMsg.Data.msg)+'</p>');
+			$("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
 		}
 		
 		/**
@@ -103,6 +144,18 @@ var MAssistOptions = (function() {
 		 ******************************************************************/
 		if(request.subject == 'ma:tip') {
 			$('body').trigger('ma:tip', [ request.mfcMsg ]);
+			
+			var tipMsg = '<p>';
+			tipMsg += '<b>'+request.mfcMsg.Data.u[2]+'</b> has tipped <b>'+request.mfcMsg.Data.m[2]+'</b> '+request.mfcMsg.Data.tokens+' tokens. ';
+			if(request.mfcMsg.Data.msg !== undefined) {
+				tipMsg += filterEmotes(request.mfcMsg.Data.msg);
+			}
+			
+			tipMsg += '</p>';
+			console.log('here');
+			$('#chatbox').append(tipMsg);
+			$("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
+			
 		}
 		
 		/**
@@ -120,8 +173,16 @@ var MAssistOptions = (function() {
 	 * This sends a message to the content script
 	 ******************************************************************/
 	function fakeTip(num) {
-		chrome.tabs.query({active: true, currentWindow: false}, function(tabs) {
-			chrome.tabs.sendMessage(tabs[0].id, {from: 'options-page', subject: 'ma:fake-tip', tip_amount: num});
+		chrome.tabs.query({currentWindow: false}, function(tabs) {
+			
+			for(var i=0; i < tabs.length; i++) {
+				if(tabs[i].url !== undefined) {
+					if(0 === tabs[i].url.indexOf('http://www.myfreecams.com')) {
+						chrome.tabs.sendMessage(tabs[i].id, {from: 'options-page', subject: 'ma:fake-tip', tip_amount: num});
+					}
+				}
+			}
+			
 		});
 	}
 
@@ -131,23 +192,69 @@ var MAssistOptions = (function() {
 	 * This sends a message to the content script
 	 ******************************************************************/
 	function sendMsg(msg) {
-		chrome.tabs.query({active: true, currentWindow: false}, function(tabs) {
-			chrome.tabs.sendMessage(tabs[0].id, {from: 'options-page', subject: 'ma:send-msg', msg: msg});
+		chrome.tabs.query({currentWindow: false}, function(tabs) {
+			
+			for(var i=0; i < tabs.length; i++) {
+				if(tabs[i].url !== undefined) {
+					if(0 === tabs[i].url.indexOf('http://www.myfreecams.com')) {
+						chrome.tabs.sendMessage(tabs[i].id, {from: 'options-page', subject: 'ma:send-msg', msg: msg});
+					}
+				}
+			}
+			
 		});
 	}
 	
+	function filterEmotes(msg) {
+
+		msg = unescape(msg);
+
+		msg = msg.replace(new RegExp('#~(.*?)~#', 'g'),'EMOTE');
+
+		return msg;
+		
+		var emotes = msg.match(/#~(.*?)~#/g);
+
+		
+		for(var i=0; i<emotes.length; i++) {
+			
+			emotes[i] = {
+				raw: emotes[i]
+			};
+			
+			
+			emotes[i].raw = emotes[i].raw.replace('#~','');
+			emotes[i].raw = emotes[i].raw.replace('~#','');
+			
+			emotes[i].stripped = emotes[i].raw.split(',');
+			emotes[i].stripped = ':'+emotes[i].stripped[2];
+			
+			msg = msg.replace(new RegExp(emotes[i].raw, 'g'), emotes[i].stripped);
+			
+		}
+
+		msg = msg.replace(/#~/g,'');
+		msg = msg.replace(/~#/g,'');
+		
+		return msg;
+		
+	}
+
 	$(document).ready(function() {
 		
 		init();
 		
-		$('#ma-fake-tip-button').click(function() {
-			fakeTip(parseInt($('#ma-fake-tip-amount').val()));
-		});
-		
-		$('#ma-send-msg-button').click(function() {
+		$('#ma-send-msg-form').submit(function(e) {
+			e.preventDefault();
 			sendMsg($('#ma-send-msg-text').val());
+			$('#ma-send-msg-text').val('');
 		});
 		
+		$('#ma-fake-tip-form').submit(function(e) {
+			e.preventDefault();
+			fakeTip(parseInt($('#ma-fake-tip-amount').val()));
+			$('#ma-fake-tip-amount').val('');
+		});
 	
 	});
 	

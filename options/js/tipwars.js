@@ -43,6 +43,10 @@ var MATipWars = (function() {
 		$('#matw-winning-amount').val( settings.winning_amount );
 		$('#matw-repost-delay').val( settings.repostDelay );
 
+		// Force errors on required number fields that don't contain numbers
+		$('#matw-winning-amount').checkNaN();
+		$('#matw-repost-delay').checkNaN();
+
 		$('body').on('keyup', '#matw-msg-text', function() {
 			updateSettings();
 		});
@@ -81,6 +85,9 @@ var MATipWars = (function() {
 		};
 		
 		localStorage.maTipWarsSettings = JSON.stringify(settings);
+		
+		$('#matw-winning-amount').checkNaN();
+		$('#matw-repost-delay').checkNaN();
 		
 	}
 

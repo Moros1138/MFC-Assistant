@@ -8,6 +8,7 @@ if (navigator.userAgent.match(/chrome/i)) {
 }
 
 var MAssist = (function() {
+
 	if(opener)
 		return;
 	
@@ -69,7 +70,7 @@ var MAssist = (function() {
 	 * https://gist.github.com/KradekMFC/a4a337ecd7b0c71f60d88d7f4becfd29
 	 ******************************************************************/
 	function ParseLine(sMessage) {
-
+		
 		if(sMessage.substring(0,2) == FCTYPE_LOGIN) {
 			document.body.dispatchEvent(new CustomEvent('ma:update-my-name', {'detail': new MFCMessage(sMessage)}));
 		}
@@ -264,6 +265,8 @@ var MAssist = (function() {
 		settings = e.detail.s;
 	}, false );
 
+	document.body.dispatchEvent(new Event('ma:get-settings'));
+	
 	return {
 		init: init,
 		sendMsg: sendMsg,

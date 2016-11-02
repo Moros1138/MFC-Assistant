@@ -33,6 +33,12 @@ var MATokenKeno = (function () {
 
 		$('#mark-max-tokens').val(calcMaxTokens());
 		
+		// Force errors on required number fields that don't contain numbers
+		$('#matk-start-number').checkNaN();
+		$('#matk-end-number').checkNaN();
+		$('#matk-number-of-prizes').checkNaN();
+		$('#matk-repost-delay').checkNaN();
+
 		$('body').on('keyup', '#matk-msg-text', function() {
 			updateSettings();
 		});
@@ -69,6 +75,12 @@ var MATokenKeno = (function () {
 		
 		// re-calculate the max
 		$('#mark-max-tokens').val(calcMaxTokens());
+		
+		// Force errors on required number fields that don't contain numbers
+		$('#matk-start-number').checkNaN();
+		$('#matk-end-number').checkNaN();
+		$('#matk-number-of-prizes').checkNaN();
+		$('#matk-repost-delay').checkNaN();
 		
 	}
 	

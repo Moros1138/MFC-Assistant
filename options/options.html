@@ -21,6 +21,13 @@
 	position: relative;
 	top: -60px;
 }
+
+#chatbox {
+	width: 100%;
+	height: 300px;
+	overflow: hidden;
+	overflow-y: auto;
+}
 		</style>
 		
 	</head>
@@ -39,11 +46,12 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
+						<li><a href="#chat">Chat</a></li>
 						<li><a href="#options">Options</a></li>
 						<li class="dropdown">
 							<a href="#games" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Games <span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<li><a href="#tipwars">Tip Wars</a></li>
+								<li><a href="#tipwars">Tip War</a></li>
 								<li><a href="#tokenkeno">Token Keno</a></li>
 							</ul>
 						</li>
@@ -68,167 +76,141 @@
 		</header>
 		
 		<div class="container">
-			
-			<hr class="featurette-divider">
 
+			<hr class="featurette-divider">
 			<div id="options" class="shortcut"></div>
-			<h2 class="sub-header">Options and Utilities</h2>
-			<div class="row">
-			
-				<div class="col-md-6">
-					<fieldset>
-						<legend>Fake Tip</legend>
-						<div class="input-group">
-							<input class="form-control" type="text" id="ma-fake-tip-amount" placeholder="Set tip amount...">
-							<span class="input-group-btn">
-								<button class="btn btn-default" id="ma-fake-tip-button">Fake Tip</button>
-							</span>
-						</div><!-- /input-group -->
-					</fieldset>
-				</div>
-				<p>&nbsp;<br></p>
-				<div class="col-md-6">
-					<fieldset>
-						<legend>Debug Mode?</legend>
-						<label class="custom-control custom-radio">
-							<input name="ma-debug-mode" type="radio" class="custom-control-input" value="yes">
-							<span class="custom-control-indicator"></span>
-							<span class="custom-control-description">Yes</span>
-						</label>
-						<label class="custom-control custom-radio">
-							<input name="ma-debug-mode" type="radio" class="custom-control-input" value="no">
-							<span class="custom-control-indicator"></span>
-							<span class="custom-control-description">No</span>
-						</label>
-					</fieldset>
-				</div>
-			
-			</div>
+			<h2 class="sub-header">Options</h2>
+			<fieldset>
+				<legend>Debug Mode?</legend>
+				<label class="custom-control custom-radio">
+					<input name="ma-debug-mode" type="radio" class="custom-control-input" value="yes">
+					<span class="custom-control-indicator"></span>
+					<span class="custom-control-description">Yes</span>
+				</label>
+				<label class="custom-control custom-radio">
+					<input name="ma-debug-mode" type="radio" class="custom-control-input" value="no">
+					<span class="custom-control-indicator"></span>
+					<span class="custom-control-description">No</span>
+				</label>
+			</fieldset>
 			<p>&nbsp;<br></p>
-			<div class="row">
+			<fieldset>
+				<legend>Public Bot Messages?</legend>
+				<label class="custom-control custom-radio">
+					<input name="ma-send-messages" type="radio" class="custom-control-input" value="yes">
+					<span class="custom-control-indicator"></span>
+					<span class="custom-control-description">Yes</span>
+				</label>
+				<label class="custom-control custom-radio">
+					<input name="ma-send-messages" type="radio" class="custom-control-input" value="no">
+					<span class="custom-control-indicator"></span>
+					<span class="custom-control-description">No</span>
+				</label>
+			</fieldset>
 
-				<div class="col-md-6">
-					<fieldset>
-						<legend>Send Message</legend>
-						<div class="input-group">
-							<input class="form-control" type="text" id="ma-send-msg-text" placeholder="Type a message to send...">
-							<span class="input-group-btn">
-								<button class="btn btn-default" id="ma-send-msg-button">Send Message</button>
-							</span>
-						</div><!-- /input-group -->
-					</fieldset>
-				</div>
-				<p>&nbsp;<br></p>
-				<div class="col-md-6">
-					<fieldset>
-						<legend>Public Bot Messages?</legend>
-						<label class="custom-control custom-radio">
-							<input name="ma-send-messages" type="radio" class="custom-control-input" value="yes">
-							<span class="custom-control-indicator"></span>
-							<span class="custom-control-description">Yes</span>
-						</label>
-						<label class="custom-control custom-radio">
-							<input name="ma-send-messages" type="radio" class="custom-control-input" value="no">
-							<span class="custom-control-indicator"></span>
-							<span class="custom-control-description">No</span>
-						</label>
-					</fieldset>
-				</div>
-				
-			</div>
+			<div id="chat" class="shortcut"></div>
 			<hr class="featurette-divider">
+			<h2 class="sub-header">Chatbox</h2>
+			<div id="chatbox">
+			</div>
+			<form id="ma-send-msg-form">
+				<div class="input-group">
+					<input class="form-control" type="text" id="ma-send-msg-text" placeholder="Type a message to send...">
+					<span class="input-group-btn">
+						<button class="btn btn-primary" id="ma-send-msg-button">Send Message</button>
+					</span>
+				</div><!-- /input-group -->
+			</form>
+			<form id="ma-fake-tip-form">
+				<div class="input-group" style="margin-top: 10px;">
+					<input class="form-control" type="text" id="ma-fake-tip-amount" placeholder="Set tip amount...">
+					<span class="input-group-btn">
+						<button class="btn btn-info" id="ma-fake-tip-button">Fake Tip</button>
+					</span>
+				</div><!-- /input-group -->
+			</form>
 			
+			<hr class="featurette-divider">
 			
 			<h2 class="sub-header">Games</h2>
-			<div class="row">
+			<div id="tipwars"class="shortcut"></div>
+			<fieldset>
+				<legend>Tip War</legend>
+				<p>
+					<label>Game Message</label>
+					<textarea class="form-control" id="matw-msg-text" placeholder="Type a game message..."></textarea>
+				</p>
+				<p>
+					<label>Team Evens</label>
+					<input class="form-control" type="text" id="matw-team-evens" placeholder="Type the name of Team Evens...">
+				</p>
+				<p>
+					<label>Team Odds</label>
+					<input class="form-control" type="text" id="matw-team-odds" placeholder="Type the name of Team Odds...">
+				</p>
+
+				<p>
+					<label>Use Winning Amount?</label>
+
+					<label class="custom-control custom-radio">
+						<input name="matw-use-winning-amount" type="radio" class="custom-control-input" value="yes">
+						<span class="custom-control-indicator"></span>
+						<span class="custom-control-description">Yes</span>
+					</label>
+
+					<label class="custom-control custom-radio">
+						<input name="matw-use-winning-amount" type="radio" class="custom-control-input" value="no">
+						<span class="custom-control-indicator"></span>
+						<span class="custom-control-description">No</span>
+					</label>
+
+				</p>
+				<p>
+					<label>Winning Amount</label>
+					<input class="form-control" type="text" id="matw-winning-amount" placeholder="Type in a winning amount...">
+				</p>
+				<p>
+					<label>Repost Delay (Minutes)</label>
+					<input class="form-control" type="text" id="matw-repost-delay" placeholder="Type in the repost delay...">
+				</p>
+				<p class="buttons">
+					<button type="button" class="btn btn-primary" id="matw-start-stop">Start</button>
+					<button type="button" class="btn btn-info" id="matw-repost">Repost</button>
+				</p>
+			</fieldset>
 				
-				<div id="tipwars"class="shortcut"></div>
-				<div class="col-md-6">
-
-					<fieldset>
-						<legend>Tip War</legend>
-						<p>
-							<label>Game Message</label>
-							<textarea class="form-control" id="matw-msg-text" placeholder="Type a game message..."></textarea>
-						</p>
-						<p>
-							<label>Team Evens</label>
-							<input class="form-control" type="text" id="matw-team-evens" placeholder="Type the name of Team Evens...">
-						</p>
-						<p>
-							<label>Team Odds</label>
-							<input class="form-control" type="text" id="matw-team-odds" placeholder="Type the name of Team Odds...">
-						</p>
-
-						<p>
-							<label>Use Winning Amount?</label>
-
-							<label class="custom-control custom-radio">
-								<input name="matw-use-winning-amount" type="radio" class="custom-control-input" value="yes">
-								<span class="custom-control-indicator"></span>
-								<span class="custom-control-description">Yes</span>
-							</label>
-
-							<label class="custom-control custom-radio">
-								<input name="matw-use-winning-amount" type="radio" class="custom-control-input" value="no">
-								<span class="custom-control-indicator"></span>
-								<span class="custom-control-description">No</span>
-							</label>
-
-						</p>
-						<p>
-							<label>Winning Amount</label>
-							<input class="form-control" type="text" id="matw-winning-amount" placeholder="Type in a winning amount...">
-						</p>
-						<p>
-							<label>Repost Delay (Minutes)</label>
-							<input class="form-control" type="text" id="matw-repost-delay" placeholder="Type in the repost delay...">
-						</p>
-						<p class="buttons">
-							<button type="button" class="btn btn-primary" id="matw-start-stop">Start</button>
-							<button type="button" class="btn btn-info" id="matw-repost">Repost</button>
-						</p>
-					</fieldset>
-				
-				</div>
-				<div id="tokenkeno" class="shortcut"></div>
-				<div class="col-md-6">
-
-					<fieldset>
-						<legend>Token Keno</legend>
-						<p>
-							<label>Game Message</label>
-							<textarea class="form-control" id="matk-msg-text" placeholder="Type a game message..."></textarea>
-						</p>
-						<p>
-							<label>Start #:</label>
-							<input class="form-control" type="text" id="matk-start-number" placeholder="Type a starting number...">
-						</p>
-						<p>
-							<label>End #:</label>
-							<input class="form-control" type="text" id="matk-end-number" placeholder="Type an ending number...">
-						</p>
-						<p>
-							<label>Maximum (If all numbers are tipped):</label>
-							<input class="form-control" type="text" id="mark-max-tokens" disabled>
-						</p>
-						<p>
-							<label>Number of Prizes:</label>
-							<input class="form-control" type="text" id="matk-number-of-prizes" placeholder="Type the number of prizes...">
-						</p>
-						<p>
-							<label>Repost Delay (Minutes):</label>
-							<input class="form-control" type="text" id="matk-repost-delay" placeholder="Type in the repost delay...">
-						</p>
-						<p class="buttons">
-							<button type="button" class="btn btn-primary" id="matk-start-stop">Start</button> 
-							<button type="button" class="btn btn-info" id="matk-repost">Post #s</button>
-						</p>
-					</fieldset>
-				
-				</div>
-				
-			</div>
+			<div id="tokenkeno" class="shortcut"></div>
+			<fieldset>
+				<legend>Token Keno</legend>
+				<p>
+					<label>Game Message</label>
+					<textarea class="form-control" id="matk-msg-text" placeholder="Type a game message..."></textarea>
+				</p>
+				<p>
+					<label>Start #:</label>
+					<input class="form-control" type="text" id="matk-start-number" placeholder="Type a starting number...">
+				</p>
+				<p>
+					<label>End #:</label>
+					<input class="form-control" type="text" id="matk-end-number" placeholder="Type an ending number...">
+				</p>
+				<p>
+					<label>Maximum (If all numbers are tipped):</label>
+					<input class="form-control" type="text" id="mark-max-tokens" disabled>
+				</p>
+				<p>
+					<label>Number of Prizes:</label>
+					<input class="form-control" type="text" id="matk-number-of-prizes" placeholder="Type the number of prizes...">
+				</p>
+				<p>
+					<label>Repost Delay (Minutes):</label>
+					<input class="form-control" type="text" id="matk-repost-delay" placeholder="Type in the repost delay...">
+				</p>
+				<p class="buttons">
+					<button type="button" class="btn btn-primary" id="matk-start-stop">Start</button> 
+					<button type="button" class="btn btn-info" id="matk-repost">Post #s</button>
+				</p>
+			</fieldset>
 			
 		</div> <!-- /container -->
 		
