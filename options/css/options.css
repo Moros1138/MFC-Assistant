@@ -42,6 +42,7 @@ fieldset,
 	padding: 4px;
 	padding-bottom: 8px;
 	box-sizing: border-box;
+	width: 100%;
 }
 
 #saved-messages .sortable li .handle {
@@ -73,6 +74,9 @@ fieldset,
 	top: -60px;
 }
 
+.item {
+	width: 100%;
+}
 /* MEDIUM WIDTH STYLES
  ********************************************************/
 /*
@@ -102,9 +106,33 @@ fieldset,
 }
 */
 
-/* FULL WIDTH STYLES
- ********************************************************/
-@media screen and (min-width: 661px) {
+@media screen and (max-width: 499px) {
+	#saved-messages,
+	.flexbox {
+		min-width: 320px;
+	}
+}
+
+@media screen and (min-width: 500px) {
+	#saved-messages .sortable,
+	.flexbox {
+		display: flex;
+		flex-wrap: wrap;
+		align-content: flex-start;
+		align-items: center;
+		justify-content: center;		
+	}
+	
+	.message,
+	.item {
+		align-self: flex-start;
+		margin: 5px;
+	}
+
+}
+
+
+@media screen and (min-width: 768px) {
 	
 	#saved-messages .sortable,
 	.flexbox {
@@ -115,17 +143,51 @@ fieldset,
 		justify-content: center;		
 	}
 	
-	#saved-messages .sortable li,
+	.message,
 	.item {
 		align-self: flex-start;
-		flex: flex-basis;
 		margin: 5px;
-	}
-	
-	.message,
-	fieldset {
 		max-width: 320px;
 	}
 
 }
 
+
+@media screen and (min-width: 992px) {
+
+	#saved-messages .sortable,
+	.flexbox {
+		display: flex;
+		flex-wrap: wrap;
+		align-content: flex-start;
+		align-items: center;
+		justify-content: center;		
+	}
+
+	.message,
+	.item {
+		align-self: flex-start;
+		margin: 5px;
+		max-width: 400px;
+	}
+}
+
+@media screen and (min-width: 1200px) {
+
+	#saved-messages .sortable,
+	.flexbox {
+		display: flex;
+		flex-wrap: wrap;
+		align-content: flex-start;
+		align-items: center;
+		justify-content: center;		
+	}
+
+	.message,
+	.item {
+		align-self: flex-start;
+		flex: flex-basis;
+		margin: 5px;
+		max-width: 500px;
+	}
+}
