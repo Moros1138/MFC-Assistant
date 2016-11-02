@@ -245,25 +245,33 @@ var MAssistOptions = (function() {
 	 *
 	 * This sends a message to the content script
 	 ******************************************************************/
-	function sendMsg(msg) {
+	function sendMsg(msg, bypass_dialog) {
+		
+		if(bypass_dialog === undefined) {
+			bypass_dialog = false;
+		}
+		
+		if(bypass_dialog) {
+			sendToTab({from: 'options-page', subject: 'ma:send-msg', msg: msg});
+			return;
+		}
 		
 		if(settings.send_messages) {
 			sendToTab({from: 'options-page', subject: 'ma:send-msg', msg: msg});
-		} else {
-			
-			dialog(
-				'You are about to inject a fake message! If you\'d like to send real messages adjust the "Public Bot Messages" setting!',
-				'Public Messages are Off!',
-				function() {
-					sendToTab({from: 'options-page', subject: 'ma:send-msg', msg: msg});
-					$(this).dialog('close');
-				},
-				function() {
-					$(this).dialog('close');
-				}
-			);
-			
+			return;
 		}
+			
+		dialog(
+			'You are about to inject a fake message! If you\'d like to send real messages adjust the "Public Bot Messages" setting!',
+			'Public Messages are Off!',
+			function() {
+				sendToTab({from: 'options-page', subject: 'ma:send-msg', msg: msg});
+				$(this).dialog('close');
+			},
+			function() {
+				$(this).dialog('close');
+			}
+		);
 		
 	}
 	
