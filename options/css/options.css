@@ -1,6 +1,7 @@
-.shortcut {
-	position: relative;
-	top: -60px;
+/* MOBILE/SMALL WIDTH STYLES
+ ********************************************************/
+h2 {
+	text-align: center;
 }
 
 #chatbox {
@@ -8,14 +9,18 @@
 	height: 300px;
 	overflow: hidden;
 	overflow-y: auto;
+	border: 1px solid #dedede;
+	margin-bottom: 10px;
 }
 
+fieldset,
 #saved-messages {
 	width: 100%;
 	list-style-type: none;
-	background: #eee;
-	margin: 0px;
-	padding: 10px;
+	background: #fafafa;
+	margin: 10px 0px;
+	padding: 20px;
+	border: 1px solid #dedede;
 }
 
 #saved-messages .sortable {
@@ -25,7 +30,7 @@
 	margin: 0px;
 	padding: 0px;
 	padding-bottom: 15px;
-	background: #eee;
+	background: #fafafa;
 }
 
 #saved-messages .sortable li {
@@ -57,6 +62,70 @@
 	display: none;
 }
 
+
+/* hide the close button in the modal dialog */
 .ui-dialog-titlebar-close {
 	display: none;
 }
+
+.shortcut {
+	position: relative;
+	top: -60px;
+}
+
+/* MEDIUM WIDTH STYLES
+ ********************************************************/
+/*
+@media screen and (min-width: 480px) and (max-width: 660px) {
+	
+	#saved-messages .sortable,
+	.flexbox {
+		display: flex;
+		flex-wrap: wrap;
+		align-content: flex-start;
+		align-items: center;
+		justify-content: center;		
+	}
+	
+	#saved-messages .sortable li,
+	.item {
+		align-self: flex-start;
+		flex: flex-basis;
+		margin: 5px;
+	}
+	
+	.message,
+	fieldset {
+		max-width: 320px;
+	}
+
+}
+*/
+
+/* FULL WIDTH STYLES
+ ********************************************************/
+@media screen and (min-width: 661px) {
+	
+	#saved-messages .sortable,
+	.flexbox {
+		display: flex;
+		flex-wrap: wrap;
+		align-content: flex-start;
+		align-items: center;
+		justify-content: center;		
+	}
+	
+	#saved-messages .sortable li,
+	.item {
+		align-self: flex-start;
+		flex: flex-basis;
+		margin: 5px;
+	}
+	
+	.message,
+	fieldset {
+		max-width: 320px;
+	}
+
+}
+
