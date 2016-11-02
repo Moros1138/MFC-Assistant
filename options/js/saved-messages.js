@@ -250,7 +250,7 @@ var MASavedMessages = (function () {
 				MAssistOptions.sendMsg(message.data('msg'));
 				
 				intervals[message.data('id')] = setInterval(function() {
-					MAssistOptions.sendMsg(message.data('msg'));
+					MAssistOptions.sendMsg(message.data('msg'), true);
 				}, (1000 * 60 * message.data('delay')));
 
 				$(this).toggleClass('btn-warning', true);
