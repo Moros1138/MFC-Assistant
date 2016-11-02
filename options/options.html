@@ -19,6 +19,7 @@
 		<script src="js/tipwars.js"></script>
 		<script src="js/tokenkeno.js"></script>
 		<script src="js/saved-messages.js"></script>
+		<script src="js/navigation.js"></script>
 		
 		<!-- app styles -->
 		<link rel="stylesheet" type="text/css" href="css/options.css">
@@ -26,7 +27,6 @@
 	</head>
 	<body>
 	
-		<div id="home" class="shortcut"></div>
 		<nav class="navbar navbar-inverse navbar-fixed-top">
 			<div class="container-fluid">
 				<div class="navbar-header">
@@ -55,98 +55,90 @@
 			</div>
 		</nav>
 		
-		<header>
-			<div class="container theme-showcase">
-				<div class="jumbotron">
-					<h1>Myfreecams Assistant</h1>
-					<p>
-						The MFC Chat bot that puts you in charge of
-						your room!
-					</p>
-					<p>Key Features:</p>
-					<ul class="features">
-						<li>
-							<b>Point and Click</b> - No confusing commands to learn.
-							Just change a few options and then it's all point and
-							click!
-						</li>
-						<li>
-							<b>Ease of Use</b> - Our straight forward design makes
-							the MFC Assistant extremely easy to learn!
-						</li>
-						<li>
-							<b>Tip Wars</b> is a game where you to set 2 teams and
-							a winning goal. Members support these teams	by tipping
-							Even or Odd numbers until their team wins!
-						</li>
-						<li>
-							<b>Token Keno</b> is a game where you set a range of numbers
-							that your members can tip to win a prize. Prizes are randomly
-							generated when the game starts and the game ends when all prizes
-							have been won, and/or when all numbers have been tipped.
-						</li>
-						<li>
-							<b>Saved/Timed Messages</b> - You can set saved messages
-							that you can click to post them to your room. Alternatively,
-							you can set them up on a timer so they automatically post
-							at an interval you set! This is perfect for advertisements
-							during your shows!
-						</li>
-						<li>
-							<b>Actively Developed!</b> - There are certainly more features
-							to come! I also look forward to your feedback! If you have an
-							idea for a feature or you found a bug contact me!<br><br>
-							
-							<b>Twitter:</b> <a href="https://www.twitter.com/Moros1138" target="_blank">@Moros1138</a><br>
-							<b>Email:</b> <a href="mailto:moros1138@gmail.com" target="_blank">moros1138@gmail.com</a><br>
-						</li>
-					</ul>
-					
-					<small>
-						Special thanks to <a href="https://www.twitter.com/KradekMFC" target="_blank">@KradekMFC</a> for
-						his work on the MFC Assistant userscript which served when I
-						was in the early stages of developing this software.
-					</small>
-				</div>
+		<div id="home" class="page container">
+			<div class="jumbotron">
+				<h1>Myfreecams Assistant</h1>
+				<p>
+					The MFC Chat bot that puts you in charge of
+					your room!
+				</p>
+				<p>Key Features:</p>
+				<ul class="features">
+					<li>
+						<b>Point and Click</b> - No confusing commands to learn.
+						Just change a few options and then it's all point and
+						click!
+					</li>
+					<li>
+						<b>Ease of Use</b> - Our straight forward design makes
+						the MFC Assistant extremely easy to learn!
+					</li>
+					<li>
+						<b>Tip Wars</b> is a game where you to set 2 teams and
+						a winning goal. Members support these teams	by tipping
+						Even or Odd numbers until their team wins!
+					</li>
+					<li>
+						<b>Token Keno</b> is a game where you set a range of numbers
+						that your members can tip to win a prize. Prizes are randomly
+						generated when the game starts and the game ends when all prizes
+						have been won, and/or when all numbers have been tipped.
+					</li>
+					<li>
+						<b>Saved/Timed Messages</b> - You can set saved messages
+						that you can click to post them to your room. Alternatively,
+						you can set them up on a timer so they automatically post
+						at an interval you set! This is perfect for advertisements
+						during your shows!
+					</li>
+					<li>
+						<b>Actively Developed!</b> - There are certainly more features
+						to come! I also look forward to your feedback! If you have an
+						idea for a feature or you found a bug contact me!<br><br>
+						
+						<b>Twitter:</b> <a href="https://www.twitter.com/Moros1138" target="_blank">@Moros1138</a><br>
+						<b>Email:</b> <a href="mailto:moros1138@gmail.com" target="_blank">moros1138@gmail.com</a><br>
+					</li>
+				</ul>
+				
+				<small>
+					Special thanks to <a href="https://www.twitter.com/KradekMFC" target="_blank">@KradekMFC</a> for
+					his work on the MFC Assistant userscript which served when I
+					was in the early stages of developing this software.
+				</small>
 			</div>
-		</header>
+		</div>
 		
-		<div class="container">
-
-			<div id="options" class="shortcut"></div>
-			<h2 class="sub-header">Options</h2>
+		<div id="options" class="page container">
+			<h1>Options</h1>
+			<fieldset>
+				<h4>Debug Mode?</h4>
+				<label class="custom-control custom-radio">
+					<input name="ma-debug-mode" type="radio" class="custom-control-input" value="yes">
+					<span class="custom-control-indicator"></span>
+					<span class="custom-control-description">Yes</span>
+				</label>
+				<label class="custom-control custom-radio">
+					<input name="ma-debug-mode" type="radio" class="custom-control-input" value="no">
+					<span class="custom-control-indicator"></span>
+					<span class="custom-control-description">No</span>
+				</label>
+				<h4>Public Bot Messages?</h4>
+				<label class="custom-control custom-radio">
+					<input name="ma-send-messages" type="radio" class="custom-control-input" value="yes">
+					<span class="custom-control-indicator"></span>
+					<span class="custom-control-description">Yes</span>
+				</label>
+				<label class="custom-control custom-radio">
+					<input name="ma-send-messages" type="radio" class="custom-control-input" value="no">
+					<span class="custom-control-indicator"></span>
+					<span class="custom-control-description">No</span>
+				</label>
+			</fieldset>
+		</div><!-- /page -->
 			
-			<div class="flexbox">
-				<div class="item">
-					<fieldset>
-						<h4>Debug Mode?</h4>
-						<label class="custom-control custom-radio">
-							<input name="ma-debug-mode" type="radio" class="custom-control-input" value="yes">
-							<span class="custom-control-indicator"></span>
-							<span class="custom-control-description">Yes</span>
-						</label>
-						<label class="custom-control custom-radio">
-							<input name="ma-debug-mode" type="radio" class="custom-control-input" value="no">
-							<span class="custom-control-indicator"></span>
-							<span class="custom-control-description">No</span>
-						</label>
-						<h4>Public Bot Messages?</h4>
-						<label class="custom-control custom-radio">
-							<input name="ma-send-messages" type="radio" class="custom-control-input" value="yes">
-							<span class="custom-control-indicator"></span>
-							<span class="custom-control-description">Yes</span>
-						</label>
-						<label class="custom-control custom-radio">
-							<input name="ma-send-messages" type="radio" class="custom-control-input" value="no">
-							<span class="custom-control-indicator"></span>
-							<span class="custom-control-description">No</span>
-						</label>
-					</fieldset>
-				</div><!-- /item -->
-			</div><!-- /flexbox -->
-			
-			<div id="chat" class="shortcut"></div>
-			<h2 class="sub-header">Chatbox</h2>
+		<div id="chat" class="page container">
+			<h1>Chatbox</h1>
 			<div id="chatbox">
 			</div>
 			<form id="ma-send-msg-form">
@@ -165,103 +157,95 @@
 					</span>
 				</div><!-- /input-group -->
 			</form>
+		</div><!-- /page -->
 			
-			<div id="savedMsg" class="shortcut"></div>
-			<h2 class="sub-header">Saved/Timed Messages</h2>
+		<div id="savedMsg" class="page container">
+			<h1>Saved/Timed Messages</h1>
 			<div id="saved-messages">
 				<ul class="sortable"></ul>
 				<p style="text-align: center;">
 					<button type="button" id="add-message" class="pb-setting btn btn-sm btn-default"><span class="glyphicon glyphicon-plus">&nbsp;</span> Add Message</button><br>
 				</p>
 			</div>
-			
-			<h2 class="sub-header">Games</h2>
-			<div id="tipwars"class="shortcut"></div>
-			<div class="flexbox">
-				<div class="item">
-					<fieldset>
-						<h4>Tip War</h4>
-						<p>
-							<label>Game Message</label>
-							<textarea class="form-control" id="matw-msg-text" placeholder="Type a game message..."></textarea>
-						</p>
-						<p>
-							<label>Team Evens</label>
-							<input class="form-control" type="text" id="matw-team-evens" placeholder="Type the name of Team Evens...">
-						</p>
-						<p>
-							<label>Team Odds</label>
-							<input class="form-control" type="text" id="matw-team-odds" placeholder="Type the name of Team Odds...">
-						</p>
+		</div><!-- /page -->
 
-						<p>
-							<label>Use Winning Amount?</label>
+		<div id="tipwars" class="page container">
+			<h1>Tip Wars</h1>
+			<fieldset>
+				<p>
+					<label>Game Message</label>
+					<textarea class="form-control" id="matw-msg-text" placeholder="Type a game message..."></textarea>
+				</p>
+				<p>
+					<label>Team Evens</label>
+					<input class="form-control" type="text" id="matw-team-evens" placeholder="Type the name of Team Evens...">
+				</p>
+				<p>
+					<label>Team Odds</label>
+					<input class="form-control" type="text" id="matw-team-odds" placeholder="Type the name of Team Odds...">
+				</p>
 
-							<label class="custom-control custom-radio">
-								<input name="matw-use-winning-amount" type="radio" class="custom-control-input" value="yes">
-								<span class="custom-control-indicator"></span>
-								<span class="custom-control-description">Yes</span>
-							</label>
-
-							<label class="custom-control custom-radio">
-								<input name="matw-use-winning-amount" type="radio" class="custom-control-input" value="no">
-								<span class="custom-control-indicator"></span>
-								<span class="custom-control-description">No</span>
-							</label>
-
-						</p>
-						<p>
-							<label>Winning Amount</label>
-							<input class="form-control" type="text" id="matw-winning-amount" placeholder="Type in a winning amount...">
-						</p>
-						<p>
-							<label>Repost Delay (Minutes)</label>
-							<input class="form-control" type="text" id="matw-repost-delay" placeholder="Type in the repost delay...">
-						</p>
-						<p class="buttons">
-							<button type="button" class="btn btn-primary" id="matw-start-stop">Start</button>
-							<button type="button" class="btn btn-info" id="matw-repost">Repost</button>
-						</p>
-					</fieldset>
-				</div><!-- /item -->
-					
-				<div id="tokenkeno" class="shortcut"></div>
-				<div class="item">
-					<fieldset>
-						<h4>Token Keno</h4>
-						<p>
-							<label>Game Message</label>
-							<textarea class="form-control" id="matk-msg-text" placeholder="Type a game message..."></textarea>
-						</p>
-						<p>
-							<label>Start #:</label>
-							<input class="form-control" type="text" id="matk-start-number" placeholder="Type a starting number...">
-						</p>
-						<p>
-							<label>End #:</label>
-							<input class="form-control" type="text" id="matk-end-number" placeholder="Type an ending number...">
-						</p>
-						<p>
-							<label>Maximum (If all numbers are tipped):</label>
-							<input class="form-control" type="text" id="mark-max-tokens" disabled>
-						</p>
-						<p>
-							<label>Number of Prizes:</label>
-							<input class="form-control" type="text" id="matk-number-of-prizes" placeholder="Type the number of prizes...">
-						</p>
-						<p>
-							<label>Repost Delay (Minutes):</label>
-							<input class="form-control" type="text" id="matk-repost-delay" placeholder="Type in the repost delay...">
-						</p>
-						<p class="buttons">
-							<button type="button" class="btn btn-primary" id="matk-start-stop">Start</button> 
-							<button type="button" class="btn btn-info" id="matk-repost">Post #s</button>
-						</p>
-					</fieldset>
-				</div><!-- /item -->
-			
-			</div><!-- /flexbox -->
-		</div> <!-- /container -->
+				<p>
+					<label>Use Winning Amount?</label>
+					<label class="custom-control custom-radio">
+						<input name="matw-use-winning-amount" type="radio" class="custom-control-input" value="yes">
+						<span class="custom-control-indicator"></span>
+						<span class="custom-control-description">Yes</span>
+					</label>
+					<label class="custom-control custom-radio">
+						<input name="matw-use-winning-amount" type="radio" class="custom-control-input" value="no">
+						<span class="custom-control-indicator"></span>
+						<span class="custom-control-description">No</span>
+					</label>
+				</p>
+				<p>
+					<label>Winning Amount</label>
+					<input class="form-control" type="text" id="matw-winning-amount" placeholder="Type in a winning amount...">
+				</p>
+				<p>
+					<label>Repost Delay (Minutes)</label>
+					<input class="form-control" type="text" id="matw-repost-delay" placeholder="Type in the repost delay...">
+				</p>
+				<p class="buttons">
+					<button type="button" class="btn btn-primary" id="matw-start-stop">Start</button>
+					<button type="button" class="btn btn-info" id="matw-repost">Repost</button>
+				</p>
+			</fieldset>
+		</div><!-- /page -->
+						
+		<div id="tokenkeno" class="page container">
+			<h1>Token Keno</h1>
+			<fieldset>
+				<p>
+					<label>Game Message</label>
+					<textarea class="form-control" id="matk-msg-text" placeholder="Type a game message..."></textarea>
+				</p>
+				<p>
+					<label>Start #:</label>
+					<input class="form-control" type="text" id="matk-start-number" placeholder="Type a starting number...">
+				</p>
+				<p>
+					<label>End #:</label>
+					<input class="form-control" type="text" id="matk-end-number" placeholder="Type an ending number...">
+				</p>
+				<p>
+					<label>Maximum (If all numbers are tipped):</label>
+					<input class="form-control" type="text" id="mark-max-tokens" disabled>
+				</p>
+				<p>
+					<label>Number of Prizes:</label>
+					<input class="form-control" type="text" id="matk-number-of-prizes" placeholder="Type the number of prizes...">
+				</p>
+				<p>
+					<label>Repost Delay (Minutes):</label>
+					<input class="form-control" type="text" id="matk-repost-delay" placeholder="Type in the repost delay...">
+				</p>
+				<p class="buttons">
+					<button type="button" class="btn btn-primary" id="matk-start-stop">Start</button> 
+					<button type="button" class="btn btn-info" id="matk-repost">Post #s</button>
+				</p>
+			</fieldset>
+		</div><!-- /page -->
 		
 		<div id="modal-dialog" style="display: none;">
 			<p></p>
