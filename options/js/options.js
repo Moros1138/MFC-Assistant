@@ -6,14 +6,14 @@ jQuery.fn.extend({
 		if(!isNaN(num) && num != '') {
 			
 			$(this).toggleClass('btn-danger', false);
+			$(this).off('click');
 			return false;
 			
 		} else {
 			
 			$(this).toggleClass('btn-danger', true);
 			$(this).val('Error: This field needs to be a number is not a number');
-
-			$(this).click(function() {
+			$(this).on('click', function() {
 				$(this).val('');
 			});
 			return true;
