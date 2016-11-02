@@ -247,36 +247,8 @@ var MAssistOptions = (function() {
 	
 	function filterEmotes(msg) {
 
-		msg = unescape(msg);
-
-		msg = msg.replace(new RegExp('#~(.*?)~#', 'g'),'EMOTE');
-
-		return msg;
-		
-		var emotes = msg.match(/#~(.*?)~#/g);
-
-		
-		for(var i=0; i<emotes.length; i++) {
-			
-			emotes[i] = {
-				raw: emotes[i]
-			};
-			
-			
-			emotes[i].raw = emotes[i].raw.replace('#~','');
-			emotes[i].raw = emotes[i].raw.replace('~#','');
-			
-			emotes[i].stripped = emotes[i].raw.split(',');
-			emotes[i].stripped = ':'+emotes[i].stripped[2];
-			
-			msg = msg.replace(new RegExp(emotes[i].raw, 'g'), emotes[i].stripped);
-			
-		}
-
-		msg = msg.replace(/#~/g,'');
-		msg = msg.replace(/~#/g,'');
-		
-		return msg;
+		// TODO: do it better!
+		return unescape(msg).replace(new RegExp('#~(.*?)~#', 'g'),'EMOTE');
 		
 	}
 
