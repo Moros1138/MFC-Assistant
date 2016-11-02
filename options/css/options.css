@@ -85,15 +85,11 @@ fieldset,
 }
 
 @media screen and (max-width: 499px) {
-	#saved-messages,
-	.flexbox {
-		min-width: 320px;
-	}
+	#saved-messages {
 }
 
 @media screen and (min-width: 500px) {
-	#saved-messages .sortable,
-	.flexbox {
+	#saved-messages .sortable {
 		display: flex;
 		flex-wrap: wrap;
 		align-content: flex-start;
@@ -101,8 +97,7 @@ fieldset,
 		justify-content: center;		
 	}
 	
-	.message,
-	.item {
+	.message {
 		align-self: flex-start;
 		margin: 5px;
 	}
@@ -112,8 +107,7 @@ fieldset,
 
 @media screen and (min-width: 768px) {
 	
-	#saved-messages .sortable,
-	.flexbox {
+	#saved-messages .sortable {
 		display: flex;
 		flex-wrap: wrap;
 		align-content: flex-start;
@@ -121,8 +115,7 @@ fieldset,
 		justify-content: center;		
 	}
 	
-	.message,
-	.item {
+	.message {
 		align-self: flex-start;
 		margin: 5px;
 		max-width: 320px;
@@ -133,8 +126,7 @@ fieldset,
 
 @media screen and (min-width: 992px) {
 
-	#saved-messages .sortable,
-	.flexbox {
+	#saved-messages .sortable {
 		display: flex;
 		flex-wrap: wrap;
 		align-content: flex-start;
@@ -142,8 +134,7 @@ fieldset,
 		justify-content: center;		
 	}
 
-	.message,
-	.item {
+	.message {
 		align-self: flex-start;
 		margin: 5px;
 		max-width: 400px;
@@ -152,8 +143,7 @@ fieldset,
 
 @media screen and (min-width: 1200px) {
 
-	#saved-messages .sortable,
-	.flexbox {
+	#saved-messages .sortable {
 		display: flex;
 		flex-wrap: wrap;
 		align-content: flex-start;
@@ -161,8 +151,7 @@ fieldset,
 		justify-content: center;		
 	}
 
-	.message,
-	.item {
+	.message {
 		align-self: flex-start;
 		flex: flex-basis;
 		margin: 5px;
