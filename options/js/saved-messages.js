@@ -37,7 +37,7 @@ var MASavedMessages = (function () {
 			
 			// desc
 			if($(elem).prop("name") == 'saved-messages-desc[]') {
-				$(elem).parent().prev().find('h3').html($(elem).val());
+				$(elem).parent().parent().prev().find('h3').html($(elem).val());
 				$(elem).parent().parent().parent().data('desc', $(elem).val());
 			}
 			
@@ -289,15 +289,14 @@ var MASavedMessages = (function () {
 			/**
 			 * kill all intervals
 			 ******************************************************************/
-			$('.message').each(function() {
+			$('.start-timer').each(function() {
 				
-				clearInterval( $(this).data('id') );
+				if( $(this).find('span:last-child').html() == 'Stop Timer' ) {
+					
+					$(this).trigger('click');
+					
+				}
 				
-				$('.start-timer').toggleClass('btn-warning', false);
-				$('.start-timer').toggleClass('btn-info', true);
-				$('.start-timer').find('span:first-child').toggleClass('glyphicon-play', true);
-				$('.start-timer').find('span:first-child').toggleClass('glyphicon-stop', false);
-				$('.start-timer').find('span:last-child').html('Start Timer');
 			});
 			
 		});
