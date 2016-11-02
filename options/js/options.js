@@ -120,17 +120,34 @@ var MAssistOptions = (function() {
 	 ******************************************************************/
 	function dialog(message, title, yesCallback, noCallback) {
 		
-		$('#modal-dialog p').html(message);
-		$('#modal-dialog').dialog({
-			modal: true,
-			title: title,
-			buttons: [{
+		var buttons;
+		
+		if( (yesCallback === undefined || yesCallback == null) || (noCallback === undefined || noCallback === null)) {
+			
+			buttons = [{
+				text: 'Ok',
+				click: function() {
+					$(this).dialog('close');
+				}
+			}];
+			
+		} else {
+
+			buttons = [{
 				text: 'Yes',
 				click: yesCallback
 			},{
 				text: 'No',
 				click: noCallback
-			}],
+			}];
+		
+		}
+		
+		$('#modal-dialog p').html(message);
+		$('#modal-dialog').dialog({
+			modal: true,
+			title: title,
+			buttons: buttons,
 			autoOpen: true,
 			open: function(e,ui) {
 				
@@ -246,33 +263,7 @@ var MAssistOptions = (function() {
 	 * This sends a message to the content script
 	 ******************************************************************/
 	function sendMsg(msg, bypass_dialog) {
-		
-		if(bypass_dialog === undefined) {
-			bypass_dialog = false;
-		}
-		
-		if(bypass_dialog) {
-			sendToTab({from: 'options-page', subject: 'ma:send-msg', msg: msg});
-			return;
-		}
-		
-		if(settings.send_messages) {
-			sendToTab({from: 'options-page', subject: 'ma:send-msg', msg: msg});
-			return;
-		}
-			
-		dialog(
-			'You are about to inject a fake message! If you\'d like to send real messages adjust the "Public Bot Messages" setting!',
-			'Public Messages are Off!',
-			function() {
-				sendToTab({from: 'options-page', subject: 'ma:send-msg', msg: msg});
-				$(this).dialog('close');
-			},
-			function() {
-				$(this).dialog('close');
-			}
-		);
-		
+		sendToTab({from: 'options-page', subject: 'ma:send-msg', msg: msg});
 	}
 	
 	function filterEmotes(msg) {
@@ -325,7 +316,26 @@ var MAssistOptions = (function() {
 			fakeTip(parseInt($('#ma-fake-tip-amount').val()));
 			$('#ma-fake-tip-amount').val('');
 		});
-	
+		
+		/**
+		 * model changed
+		 ******************************************************************/
+		$('body').on('ma:model-changed', function() {
+			
+			$("#chatbox").html('');
+			
+			dialog(
+				'You have entered another model\'s room! All games and timers have been stopped!',
+				'Model Changed!',
+				function() {
+					$(this).dialog('close');
+				},
+				null
+			);
+			
+			
+		});
+		
 	});
 	
 	return {

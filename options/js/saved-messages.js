@@ -159,7 +159,7 @@ var MASavedMessages = (function () {
 		$('.message:last-child input[name="saved-messages-delay[]"]').checkNaN();
 		
 	}
-	
+
 	$(document).ready(function() {
 		
 		init();
@@ -279,6 +279,27 @@ var MASavedMessages = (function () {
 		$('body').on('click', '.post-now', function() {
 			var message = $(this).parent().parent();
 			MAssistOptions.sendMsg(message.data('msg'));
+		});
+		
+		/**
+		 * model changed
+		 ******************************************************************/
+		$('body').on('ma:model-changed', function() {
+			
+			/**
+			 * kill all intervals
+			 ******************************************************************/
+			$('.message').each(function() {
+				
+				clearInterval( $(this).data('id') );
+				
+				$('.start-timer').toggleClass('btn-warning', false);
+				$('.start-timer').toggleClass('btn-info', true);
+				$('.start-timer').find('span:first-child').toggleClass('glyphicon-play', true);
+				$('.start-timer').find('span:first-child').toggleClass('glyphicon-stop', false);
+				$('.start-timer').find('span:last-child').html('Start Timer');
+			});
+			
 		});
 		
 	});

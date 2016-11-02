@@ -278,6 +278,21 @@ var MATipWars = (function() {
 		$('#matw-repost').click(function(e) {
 			repost();
 		});
+
+		/**
+		 * model changed
+		 ******************************************************************/
+		$('body').on('ma:model-changed', function() {
+			
+			running = false;
+			clear();
+			
+			$('#matw-start-stop').toggleClass('btn-danger', false);
+			$('#matw-start-stop').toggleClass('btn-primary', true);
+			$('#matw-start-stop').html('Start');
+			
+		});
+
 		
 	});
 

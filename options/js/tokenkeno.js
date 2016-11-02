@@ -368,9 +368,14 @@ var MATokenKeno = (function () {
 		});
 
 		$('body').on('ma:model-changed', function() {
+			
 			running = false;
 			clear();
+			
+			$('#matk-start-stop').toggleClass('btn-primary', true);
+			$('#matk-start-stop').toggleClass('btn-danger', false);
 			$('#matk-start-stop').html('Start');
+			
 		});
 
 	});
