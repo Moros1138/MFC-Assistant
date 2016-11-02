@@ -6,6 +6,7 @@ jQuery.fn.extend({
 		if(!isNaN(num) && num != '') {
 			
 			$(this).toggleClass('btn-danger', false);
+			return false;
 			
 		} else {
 			
@@ -15,6 +16,7 @@ jQuery.fn.extend({
 			$(this).click(function() {
 				$(this).val('');
 			});
+			return true;
 			
 		}
 	}

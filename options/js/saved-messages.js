@@ -88,7 +88,7 @@ var MASavedMessages = (function () {
 				id: getNewId(),
 				desc: 'New Message',
 				msg: '',
-				delay: ''
+				delay: 1
 			};
 			
 			settings.messages.push(savedMsg);
@@ -101,8 +101,8 @@ var MASavedMessages = (function () {
 		'<h3>'+savedMsg.desc+'</h3>',
 		'<button type="button" class="btn btn-sm btn-primary glyphicon glyphicon-cog edit"data-id="'+savedMsg.id+'"></button> ',
 		'<button type="button" class="btn btn-sm btn-danger glyphicon glyphicon-remove-sign delete"data-id="'+savedMsg.id+'"></button> ',
-		'<button type="button" class="btn btn-sm btn-info start-timer" data-id="'+savedMsg.id+'"><span class="glyphicon glyphicon-time"></span> <span>Start Timer</span></button> ',
-		'<button type="button" class="btn btn-sm btn-info post-now" data-id="'+savedMsg.id+'"><span class="glyphicon glyphicon-time"></span> <span>Post Now</span></button>',
+		'<button type="button" class="btn btn-sm btn-info start-timer" data-id="'+savedMsg.id+'"><span class="glyphicon glyphicon-play"></span> <span>Start Timer</span></button> ',
+		'<button type="button" class="btn btn-sm btn-info post-now" data-id="'+savedMsg.id+'"><span class="glyphicon glyphicon-send"></span> <span>Post Now</span></button>',
 	'</div>',
 	'<div class="edit-box">',
 		'<input type="hidden" name="saved-messages-id[]" value="'+savedMsg.id+'">',
@@ -116,9 +116,11 @@ var MASavedMessages = (function () {
 '</li>'
 		].join(''));
 		
+
 		$('.message:last-child').data('desc', savedMsg.desc);
 		$('.message:last-child').data('msg', savedMsg.msg);
 		$('.message:last-child').data('delay', savedMsg.delay);
+		$('.message:last-child input[name="saved-messages-delay[]"]').checkNaN();
 		
 	}
 	
@@ -209,7 +211,12 @@ var MASavedMessages = (function () {
 			
 			// delay
 			if($(this).prop("name") == 'saved-messages-delay[]') {
-				$(this).parent().parent().data('delay', $(this).val());
+				if($(this).checkNaN()) {
+					$(this).parent().parent().data('delay', 0);
+				} else {
+					$(this).parent().parent().data('delay', $(this).val());
+				}
+				
 			}
 			
 			updateSettings();
@@ -229,13 +236,17 @@ var MASavedMessages = (function () {
 			var message = $(this).parent().parent();
 			
 			if(message.find('span:last-child').html() == 'Start Timer') {
-
+				
+				MAssistOptions.sendMsg(message.data('msg'));
+				
 				intervals[message.data('id')] = setInterval(function() {
 					MAssistOptions.sendMsg(message.data('msg'));
 				}, (1000 * 60 * message.data('delay')));
 
 				$(this).toggleClass('btn-warning', true);
 				$(this).toggleClass('btn-info', false);
+				$(this).find('span:first-child').toggleClass('glyphicon-play', false);
+				$(this).find('span:first-child').toggleClass('glyphicon-stop', true);
 				$(this).find('span:last-child').html('Stop Timer');
 				return;
 				
@@ -247,6 +258,8 @@ var MASavedMessages = (function () {
 				
 				$(this).toggleClass('btn-warning', false);
 				$(this).toggleClass('btn-info', true);
+				$(this).find('span:first-child').toggleClass('glyphicon-play', true);
+				$(this).find('span:first-child').toggleClass('glyphicon-stop', false);
 				$(this).find('span:last-child').html('Start Timer');
 				return;
 			}
