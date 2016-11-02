@@ -1,0 +1,62 @@
+.shortcut {
+	position: relative;
+	top: -60px;
+}
+
+#chatbox {
+	width: 100%;
+	height: 300px;
+	overflow: hidden;
+	overflow-y: auto;
+}
+
+#saved-messages {
+	width: 100%;
+	list-style-type: none;
+	background: #eee;
+	margin: 0px;
+	padding: 10px;
+}
+
+#saved-messages .sortable {
+	width: 100%;
+	padding: 10px;
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	padding-bottom: 15px;
+	background: #eee;
+}
+
+#saved-messages .sortable li {
+	background: #dedede;
+	border: 1px solid #000;
+	cursor: move;
+	clear: both;
+	margin-top: 5px;
+	padding: 4px;
+	padding-bottom: 8px;
+	box-sizing: border-box;
+}
+
+#saved-messages .sortable li .handle {
+	text-align: center;
+}
+
+#saved-messages .sortable li .handle h3 {
+	margin: 5px;
+}
+
+#saved-messages .sortable li .edit-box {
+	margin-top: 5px;
+	box-sizing: border-box;
+	padding: 10px;
+}
+
+#saved-messages .sortable li .collapsed {
+	display: none;
+}
+
+.ui-dialog-titlebar-close {
+	display: none;
+}
