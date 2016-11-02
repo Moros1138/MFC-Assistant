@@ -150,7 +150,21 @@ var MAssistOptions = (function() {
 		});
 
 	}
-	
+
+	function sendToTab(object) {
+		chrome.tabs.query({currentWindow: false}, function(tabs) {
+			
+			for(var i=0; i < tabs.length; i++) {
+				if(tabs[i].url !== undefined) {
+					if(0 === tabs[i].url.indexOf('http://www.myfreecams.com')) {
+						chrome.tabs.sendMessage(tabs[i].id, object);
+					}
+				}
+			}
+			
+		});
+	}
+
 	/**
 	 * Listen for messages from "content"
 	 ******************************************************************/
@@ -212,28 +226,18 @@ var MAssistOptions = (function() {
 	 ******************************************************************/
 	function fakeTip(num) {
 
-		dialog('You are about to inject a fake tip! This is intended to be used for testing purposes and is only visible to you!<br><br>You are not actually tipping the model!', 'Fake Tip',
+		dialog(
+			'You are about to inject a fake tip! This is intended to be used for testing purposes and is only visible to you!<br><br>You are not actually tipping the model!',
+			'Fake Tip',
 			function() {
-				
-				chrome.tabs.query({currentWindow: false}, function(tabs) {
-					
-					for(var i=0; i < tabs.length; i++) {
-						if(tabs[i].url !== undefined) {
-							if(0 === tabs[i].url.indexOf('http://www.myfreecams.com')) {
-								chrome.tabs.sendMessage(tabs[i].id, {from: 'options-page', subject: 'ma:fake-tip', tip_amount: num});
-							}
-						}
-					}
-					
-				});
-				
+				sendToTab({from: 'options-page', subject: 'ma:fake-tip', tip_amount: num});
 				$(this).dialog('close');
 			},
 			function() {
 				$(this).dialog('close');
 			}
 		);
-
+		
 	}
 
 	/**
@@ -242,17 +246,25 @@ var MAssistOptions = (function() {
 	 * This sends a message to the content script
 	 ******************************************************************/
 	function sendMsg(msg) {
-		chrome.tabs.query({currentWindow: false}, function(tabs) {
+		
+		if(settings.send_messages) {
+			sendToTab({from: 'options-page', subject: 'ma:send-msg', msg: msg});
+		} else {
 			
-			for(var i=0; i < tabs.length; i++) {
-				if(tabs[i].url !== undefined) {
-					if(0 === tabs[i].url.indexOf('http://www.myfreecams.com')) {
-						chrome.tabs.sendMessage(tabs[i].id, {from: 'options-page', subject: 'ma:send-msg', msg: msg});
-					}
+			dialog(
+				'You are about to inject a fake message! If you\'d like to send real messages adjust the "Public Bot Messages" setting!',
+				'Public Messages are Off!',
+				function() {
+					sendToTab({from: 'options-page', subject: 'ma:send-msg', msg: msg});
+					$(this).dialog('close');
+				},
+				function() {
+					$(this).dialog('close');
 				}
-			}
+			);
 			
-		});
+		}
+		
 	}
 	
 	function filterEmotes(msg) {
