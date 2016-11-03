@@ -213,6 +213,11 @@ var MAssistOptions = (function() {
 			$('body').trigger('ma:model-changed');
 		}
 		
+		if(request.subject == 'ma:model-model-name-not-match') {
+			$('body').trigger('ma:model-model-name-not-match');
+		}
+		
+		
 	});
 	
 	/**
@@ -276,8 +281,8 @@ var MAssistOptions = (function() {
 			$("#chatbox").html('');
 			
 			dialog(
-				'You have entered another model\'s room! All games and timers have been stopped!',
-				'Model Changed!',
+				'You have entered a room!<br><br>All games and timers have been reset!',
+				'Entered the room!',
 				function() {
 					$(this).dialog('close');
 				},
@@ -285,6 +290,20 @@ var MAssistOptions = (function() {
 			);
 			
 			
+		});
+
+
+		$('body').on('ma:model-model-name-not-match', function() {
+			
+			$("#chatbox").html('');
+			dialog(
+				'This is not your room!<br><br>All games and timers have been reset!',
+				'Unauthorized!',
+				function() {
+					$(this).dialog('close');
+				},
+				null
+			);
 		});
 		
 	});

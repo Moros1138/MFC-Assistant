@@ -23,6 +23,10 @@ if (0 === window.location.href.indexOf('http://www.myfreecams.com/_html/top.html
 		chrome.runtime.sendMessage({from: 'content', subject: 'ma:model-changed', modelName: e.detail});
 	}, false);
 
+	document.body.addEventListener('ma:model-name-not-match', function() {
+		chrome.runtime.sendMessage({from: 'content', subject: 'ma:model-model-name-not-match'});
+	}, false);
+	
 	// Inform the background page that this tab should have a page-action
 	chrome.runtime.sendMessage({
 		from:    'content',

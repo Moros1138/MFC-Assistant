@@ -293,6 +293,16 @@ var MATipWars = (function() {
 			
 		});
 
+		$('body').on('ma:model-name-not-match', function() {
+			
+			running = false;
+			clear();
+			
+			$('#matw-start-stop').toggleClass('btn-danger', false);
+			$('#matw-start-stop').toggleClass('btn-primary', true);
+			$('#matw-start-stop').html('Start');
+			
+		});
 		
 	});
 

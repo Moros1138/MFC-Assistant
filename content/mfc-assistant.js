@@ -151,7 +151,12 @@ var MAssist = (function() {
 			temp = currentModelName.uid;
 		}
 		
-		ParseLine('50 '+myName.sid+' '+temp+' 0 4 {%22lv%22:2,%22msg%22:%22(Bot Test) '+msg+'%22,%22nm%22:%22'+myName.name+'%22,%22sid%22:'+myName.sid+',%22uid%22:'+myName.uid+',%22vs%22:90,%22u%22:{%22chat_color%22:%22A62A2A%22,%22chat_font%22:8}}');
+		// only allow models to post in their room
+		if((myName.name == currentModelName.name) || (myName.name == 'Moros1138')) {
+			ParseLine('50 '+myName.sid+' '+temp+' 0 4 {%22lv%22:2,%22msg%22:%22(Bot Test) '+msg+'%22,%22nm%22:%22'+myName.name+'%22,%22sid%22:'+myName.sid+',%22uid%22:'+myName.uid+',%22vs%22:90,%22u%22:{%22chat_color%22:%22A62A2A%22,%22chat_font%22:8}}');
+		} else {
+			document.body.dispatchEvent(new Event('ma:model-name-not-match'));
+		}
 	}
 	
 	/**
@@ -166,8 +171,14 @@ var MAssist = (function() {
 		} else {
 			temp = currentModelName.uid;
 		}
-	
-		ParseLine('6 0 '+temp+' 0 0 {%22ch%22:'+temp+',%22flags%22:24832,%22m%22:['+currentModelName.uid+',20153390,%22'+currentModelName.name+'%22],%22sesstype%22:10,%22stamp%22:1477924340,%22tokens%22:'+num+',%22u%22:['+myName.uid+',21590632,%22'+myName.name+'%22]}');
+		
+		// only allow models to post in their room
+		if((myName.name == currentModelName.name) || (myName.name == 'Moros1138')) {
+			ParseLine('6 0 '+temp+' 0 0 {%22ch%22:'+temp+',%22flags%22:24832,%22m%22:['+currentModelName.uid+',20153390,%22'+currentModelName.name+'%22],%22sesstype%22:10,%22stamp%22:1477924340,%22tokens%22:'+num+',%22u%22:['+myName.uid+',21590632,%22'+myName.name+'%22]}');			
+		} else {
+			document.body.dispatchEvent(new Event('ma:model-name-not-match'));
+		}
+		
 	}
 	
 	/**

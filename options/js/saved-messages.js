@@ -300,6 +300,26 @@ var MASavedMessages = (function () {
 			});
 			
 		});
+
+		/**
+		 * model changed
+		 ******************************************************************/
+		$('body').on('ma:model-name-not-match', function() {
+			
+			/**
+			 * kill all intervals
+			 ******************************************************************/
+			$('.start-timer').each(function() {
+				
+				if( $(this).find('span:last-child').html() == 'Stop Timer' ) {
+					
+					$(this).trigger('click');
+					
+				}
+				
+			});
+			
+		});
 		
 	});
 
