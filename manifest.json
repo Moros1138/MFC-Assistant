@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "MFCAssistant",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"background": {
 		"html": [
 			"options/options.html"
@@ -24,13 +24,17 @@
 			"all_frames": true
 		}
 	],
+	"icons": {
+		"16": "options/images/icon16.png",
+		"48": "options/images/icon48.png",
+		"128": "options/images/icon128.png"
+	},
 	"browser_action": {
 		"default_title": "MFC Assistant"
 	},
 	"web_accessible_resources": [
 		"content/*.js"
 	],
-	
 	"permissions": [
 		"tabs",
 		"activeTab"
