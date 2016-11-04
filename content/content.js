@@ -11,6 +11,10 @@ if (0 === window.location.href.indexOf('http://www.myfreecams.com/_html/top.html
 
 	injectJs("content/mfc-assistant.js");
 	
+	document.body.addEventListener('ma:private-message', function(e) {
+		chrome.runtime.sendMessage({from: 'content', subject: 'ma:private-message', mfcMsg: e.detail});
+	}, false);
+
 	document.body.addEventListener('ma:chat-message', function(e) {
 		chrome.runtime.sendMessage({from: 'content', subject: 'ma:chat-message', mfcMsg: e.detail});
 	}, false);

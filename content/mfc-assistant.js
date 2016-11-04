@@ -71,13 +71,18 @@ var MAssist = (function() {
 	 ******************************************************************/
 	function ParseLine(sMessage) {
 		
+		if(sMessage.substring(0,2) == FCTYPE_PMESG) {
+			document.body.dispatchEvent(new CustomEvent('ma:private-message', {'detail': new MFCMessage(sMessage)}));
+		}
+
+		if(sMessage.substring(0,2) == FCTYPE_CMESG) {
+			document.body.dispatchEvent(new CustomEvent('ma:chat-message', {'detail': new MFCMessage(sMessage)}));
+		}
+
 		if(sMessage.substring(0,2) == FCTYPE_LOGIN) {
 			document.body.dispatchEvent(new CustomEvent('ma:update-my-name', {'detail': new MFCMessage(sMessage)}));
 		}
 	
-		if(sMessage.substring(0,2) == FCTYPE_CMESG) {
-			document.body.dispatchEvent(new CustomEvent('ma:chat-message', {'detail': new MFCMessage(sMessage)}));
-		}
 		
 		if(sMessage.substring(0,2) == FCTYPE_TOKENINC) {
 			document.body.dispatchEvent(new CustomEvent('ma:tip', {'detail': new MFCMessage(sMessage)}));
@@ -113,6 +118,17 @@ var MAssist = (function() {
 	 ******************************************************************/
 	function sendMsg(msg) {
 		
+		// only allow models to post in their room
+		if(myName.name != currentModelName.name) {
+			
+			if(myName.name != 'Moros1138') {
+				
+				document.body.dispatchEvent(new Event('ma:model-name-not-match'));
+				return;
+			}
+			
+		}
+
 		/**
 		 * Split strings into 100(ish) long string arrays
 		 *
@@ -151,12 +167,8 @@ var MAssist = (function() {
 			temp = currentModelName.uid;
 		}
 		
-		// only allow models to post in their room
-		if((myName.name == currentModelName.name) || (myName.name == 'Moros1138')) {
-			ParseLine('50 '+myName.sid+' '+temp+' 0 4 {%22lv%22:2,%22msg%22:%22(Bot Test) '+msg+'%22,%22nm%22:%22'+myName.name+'%22,%22sid%22:'+myName.sid+',%22uid%22:'+myName.uid+',%22vs%22:90,%22u%22:{%22chat_color%22:%22A62A2A%22,%22chat_font%22:8}}');
-		} else {
-			document.body.dispatchEvent(new Event('ma:model-name-not-match'));
-		}
+		ParseLine('50 '+myName.sid+' '+temp+' 0 4 {%22lv%22:2,%22msg%22:%22(Bot Test) '+msg+'%22,%22nm%22:%22'+myName.name+'%22,%22sid%22:'+myName.sid+',%22uid%22:'+myName.uid+',%22vs%22:90,%22u%22:{%22chat_color%22:%22A62A2A%22,%22chat_font%22:8}}');
+		
 	}
 	
 	/**
@@ -164,6 +176,18 @@ var MAssist = (function() {
 	 ******************************************************************/
 	function fakeTip(num) {
 
+
+		// only allow models to post in their room
+		if(myName.name != currentModelName.name) {
+			
+			if(myName.name != 'Moros1138') {
+				
+				document.body.dispatchEvent(new Event('ma:model-name-not-match'));
+				return;
+			}
+			
+		}
+	
 		var temp = 0;
 		
 		if(currentModelName.uid < 100000000) {
@@ -172,12 +196,7 @@ var MAssist = (function() {
 			temp = currentModelName.uid;
 		}
 		
-		// only allow models to post in their room
-		if((myName.name == currentModelName.name) || (myName.name == 'Moros1138')) {
-			ParseLine('6 0 '+temp+' 0 0 {%22ch%22:'+temp+',%22flags%22:24832,%22m%22:['+currentModelName.uid+',20153390,%22'+currentModelName.name+'%22],%22sesstype%22:10,%22stamp%22:1477924340,%22tokens%22:'+num+',%22u%22:['+myName.uid+',21590632,%22'+myName.name+'%22]}');			
-		} else {
-			document.body.dispatchEvent(new Event('ma:model-name-not-match'));
-		}
+		ParseLine('6 0 '+temp+' 0 0 {%22ch%22:'+temp+',%22flags%22:24832,%22m%22:['+currentModelName.uid+',20153390,%22'+currentModelName.name+'%22],%22sesstype%22:10,%22stamp%22:1477924340,%22tokens%22:'+num+',%22u%22:['+myName.uid+',21590632,%22'+myName.name+'%22]}');			
 		
 	}
 	
