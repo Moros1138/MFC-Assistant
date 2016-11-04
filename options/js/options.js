@@ -35,6 +35,14 @@ var MAssistOptions = (function() {
 	 ******************************************************************/
 	function init() {
 		loadSettings();
+		
+		/*
+			TODO: signature
+		var current_date = (new Date()).valueOf().toString();
+		var random = Math.random().toString();		
+		console.log(md5(current_date+random));
+		*/
+		
 	}
 
 	/**
@@ -148,17 +156,21 @@ var MAssistOptions = (function() {
 	}
 
 	function sendToTab(object) {
+		
 		chrome.tabs.query({currentWindow: false}, function(tabs) {
 			
 			for(var i=0; i < tabs.length; i++) {
 				if(tabs[i].url !== undefined) {
 					if(0 === tabs[i].url.indexOf('http://www.myfreecams.com')) {
-						chrome.tabs.sendMessage(tabs[i].id, object);
+						if(-1 === tabs[i].url.indexOf('http://www.myfreecams.com/modelweb')) {
+							chrome.tabs.sendMessage(tabs[i].id, object);
+						}
 					}
 				}
 			}
 			
 		});
+		
 	}
 
 	/**
@@ -292,7 +304,9 @@ var MAssistOptions = (function() {
 			
 		});
 
-
+		/**
+		 * model name does not match bot's username
+		 ******************************************************************/
 		$('body').on('ma:model-model-name-not-match', function() {
 			
 			$("#chatbox").html('');
