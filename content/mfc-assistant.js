@@ -33,6 +33,10 @@ var MAssist = (function() {
 		
 	}
 	
+	function isRunning() {
+		return running;
+	}
+
 	/**
 	 * Grabs messages from the DOM and parses them for chat
 	 * messages and tips.
@@ -53,7 +57,7 @@ var MAssist = (function() {
 
 			debug('MA: new chat message arrived.');
 			
-			$("#centertabs-body div[id$='channeltab'] div[id$='channeltext'] p:not([class='ma-processed']").each(function() {
+			$("#centertabs-body div[id$='channeltab'] div[id$='channeltext'] p:not(.ma-processed)").each(function() {
 				
 				// probably a tip, process it here
 				if( $(this).children()[0].tagName.toLowerCase() == 'font' ) {
@@ -65,21 +69,17 @@ var MAssist = (function() {
 					if(tipInfo) {
 						
 						var memberName = tipInfo[2];
+						tipInfo[1] = parseInt(tipInfo[1]);
 						
-						if( $(this).next().length > 0 ) {
-							
-							// only process THIS tip if it's public!
-							if( -1 === $(this).next().text().indexOf("not shown in room") ) {
-								chrome.runtime.sendMessage({from: 'content', subject: 'ma:tip', mfcMsg: {memberName: memberName, tipAmount: tipInfo[1]}});
-								debug({from: 'content', subject: 'ma:tip', mfcMsg: {memberName: memberName, tipAmount: tipInfo[1]}});
-							}
-							
+						if( $(this).find('span[style="display: inline; background-color: #C8C8C8;"]').length == 0 ) {
+							chrome.runtime.sendMessage({from: 'content', subject: 'ma:tip', mfcMsg: {memberName: memberName, tipAmount: tipInfo[1]}});
 						}
 						
 					}
 					
 				}
-				
+
+				/*
 				// probably a chat message, process it here
 				if($(this).children()[0].tagName.toLowerCase() == 'a') {
 					
@@ -89,13 +89,14 @@ var MAssist = (function() {
 						var message = $(this).find('> font').text();
 						
 						if(memberName && message) {
-							chrome.runtime.sendMessage({from: 'content', subject: 'ma:chat-message', mfcMsg: {memberName: memberName, message: message}});
-							debug({from: 'content', subject: 'ma:chat-message', mfcMsg: {memberName: memberName, message: message}});
+							//chrome.runtime.sendMessage({from: 'content', subject: 'ma:chat-message', mfcMsg: {memberName: memberName, message: message}});
+							//debug({from: 'content', subject: 'ma:chat-message', mfcMsg: {memberName: memberName, message: message}});
 						}
 						
 					}
 					
 				}
+				*/
 				
 				// set this item to processed.
 				$(this).toggleClass('ma-processed', true);
@@ -139,16 +140,12 @@ var MAssist = (function() {
 		
 		if(settings.send_messages) {
 			for(var i=0; i<msg.length;i++) {
-				setTimeout(function () {
-					$("#centertabs-body div[id$='channeltab'] input[id$='message_input']").val(msg[i]);
-					$("#centertabs-body div[id$='channeltab'] input[type='button']").trigger('click');
-				}, i*200);
+				$("#centertabs-body div[id$='channeltab'] input[id$='message_input']").val(msg[i]);
+				$("#centertabs-body div[id$='channeltab'] input[type='button']").trigger('click');
 			}
 		} else {
 			for(var i=0; i<msg.length;i++) {
-				setTimeout(function () {
-					fakeMsg(msg[i]);
-				}, i*200);
+				fakeMsg(msg[i]);
 			}
 		}
 		
@@ -166,7 +163,8 @@ var MAssist = (function() {
 		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext']").append([
 			'<p>',
 				'<a onclick="UI.UserInfoDisplay(16212199,false, true);">',
-				'<font face="Palatino Linotype" color="#A62A2A" style="font-size:29px"><b>MFC Assistant</b></font></a>',
+					'<font face="Palatino Linotype" color="#A62A2A" style="font-size:29px"><b>MFC Assistant</b></font>',
+				'</a>',
 				'<font face="Palatino Linotype" color="#A62A2A" style="font-size:29px"><b>:&nbsp;'+msg+'</b></font>',
 			'</p>',
 		].join(''));
@@ -185,10 +183,18 @@ var MAssist = (function() {
 			return;
 		}
 		
+		
 		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext']").append([
-			'<p><font face="Arial" color="#DC0000" style="font-size:34px"><span style="display: inline; background-color: #FFFF00;"><b>Received a 5 token tip from <a style="cursor:pointer" ondblclick="ConversationManager.NewConversation(16212199,true)" onclick="UI.UserInfoDisplay(16212199)"><font face="Palatino Linotype" color="#A62A2A" style="font-size:34px"><b>MFC Assistant (Testing)</b></font></a>!</b></span></font></p>'
+			'<p class="uid16212199 sid176065692">',
+			'<font face="Arial" color="#DC0000" style="font-size:34px">',
+			'<span style="display: inline; background-color: #FFFF00;">',
+			'<b>Received a '+num+' token tip from <a style="cursor:pointer" ondblclick="ConversationManager.NewConversation(16212199,true)" onclick="UI.UserInfoDisplay(16212199)"><font face="Palatino Linotype" color="#A62A2A" style="font-size:34px"><b>MFC Assistant (Testing)</b></font></a>!</b></span></font>',
+			'</p>'
 		].join(''));
 
+		// force the scroll down.
+		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext']")[0].scrollTop = $("#centertabs-body div[id$='channeltab'] div[id$='channeltext']")[0].scrollHeight;
+		
 	}
 	
 	/**
@@ -234,17 +240,14 @@ var MAssist = (function() {
 	});
 	
 	// Inform the background page that this tab should have a page-action
-	chrome.runtime.sendMessage({
-		from:    'content',
-		subject: 'openOptionsPage'
-	});
+	chrome.runtime.sendMessage({from:    'content', subject: 'openOptionsPage'});
 
 	return {
 		init: init,
 		sendMsg: sendMsg,
 		fakeTip: fakeTip,
 		debug: debug,
-		running: running
+		isRunning: isRunning
 	};
 	
 })();
@@ -276,11 +279,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, response) {
 				return true;
 				break;
 			case 'ma:init':
-				response({running: MAssist.running});
+				console.log('MA: ma:init recieved from options page');
+				response({running: MAssist.isRunning()});
 			default:
 				break;
 		}
 		
 	}
 	
+	return true;
 });
