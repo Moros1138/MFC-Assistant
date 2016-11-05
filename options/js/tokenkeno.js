@@ -94,6 +94,9 @@ var MATokenKeno = (function () {
 		
 	}
 	
+	/**
+	 * Calculates the sum of every number in the start/end range
+	 ******************************************************************/
 	function calcMaxTokens() {
 		
 		if(!isNaN(settings.start) && !isNaN(settings.end) && settings.start != null && settings.end != null) {
@@ -113,8 +116,9 @@ var MATokenKeno = (function () {
 		
 	}
 
-	/* Start Keno
-	 ******************************************************/
+	/**
+	 * start token keno
+	 ******************************************************************/
 	function start() {
 		
 		if( isNaN(settings.start) ) {
@@ -173,8 +177,9 @@ var MATokenKeno = (function () {
 		
 	}
 
-	/* Stop Keno
-	 ******************************************************/
+	/**
+	 * stop token keno
+	 ******************************************************************/
 	function stop() {
 		
 		running = false;
@@ -191,9 +196,9 @@ var MATokenKeno = (function () {
 		
 	}
 
-
-	/* Re-post remaining numbers
-	 ******************************************************/
+	/**
+	 * re-post remaining numbers
+	 ******************************************************************/
 	function repost() {
 
 		if(!running)
@@ -278,8 +283,9 @@ var MATokenKeno = (function () {
 		
 	}
 	
-	/* Clear game variabls
-	 ******************************************************/
+	/**
+	 * clear game variables
+	 ******************************************************************/
 	function clear() {
 		
 		remaining = [];
@@ -290,8 +296,9 @@ var MATokenKeno = (function () {
 	}
 	
 	
-	/* Handle Tip
-	 ******************************************************/
+	/**
+	 * handle tips
+	 ******************************************************************/
 	function handleTip(mfcMsg) {
 		
 		var i;
