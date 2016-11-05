@@ -16,3 +16,40 @@ The MFC Chat bot that puts you in charge of your room!
 
 Special thanks to [@KradekMFC](https://www.twitter.com/KradekMFC) for his work on the MFC Assistant userscript which served when I was in the early stages of developing this software.
 		
+## Version History
+
+* 1.0.8
+  * Switched content/injected script to run inside MyFreeCams' Model Web instead of the member's site
+  * Removed chat page
+  * Moved testing Fake Tip to the Options page.Fixed tip capturing issue
+* 1.0.7
+  * Added model only requirement for sending messages
+  * Added private message handler
+* 1.0.6
+  * Added icons
+* 1.0.5
+  * Updated layout/styles
+  * Code refactoring
+  * Minor tweaks in Options page
+  * sendMsg dialog
+  * Added model changed event
+  * Fixed saved/timed message description update/sync and timer clearing
+  * Turn every navbar link into a page
+  * Removed defunct css
+  * Tip Wars is now called Tip War
+  * Tweak chrome extension manifest
+* 1.0.4
+  * checkNaN remove click events
+  * Changed updateSettings to handle data/dom
+  * Update layout to be responsive
+* 1.0.3
+  * Added "number required" errors for delay inputs
+  * Move Options styles into options/css/options.css
+* 1.0.2
+  * Added maximum token calculator.
+  * Fixed window/tab targetting issue.
+  * Added saved/timed messages
+* 1.0.1
+  * moved ui away from content/injected script
+* 1.0.0
+  * inital commit
