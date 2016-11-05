@@ -1,6 +1,7 @@
 var MANavigation = (function() {
 	
 	var pages = [
+		'#not-ready',
 		'#home',
 		'#options',
 		'#savedMsg',
@@ -8,7 +9,12 @@ var MANavigation = (function() {
 		'#tokenkeno'
 	];
 	
+	var ready = false;
+	
 	function navigateTo(page) {
+		
+		if(!ready && page != '#not-ready')
+			return;
 		
 		if( pages.indexOf(page) != -1 ) {
 			for(var i = 0; i < pages.length; i++) {
@@ -27,12 +33,17 @@ var MANavigation = (function() {
 		if(window.location.hash) {
 			navigateTo(window.location.hash);
 		} else {
-			navigateTo('#home');
+			navigateTo('#not-ready');
 		}
 		
 		// link click navigation
 		$('a').click(function(e) {
 			navigateTo($(this).attr('href'));	
+		});
+		
+		$('body').on('ma:ready', function(e) {
+			ready = true;
+			navigateTo('#home');
 		});
 		
 	});	
