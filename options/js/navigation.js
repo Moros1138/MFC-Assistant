@@ -2,6 +2,7 @@ var MANavigation = (function() {
 	
 	var pages = [
 		'#not-ready',
+		'#chat',
 		'#home',
 		'#options',
 		'#savedMsg',

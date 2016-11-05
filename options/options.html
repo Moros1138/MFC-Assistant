@@ -48,6 +48,7 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
+						<li><a href="#chat">Chat</a></li>
 						<li class="dropdown">
 							<a href="#games" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Games <span class="caret"></span></a>
 							<ul class="dropdown-menu">
@@ -62,7 +63,7 @@
 			</div>
 		</nav>
 
-		<div id="not-ready" class="page container">
+		<div id="not-ready" class="page container" style="display: none;">
 
 			<div class="panel panel-default">
 				<div class="panel-heading">
@@ -76,7 +77,7 @@
 		
 		</div>
 
-		<div id="home" class="page container">
+		<div id="home" class="page container" style="display: none;">
 			<div class="jumbotron">
 				<h1>Myfreecams Assistant</h1>
 				<p>
@@ -130,7 +131,30 @@
 			</div>
 		</div>
 		
-		<div id="options" class="page container">
+		<div id="chat" class="page container" style="display: none;">
+			<h1>Chatbox</h1>
+			<div id="chatbox">
+			</div>
+			<form id="ma-send-msg-form">
+				<div class="input-group">
+					<input class="form-control" type="text" id="ma-send-msg-text" placeholder="Type a message to send...">
+					<span class="input-group-btn">
+						<button class="btn btn-primary" id="ma-send-msg-button">Send Message</button>
+					</span>
+				</div><!-- /input-group -->
+			</form>
+			<h4>Send a Test Tip</h4>
+			<form id="ma-fake-tip-form">
+				<div class="input-group" style="margin-top: 10px;">
+					<input class="form-control" type="text" id="ma-fake-tip-amount" placeholder="Set tip amount...">
+					<span class="input-group-btn">
+						<button class="btn btn-info" id="ma-fake-tip-button">Fake Tip</button>
+					</span>
+				</div><!-- /input-group -->
+			</form>
+		</div><!-- /page -->
+
+		<div id="options" class="page container" style="display: none;">
 			<h1>Options</h1>
 			<fieldset>
 				<h4>Debug Mode?</h4>
@@ -155,19 +179,10 @@
 					<span class="custom-control-indicator"></span>
 					<span class="custom-control-description">No</span>
 				</label>
-				<h4>Send a Test Tip</h4>
-				<form id="ma-fake-tip-form">
-					<div class="input-group" style="margin-top: 10px;">
-						<input class="form-control" type="text" id="ma-fake-tip-amount" placeholder="Set tip amount...">
-						<span class="input-group-btn">
-							<button class="btn btn-info" id="ma-fake-tip-button">Fake Tip</button>
-						</span>
-					</div><!-- /input-group -->
-				</form>
 			</fieldset>
 		</div><!-- /page -->
 			
-		<div id="savedMsg" class="page container">
+		<div id="savedMsg" class="page container" style="display: none;">
 			<h1>Saved/Timed Messages</h1>
 			<div id="saved-messages">
 				<ul class="sortable"></ul>
@@ -177,7 +192,7 @@
 			</div>
 		</div><!-- /page -->
 
-		<div id="tipwar" class="page container">
+		<div id="tipwar" class="page container" style="display: none;">
 			<h1>Tip War</h1>
 			<fieldset>
 				<p>
@@ -221,7 +236,7 @@
 			</fieldset>
 		</div><!-- /page -->
 						
-		<div id="tokenkeno" class="page container">
+		<div id="tokenkeno" class="page container" style="display: none;">
 			<h1>Token Keno</h1>
 			<fieldset>
 				<p>

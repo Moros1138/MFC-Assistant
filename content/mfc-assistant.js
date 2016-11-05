@@ -79,7 +79,6 @@ var MAssist = (function() {
 					
 				}
 
-				/*
 				// probably a chat message, process it here
 				if($(this).children()[0].tagName.toLowerCase() == 'a') {
 					
@@ -89,14 +88,12 @@ var MAssist = (function() {
 						var message = $(this).find('> font').text();
 						
 						if(memberName && message) {
-							//chrome.runtime.sendMessage({from: 'content', subject: 'ma:chat-message', mfcMsg: {memberName: memberName, message: message}});
-							//debug({from: 'content', subject: 'ma:chat-message', mfcMsg: {memberName: memberName, message: message}});
+							chrome.runtime.sendMessage({from: 'content', subject: 'ma:chat-message', mfcMsg: {memberName: memberName, message: message}});
 						}
 						
 					}
 					
 				}
-				*/
 				
 				// set this item to processed.
 				$(this).toggleClass('ma-processed', true);

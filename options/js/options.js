@@ -200,6 +200,8 @@ var MAssistOptions = (function() {
 		 ******************************************************************/
 		if(request.subject == 'ma:chat-message') {
 			$('body').trigger('ma:chat-message', [ request.mfcMsg ]);
+			$('#chatbox').append('<p><b>'+request.mfcMsg.memberName+':</b> '+filterEmotes(request.mfcMsg.message)+'</p>');
+			$("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
 		}
 		
 		/**
@@ -210,6 +212,17 @@ var MAssistOptions = (function() {
 		 ******************************************************************/
 		if(request.subject == 'ma:tip') {
 			$('body').trigger('ma:tip', [ request.mfcMsg ]);
+
+			var tipMsg = '<p>';
+			tipMsg += '<b>'+request.mfcMsg.memberName+'</b> has tipped you '+request.mfcMsg.tipAmount+' tokens. ';
+			if(request.mfcMsg.Data.msg !== undefined) {
+				tipMsg += filterEmotes(request.mfcMsg.Data.msg);
+			}
+			
+			tipMsg += '</p>';
+
+			$('#chatbox').append(tipMsg);
+			$("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
 		}
 		
 		/**
@@ -251,6 +264,16 @@ var MAssistOptions = (function() {
 	 ******************************************************************/
 	function sendMsg(msg, bypass_dialog) {
 		sendToTab({from: 'options-page', subject: 'ma:send-msg', msg: msg});
+	}
+	
+	/**
+	 * filter emotes
+	 ******************************************************************/
+	function filterEmotes(msg) {
+
+		// TODO: do it better!
+		return unescape(msg).replace(new RegExp('#~(.*?)~#', 'g'),'EMOTE');
+		
 	}
 	
 	$(document).ready(function() {
