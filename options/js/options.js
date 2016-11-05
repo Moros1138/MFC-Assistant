@@ -45,8 +45,6 @@ var MAssistOptions = (function() {
 					if(response.running) {
 						$('body').trigger('ma:ready');
 						clearInterval(initInterval);
-					} else {
-						console.log('not ready');
 					}
 				}
 			});
@@ -229,7 +227,9 @@ var MAssistOptions = (function() {
 	 * This sends a message to the content script
 	 ******************************************************************/
 	function fakeTip(num) {
-
+		
+		num = parseInt(num);
+		
 		dialog(
 			'You are about to inject a fake tip! This is intended to be used for testing purposes and is only visible to you!<br><br>You are not actually tipping the model!',
 			'Fake Tip',
@@ -264,7 +264,7 @@ var MAssistOptions = (function() {
 		});
 		
 		$('body').on('ma:ready', function(e) {
-			navigateTo('#home');
+			MANavigation.navigateTo('#home');
 		});
 		
 	});
