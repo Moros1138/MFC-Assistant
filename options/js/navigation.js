@@ -49,6 +49,7 @@ var MANavigation = (function() {
 	});	
 	
 	return {
+		navigateTo: navigateTo
 	};
 	
 })();
