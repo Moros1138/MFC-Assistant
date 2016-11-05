@@ -24,6 +24,8 @@ jQuery.fn.extend({
 
 var MAssistOptions = (function() {
 
+	var initInterval = null;
+
 	// default settings
 	var settings = {
 		debug_mode: true,
@@ -35,6 +37,22 @@ var MAssistOptions = (function() {
 	 ******************************************************************/
 	function init() {
 		loadSettings();
+
+		initInterval = setInterval(function() {
+			
+			sendToTab({from: 'options-page', subject: 'ma:init', s: settings}, function(response) {
+				if(response) {
+					if(response.running) {
+						$('body').trigger('ma:ready');
+						clearInterval(initInterval);
+					} else {
+						console.log('not ready');
+					}
+				}
+			});
+			
+		}, 1000);
+		
 	}
 
 	/**
@@ -147,14 +165,18 @@ var MAssistOptions = (function() {
 
 	}
 
-	function sendToTab(object) {
+	function sendToTab(object, callback) {
 		
 		chrome.tabs.query({currentWindow: false}, function(tabs) {
 			
 			for(var i=0; i < tabs.length; i++) {
 				if(tabs[i].url !== undefined) {
 					if(-1 !== tabs[i].url.indexOf('//www.myfreecams.com/modelweb')) {
-						chrome.tabs.sendMessage(tabs[i].id, object);
+						if(callback === undefined) {
+							chrome.tabs.sendMessage(tabs[i].id, object);
+						} else {
+							chrome.tabs.sendMessage(tabs[i].id, object, callback);
+						}
 					}
 				}
 			}
@@ -166,7 +188,7 @@ var MAssistOptions = (function() {
 	/**
 	 * Listen for messages from "content"
 	 ******************************************************************/
-	chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
+	chrome.runtime.onMessage.addListener( function(request, sender, response) {
 		
 		if(request.from != 'content') {
 			return;
@@ -241,8 +263,13 @@ var MAssistOptions = (function() {
 			$('#ma-fake-tip-amount').val('');
 		});
 		
+		$('body').on('ma:ready', function(e) {
+			navigateTo('#home');
+		});
+		
 	});
 	
+
 	return {
 		init: init,
 		sendMsg: sendMsg,
