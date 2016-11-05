@@ -11,11 +11,6 @@ function openOrFocusOptionsPage() {
 		found: false
 	};
 	
-	var mfcURL = {
-		url: '//www.myfreecams.com/modelweb',
-		found: false
-	};
-	
 	chrome.windows.getAll({ populate: true }, function(wins) {
 		
 		for(var wi=0; wi<wins.length; wi++) {
@@ -27,10 +22,6 @@ function openOrFocusOptionsPage() {
 				var tab = win.tabs[ti];
 				
 				if(tab.url !== undefined) {
-					
-					if(-1 !== tab.url.indexOf(mfcURL.url)) {
-						mfcURL.found = true;
-					}
 
 					if(extensionURL.url == tab.url) {
 						extensionURL.found = true;
@@ -45,12 +36,8 @@ function openOrFocusOptionsPage() {
 		}
 		
 		// if it's not already open, create a new tab
-		if (!extensionURL.found && mfcURL.found) {
+		if (!extensionURL.found) {
 			chrome.windows.create({url: extensionURL.url});
-		}
-		
-		if(!mfcURL.found) {
-			alert("MFC Assistant requires you to be logged into the broadcaster!");
 		}
 		
 	});
