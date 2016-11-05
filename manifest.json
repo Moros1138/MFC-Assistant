@@ -11,19 +11,10 @@
 		],
 		"persistent": true
 	},
-	"content_scripts": [
-		{
-			"run_at": "document_end",
-			"js": [
-				"content/content.js"
-			],
-			"matches": [
-				"http://www.myfreecams.com/*",
-				"https://www.myfreecams.com/*"
-			],
-			"all_frames": true
-		}
-	],
+	"content_scripts": [{
+		"js": [ "content/jquery.js", "content/mfc-assistant.js" ],
+		"matches": [ "*://www.myfreecams.com/modelweb/*" ]
+	}],
 	"icons": {
 		"16": "options/images/icon16.png",
 		"48": "options/images/icon48.png",
@@ -32,9 +23,6 @@
 	"browser_action": {
 		"default_title": "MFC Assistant"
 	},
-	"web_accessible_resources": [
-		"content/*.js"
-	],
 	"permissions": [
 		"tabs",
 		"activeTab"

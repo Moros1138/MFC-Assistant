@@ -27,7 +27,7 @@ var MAssistOptions = (function() {
 	// default settings
 	var settings = {
 		debug_mode: true,
-		send_messages: false
+		send_messages: false,
 	};
 	
 	/**
@@ -35,14 +35,6 @@ var MAssistOptions = (function() {
 	 ******************************************************************/
 	function init() {
 		loadSettings();
-		
-		/*
-			TODO: signature
-		var current_date = (new Date()).valueOf().toString();
-		var random = Math.random().toString();		
-		console.log(md5(current_date+random));
-		*/
-		
 	}
 
 	/**
@@ -161,10 +153,8 @@ var MAssistOptions = (function() {
 			
 			for(var i=0; i < tabs.length; i++) {
 				if(tabs[i].url !== undefined) {
-					if(0 === tabs[i].url.indexOf('http://www.myfreecams.com')) {
-						if(-1 === tabs[i].url.indexOf('http://www.myfreecams.com/modelweb')) {
-							chrome.tabs.sendMessage(tabs[i].id, object);
-						}
+					if(-1 !== tabs[i].url.indexOf('//www.myfreecams.com/modelweb')) {
+						chrome.tabs.sendMessage(tabs[i].id, object);
 					}
 				}
 			}
@@ -185,50 +175,29 @@ var MAssistOptions = (function() {
 		/**
 		 * Fire our local ma:chat-message event passing mfcMsg
 		 *
-		 * mfcMsg.Data.nm  == chat user name
-		 * mfcMsg.Data.msg == message
+		 * mfcMsg.memberName
+		 * mfcMsg.message
 		 ******************************************************************/
 		if(request.subject == 'ma:chat-message') {
 			$('body').trigger('ma:chat-message', [ request.mfcMsg ]);
-			$('#chatbox').append('<p><b>'+request.mfcMsg.Data.nm+':</b> '+filterEmotes(request.mfcMsg.Data.msg)+'</p>');
-			$("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
 		}
 		
 		/**
 		 * Fire our local ma:tip event passing mfcMsg
 		 *
-		 * mfcMsg.Data.m[2]   == model name
-		 * mfcMsg.Data.tokens == tip amount
-		 * mfcMsg.Data.u[2]   == member name
-		 * mfcMsg.Data.msg    == tip note
+		 * mfcMsg.Data.memberName
+		 * mfcMsg.Data.tipAmount
 		 ******************************************************************/
 		if(request.subject == 'ma:tip') {
 			$('body').trigger('ma:tip', [ request.mfcMsg ]);
-			
-			var tipMsg = '<p>';
-			tipMsg += '<b>'+request.mfcMsg.Data.u[2]+'</b> has tipped <b>'+request.mfcMsg.Data.m[2]+'</b> '+request.mfcMsg.Data.tokens+' tokens. ';
-			if(request.mfcMsg.Data.msg !== undefined) {
-				tipMsg += filterEmotes(request.mfcMsg.Data.msg);
-			}
-			
-			tipMsg += '</p>';
-
-			$('#chatbox').append(tipMsg);
-			$("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
-			
 		}
 		
 		/**
-		 * Fire our local ma:model-changed event
+		 * MFC Assistant is ready, spread the word!
 		 ******************************************************************/
-		if(request.subject == 'ma:model-changed') {
-			$('body').trigger('ma:model-changed');
+		if(request.sugject == 'ma:ready') {
+			$('body').trigger('ma:ready');
 		}
-		
-		if(request.subject == 'ma:model-model-name-not-match') {
-			$('body').trigger('ma:model-model-name-not-match');
-		}
-		
 		
 	});
 	
@@ -262,62 +231,14 @@ var MAssistOptions = (function() {
 		sendToTab({from: 'options-page', subject: 'ma:send-msg', msg: msg});
 	}
 	
-	function filterEmotes(msg) {
-
-		// TODO: do it better!
-		return unescape(msg).replace(new RegExp('#~(.*?)~#', 'g'),'EMOTE');
-		
-	}
-
 	$(document).ready(function() {
 		
 		init();
-		
-		$('#ma-send-msg-form').submit(function(e) {
-			e.preventDefault();
-			sendMsg($('#ma-send-msg-text').val());
-			$('#ma-send-msg-text').val('');
-		});
 		
 		$('#ma-fake-tip-form').submit(function(e) {
 			e.preventDefault();
 			fakeTip(parseInt($('#ma-fake-tip-amount').val()));
 			$('#ma-fake-tip-amount').val('');
-		});
-		
-		/**
-		 * model changed
-		 ******************************************************************/
-		$('body').on('ma:model-changed', function() {
-			
-			$("#chatbox").html('');
-			
-			dialog(
-				'You have entered a room!<br><br>All games and timers have been reset!',
-				'Entered the room!',
-				function() {
-					$(this).dialog('close');
-				},
-				null
-			);
-			
-			
-		});
-
-		/**
-		 * model name does not match bot's username
-		 ******************************************************************/
-		$('body').on('ma:model-model-name-not-match', function() {
-			
-			$("#chatbox").html('');
-			dialog(
-				'This is not your room!<br><br>All games and timers have been reset!',
-				'Unauthorized!',
-				function() {
-					$(this).dialog('close');
-				},
-				null
-			);
 		});
 		
 	});

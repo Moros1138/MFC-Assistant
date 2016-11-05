@@ -1,21 +1,13 @@
-//polyfill for unsafeWindow on Chrome
-if (navigator.userAgent.match(/chrome/i)) {
-    unsafeWindow = (function () {
-        var el = document.createElement('p');
-        el.setAttribute('onclick', 'return window;');
-        return el.onclick();
-    } ());
-}
-
+// probably overkill, but fuck it!
+if(	0 === window.location.href.indexOf('http://www.myfreecams.com/modelweb') || 0 === window.location.href.indexOf('https://www.myfreecams.com/modelweb') ) {
+	
 var MAssist = (function() {
-
-	if(opener)
-		return;
 	
-	var rendered = false;
-	var myName = '';
+	var initInterval = null;
 	
-	var currentModelName = '';
+	var running = false;
+	
+	var readingMessages = false;
 	
 	// default settings
 	var settings = {
@@ -24,84 +16,98 @@ var MAssist = (function() {
 	}
 	
 	/**
-	 * Initializes MAssist
+	 * Initializes MFC Assistant
 	 */
 	function init() {
-		unsafeWindow.mfcParseLine = unsafeWindow.ParseLine;
-		unsafeWindow.ParseLine = ParseLine;
-	}
-
-	/**
-	 * Parse MFC's sMessage and convert it into a useful object.
-	 *
-	 * Originally By: KradekMFC on GitHub
-	 * https://gist.github.com/KradekMFC/a4a337ecd7b0c71f60d88d7f4becfd29
-	 ******************************************************************/
-	function MFCMessage(initializer){
 		
-		var self = this;
-
-		//strip newlines
-		initializer = initializer.replace(/(\r\n|\n|\r)/gm, "");
-
-		//parse out the typical pieces
-		["Type","From","To","Arg1","Arg2"].forEach(function(part){
-			var delimiterPos = initializer.indexOf(" ");
-			self[part] = initializer.substring(0, delimiterPos);
-			initializer = initializer.substring(delimiterPos + 1)
-		});
-
-		//convert Type to an int
-		self.Type = +self.Type;
-
-	   var parsed;
-	   try {
-		   parsed = JSON.parse(unescape(initializer));
-	   } catch(err){}
-	   self.Data = parsed;
-
+		initInterval = setInterval(function() {
+			
+			if($("#centertabs-body div[id$='channeltab'] div[id$='channeltext']").length > 0) {
+				$('body').trigger('ma:ready');
+				console.log('MA: ma:ready triggered');
+				clearInterval(initInterval);
+				running = true;
+			}
+			
+		}, 1000);		
+		
 	}
 	
 	/**
-	 * Replacement for MFC's ParseLine. Allows us to fire message
-	 * events for both chat messages and tips.
-	 *
-	 * Originally By: KradekMFC on GitHub
-	 * https://gist.github.com/KradekMFC/a4a337ecd7b0c71f60d88d7f4becfd29
+	 * Grabs messages from the DOM and parses them for chat
+	 * messages and tips.
 	 ******************************************************************/
-	function ParseLine(sMessage) {
+	function readMessages() {
 		
-		if(sMessage.substring(0,2) == FCTYPE_PMESG) {
-			document.body.dispatchEvent(new CustomEvent('ma:private-message', {'detail': new MFCMessage(sMessage)}));
-		}
+		// set all current messages as processed
+		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext'] p").toggleClass('ma-processed', true);
+		debug('MA: all chat messages prior to init have been set to processed and ignored.');
+		
+		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext']").on('DOMNodeInserted', function() {
+		
+			// no double-ups please
+			if(readingMessages)
+				return;
+			
+			readingMessages = true;
 
-		if(sMessage.substring(0,2) == FCTYPE_CMESG) {
-			document.body.dispatchEvent(new CustomEvent('ma:chat-message', {'detail': new MFCMessage(sMessage)}));
-		}
+			debug('MA: new chat message arrived.');
+			
+			$("#centertabs-body div[id$='channeltab'] div[id$='channeltext'] p:not([class='ma-processed']").each(function() {
+				
+				// probably a tip, process it here
+				if( $(this).children()[0].tagName.toLowerCase() == 'font' ) {
+					
+					var tipRegEx = /Received\s+a\s+(\d+)\s+tokens?\s+tip\s+from\s+(.*)\s*!/i;
+					var thisMessage = $.trim($(this).text()).replace(/\s+/ig, " ");
+					var tipInfo = tipRegEx.exec(thisMessage);
+					
+					if(tipInfo) {
+						
+						var memberName = tipInfo[2];
+						
+						if( $(this).next().length > 0 ) {
+							
+							// only process THIS tip if it's public!
+							if( -1 === $(this).next().text().indexOf("not shown in room") ) {
+								chrome.runtime.sendMessage({from: 'content', subject: 'ma:tip', mfcMsg: {memberName: memberName, tipAmount: tipInfo[1]}});
+								debug({from: 'content', subject: 'ma:tip', mfcMsg: {memberName: memberName, tipAmount: tipInfo[1]}});
+							}
+							
+						}
+						
+					}
+					
+				}
+				
+				// probably a chat message, process it here
+				if($(this).children()[0].tagName.toLowerCase() == 'a') {
+					
+					if($(this).children().length == 2) {
+						
+						var memberName = $(this).find('> a').text();
+						var message = $(this).find('> font').text();
+						
+						if(memberName && message) {
+							chrome.runtime.sendMessage({from: 'content', subject: 'ma:chat-message', mfcMsg: {memberName: memberName, message: message}});
+							debug({from: 'content', subject: 'ma:chat-message', mfcMsg: {memberName: memberName, message: message}});
+						}
+						
+					}
+					
+				}
+				
+				// set this item to processed.
+				$(this).toggleClass('ma-processed', true);
+				
+			}); // each message
 
-		if(sMessage.substring(0,2) == FCTYPE_LOGIN) {
-			document.body.dispatchEvent(new CustomEvent('ma:update-my-name', {'detail': new MFCMessage(sMessage)}));
-		}
-	
-		
-		if(sMessage.substring(0,2) == FCTYPE_TOKENINC) {
-			document.body.dispatchEvent(new CustomEvent('ma:tip', {'detail': new MFCMessage(sMessage)}));
-		}
-
-		if(sMessage.substring(0,2) == FCTYPE_DETAILS) {
-			document.body.dispatchEvent(new CustomEvent('ma:user-details', {'detail': new MFCMessage(sMessage)}));
-		}
-		
-		if(sMessage.substring(0,2) == FCTYPE_STATUS) {
-			document.body.dispatchEvent(new CustomEvent('ma:check-model-changed', {'detail': new MFCMessage(sMessage)}));
-		}
-		
-		
-		//call MFC's message handler
-		unsafeWindow.mfcParseLine(sMessage);
+			readingMessages = false;
+			
+		}); // DOMNodeInserted
 		
 	}
-
+	
 	/**
 	 * Basically a wrapper for console.log that we can control via
 	 * our custom settings.
@@ -117,18 +123,12 @@ var MAssist = (function() {
 	 * Send a chat message
 	 ******************************************************************/
 	function sendMsg(msg) {
-		
-		// only allow models to post in their room
-		if(myName.name != currentModelName.name) {
-			
-			if(myName.name != 'Moros1138') {
-				
-				document.body.dispatchEvent(new Event('ma:model-name-not-match'));
-				return;
-			}
-			
-		}
 
+		if(!running) {
+			debug('MA: error sending message. not running');
+			return;
+		}
+	
 		/**
 		 * Split strings into 100(ish) long string arrays
 		 *
@@ -139,13 +139,16 @@ var MAssist = (function() {
 		
 		if(settings.send_messages) {
 			for(var i=0; i<msg.length;i++) {
-				// TODO: ask Kradek about that Chat object (I CAN'T FIND IT!)
-				$('#main')[0].contentWindow.$('#message_input').val(msg[i]);
-				$('#main')[0].contentWindow.$('#send_button').click();
+				setTimeout(function () {
+					$("#centertabs-body div[id$='channeltab'] input[id$='message_input']").val(msg[i]);
+					$("#centertabs-body div[id$='channeltab'] input[type='button']").trigger('click');
+				}, i*200);
 			}
 		} else {
 			for(var i=0; i<msg.length;i++) {
-				fakeMsg(msg[i]);
+				setTimeout(function () {
+					fakeMsg(msg[i]);
+				}, i*200);
 			}
 		}
 		
@@ -159,110 +162,35 @@ var MAssist = (function() {
 	 ******************************************************************/
 	function fakeMsg(msg) {
 		
-		var temp = 0;
-		
-		if(currentModelName.uid < 100000000) {
-			temp = 100000000 + currentModelName.uid;
-		} else {
-			temp = currentModelName.uid;
-		}
-		
-		ParseLine('50 '+myName.sid+' '+temp+' 0 4 {%22lv%22:2,%22msg%22:%22(Bot Test) '+msg+'%22,%22nm%22:%22'+myName.name+'%22,%22sid%22:'+myName.sid+',%22uid%22:'+myName.uid+',%22vs%22:90,%22u%22:{%22chat_color%22:%22A62A2A%22,%22chat_font%22:8}}');
-		
+		// TODO: match DOM of an actual chat message.
+		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext']").append([
+			'<p>',
+				'<a onclick="UI.UserInfoDisplay(16212199,false, true);">',
+				'<font face="Palatino Linotype" color="#A62A2A" style="font-size:29px"><b>MFC Assistant</b></font></a>',
+				'<font face="Palatino Linotype" color="#A62A2A" style="font-size:29px"><b>:&nbsp;'+msg+'</b></font>',
+			'</p>',
+		].join(''));
+
+		// force the scroll down.
+		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext']")[0].scrollTop = $("#centertabs-body div[id$='channeltab'] div[id$='channeltext']")[0].scrollHeight;
 	}
 	
 	/**
 	 * Generate a fake tip for testing purposes.
 	 ******************************************************************/
 	function fakeTip(num) {
-
-
-		// only allow models to post in their room
-		if(myName.name != currentModelName.name) {
-			
-			if(myName.name != 'Moros1138') {
-				
-				document.body.dispatchEvent(new Event('ma:model-name-not-match'));
-				return;
-			}
-			
-		}
-	
-		var temp = 0;
 		
-		if(currentModelName.uid < 100000000) {
-			temp = 100000000 + currentModelName.uid;
-		} else {
-			temp = currentModelName.uid;
+		if(!running) {
+			debug('MA: error creating fake tip. not running');
+			return;
 		}
 		
-		ParseLine('6 0 '+temp+' 0 0 {%22ch%22:'+temp+',%22flags%22:24832,%22m%22:['+currentModelName.uid+',20153390,%22'+currentModelName.name+'%22],%22sesstype%22:10,%22stamp%22:1477924340,%22tokens%22:'+num+',%22u%22:['+myName.uid+',21590632,%22'+myName.name+'%22]}');			
-		
+		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext']").append([
+			'<p><font face="Arial" color="#DC0000" style="font-size:34px"><span style="display: inline; background-color: #FFFF00;"><b>Received a 5 token tip from <a style="cursor:pointer" ondblclick="ConversationManager.NewConversation(16212199,true)" onclick="UI.UserInfoDisplay(16212199)"><font face="Palatino Linotype" color="#A62A2A" style="font-size:34px"><b>MFC Assistant (Testing)</b></font></a>!</b></span></font></p>'
+		].join(''));
+
 	}
 	
-	/**
-	 * Check if the model has changed, if so fire
-	 * the ma:model-changed event
-	 ******************************************************************/
-	document.body.addEventListener('ma:check-model-changed', function(e) {
-		
-		/**
-		 * I cheat here because sometimes you can navigate to pages like
-		 * the MFC homepage where none of the model information is
-		 * available.
-		 *
-		 * TODO: make this smarter so we know if we're actually on the
-		 *       home page or some other MFC page that likewise doesn't
-		 *       have the model information.
-		 ******************************************************************/
-		try {
-			if(currentModelName.name != unsafeWindow.t.g_hUsers[e.detail.Arg1]["username"]) {
-				currentModelName = {
-					name: unsafeWindow.t.g_hUsers[e.detail.Arg1]["username"],
-					uid: parseInt(e.detail.Arg1)
-				};
-				document.body.dispatchEvent(new CustomEvent('ma:model-changed', {detail: currentModelName}));
-			}
-		} catch(err) {
-			console.log(err);
-			document.body.dispatchEvent(new Event('ma:homepage'));
-		}
-		
-	}, false);
-	
-
-	/**
-	 * Handle the ma:update-my-name event
-	 ******************************************************************/
-	document.body.addEventListener('ma:update-my-name', function(e) {
-		
-		/**
-		 * User list isn't alway available when this event is
-		 * fire. So we wait for it!
-		 ******************************************************************/
-		var my_name_interval = setInterval(function() {
-			
-			if(unsafeWindow.t.g_hUsers[e.detail.Arg2] == undefined)
-				return; // awww fuck! here we go again!
-			
-			// kill the interval
-			clearInterval(my_name_interval);
-			
-			if(myName != unsafeWindow.t.g_hUsers[e.detail.Arg2]["username"]) {
-				myName = {
-					name: unsafeWindow.t.g_hUsers[e.detail.Arg2]["username"],
-					uid: e.detail.Arg2,
-					sid: unsafeWindow.t.g_hUsers[e.detail.Arg2]["sessionid"]
-				};
-			}
-			
-			debug('MA: my name is - '+myName.name);
-			
-		}, 1000);
-		
-	}, false );
-
-
 	/**
 	 * Event listener for: ma:send-msg
 	 ******************************************************************/
@@ -295,8 +223,22 @@ var MAssist = (function() {
 		settings = e.detail.s;
 	}, false );
 
+	/**
+	 * Get our settings.
+	 ******************************************************************/
 	document.body.dispatchEvent(new Event('ma:get-settings'));
+
+	$('body').on('ma:ready', function() {
+		readMessages();
+		chrome.runtime.sendMessage({from: 'content', subject: 'ma:ready'});
+	);	
 	
+	// Inform the background page that this tab should have a page-action
+	chrome.runtime.sendMessage({
+		from:    'content',
+		subject: 'openOptionsPage'
+	});
+
 	return {
 		init: init,
 		sendMsg: sendMsg,
@@ -307,3 +249,33 @@ var MAssist = (function() {
 })();
 
 MAssist.init();
+
+}
+
+chrome.runtime.onMessage.addListener(function (request, sender, response) {
+	
+	// probably overkill, but fuck it!
+	if(	0 === window.location.href.indexOf('http://www.myfreecams.com/modelweb') || 0 === window.location.href.indexOf('https://www.myfreecams.com/modelweb') ) {
+
+		switch(request.subject) {
+			case 'ma:fake-tip':
+				document.body.dispatchEvent(new CustomEvent('ma:fake-tip', {detail: request}));
+				break;
+			case 'ma:send-msg':
+				document.body.dispatchEvent(new CustomEvent('ma:send-msg', {detail: request}));
+				break;
+			case 'ma:debug':
+				document.body.dispatchEvent(new CustomEvent('ma:debug', {detail: request}));
+				break;
+			case 'ma:update-settings':
+				document.body.dispatchEvent(new CustomEvent('ma:update-settings', {detail: request}));
+				break;
+			default:
+				break;
+		}
+		
+	}
+		
+	return true;
+		
+});

@@ -1,9 +1,7 @@
-
 var MANavigation = (function() {
 	
 	var pages = [
 		'#home',
-		'#chat',
 		'#options',
 		'#savedMsg',
 		'#tipwar',
@@ -18,7 +16,7 @@ var MANavigation = (function() {
 			}
 			$(page).show();
 		} else {
-			navigateTo('home');
+			navigateTo('#home');
 		}
 		
 	}
@@ -32,13 +30,10 @@ var MANavigation = (function() {
 			navigateTo('#home');
 		}
 		
-		
 		// link click navigation
 		$('a').click(function(e) {
-			navigateTo($(this).attr('href'));
+			navigateTo($(this).attr('href'));	
 		});
-		
-		
 		
 	});	
 	
@@ -46,4 +41,3 @@ var MANavigation = (function() {
 	};
 	
 })();
-

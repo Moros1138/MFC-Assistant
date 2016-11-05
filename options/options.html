@@ -48,7 +48,6 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<li><a href="#chat">Chat</a></li>
 						<li class="dropdown">
 							<a href="#games" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Games <span class="caret"></span></a>
 							<ul class="dropdown-menu">
@@ -62,7 +61,7 @@
 				</div>
 			</div>
 		</nav>
-		
+
 		<div id="home" class="page container">
 			<div class="jumbotron">
 				<h1>Myfreecams Assistant</h1>
@@ -142,29 +141,16 @@
 					<span class="custom-control-indicator"></span>
 					<span class="custom-control-description">No</span>
 				</label>
+				<h4>Send a Test Tip</h4>
+				<form id="ma-fake-tip-form">
+					<div class="input-group" style="margin-top: 10px;">
+						<input class="form-control" type="text" id="ma-fake-tip-amount" placeholder="Set tip amount...">
+						<span class="input-group-btn">
+							<button class="btn btn-info" id="ma-fake-tip-button">Fake Tip</button>
+						</span>
+					</div><!-- /input-group -->
+				</form>
 			</fieldset>
-		</div><!-- /page -->
-			
-		<div id="chat" class="page container">
-			<h1>Chatbox</h1>
-			<div id="chatbox">
-			</div>
-			<form id="ma-send-msg-form">
-				<div class="input-group">
-					<input class="form-control" type="text" id="ma-send-msg-text" placeholder="Type a message to send...">
-					<span class="input-group-btn">
-						<button class="btn btn-primary" id="ma-send-msg-button">Send Message</button>
-					</span>
-				</div><!-- /input-group -->
-			</form>
-			<form id="ma-fake-tip-form">
-				<div class="input-group" style="margin-top: 10px;">
-					<input class="form-control" type="text" id="ma-fake-tip-amount" placeholder="Set tip amount...">
-					<span class="input-group-btn">
-						<button class="btn btn-info" id="ma-fake-tip-button">Fake Tip</button>
-					</span>
-				</div><!-- /input-group -->
-			</form>
 		</div><!-- /page -->
 			
 		<div id="savedMsg" class="page container">

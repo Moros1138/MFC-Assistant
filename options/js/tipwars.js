@@ -217,17 +217,10 @@ var MATipWars = (function() {
 		if(!running)
 			return;
 
-		/*
-			request.mfcMsg.Data.m[2]   == model name
-			request.mfcMsg.Data.tokens == tip amount
-			request.mfcMsg.Data.u[2]   == member name
-			request.mfcMsg.Data.msg    == tip note
-		*/
-		
-		if((mfcMsg.Data.tokens % 2) == 0) {
-			even_counter += mfcMsg.Data.tokens;
+		if((mfcMsg.tipAmount % 2) == 0) {
+			even_counter += mfcMsg.tipAmount;
 		} else {
-			odd_counter += mfcMsg.Data.tokens;
+			odd_counter += mfcMsg.tipAmount;
 		}
 		
 		MAssistOptions.sendMsg( settings.team_evens+': '+even_counter+ ' - '+settings.team_odds+': '+odd_counter);
@@ -280,20 +273,9 @@ var MATipWars = (function() {
 		});
 
 		/**
-		 * model changed
+		 * MFC Assistant is ready
 		 ******************************************************************/
-		$('body').on('ma:model-changed', function() {
-			
-			running = false;
-			clear();
-			
-			$('#matw-start-stop').toggleClass('btn-danger', false);
-			$('#matw-start-stop').toggleClass('btn-primary', true);
-			$('#matw-start-stop').html('Start');
-			
-		});
-
-		$('body').on('ma:model-name-not-match', function() {
+		$('body').on('ma:ready', function() {
 			
 			running = false;
 			clear();

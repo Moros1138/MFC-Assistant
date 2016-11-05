@@ -4,7 +4,6 @@
  * Adapted from Adam Feuer's example
  * https://adamfeuer.com/notes/2013/01/26/chrome-extension-making-browser-action-icon-open-options-page/
  ******************************************************************/
-
 function openOrFocusOptionsPage() {
 	
 	var extensionURL = {
@@ -13,7 +12,7 @@ function openOrFocusOptionsPage() {
 	};
 	
 	var mfcURL = {
-		url: 'http://www.myfreecams.com',
+		url: '//www.myfreecams.com/modelweb',
 		found: false
 	};
 	
@@ -29,7 +28,7 @@ function openOrFocusOptionsPage() {
 				
 				if(tab.url !== undefined) {
 					
-					if(0 === tab.url.indexOf(mfcURL.url)) {
+					if(-1 !== tab.url.indexOf(mfcURL.url)) {
 						mfcURL.found = true;
 					}
 
@@ -51,7 +50,7 @@ function openOrFocusOptionsPage() {
 		}
 		
 		if(!mfcURL.found) {
-			alert("MFC Assistant requires 1 tab with the Myfreecams site loaded.");
+			alert("MFC Assistant requires you to be logged into the broadcaster!");
 		}
 		
 	});
@@ -65,7 +64,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, response) {
 	}
 	
 });
-
 
 chrome.extension.onConnect.addListener(function(port) {
 

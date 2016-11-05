@@ -300,23 +300,23 @@ var MATokenKeno = (function () {
 			return;
 		
 		// Find and remove item from an array
-		i = remaining.indexOf(mfcMsg.Data.tokens);
+		i = remaining.indexOf(mfcMsg.tipAmount);
 		if(i != -1) {
 			
 			remaining.splice(i, 1);
 			
-			i = prizes.indexOf(mfcMsg.Data.tokens);
+			i = prizes.indexOf(mfcMsg.tipAmount);
 			if(i != -1) {
 				
 				prizes.splice(i, 1);
-				MAssistOptions.sendMsg(mfcMsg.Data.tokens+' IS A WINNER! Congrats '+mfcMsg.Data.u[2]+'!!');
+				MAssistOptions.sendMsg(mfcMsg.tipAmount+' IS A WINNER! Congrats '+mfcMsg.memberName+'!!');
 				repost();
 				
 			} else {
 				
 				if( (mfcMsg.Data.tokens >= settings.start) || (mfcMsg.Data.tokens <= settings.end) ) {
 					
-					MAssistOptions.sendMsg(mfcMsg.Data.tokens+' is not a winner, sorry!');
+					MAssistOptions.sendMsg(mfcMsg.tipAmount+' is not a winner, sorry!');
 					repost();
 					
 				}
@@ -367,19 +367,7 @@ var MATokenKeno = (function () {
 			handleTip(mfcMsg);
 		});
 
-		$('body').on('ma:model-changed', function() {
-			
-			running = false;
-			clear();
-			
-			$('#matk-start-stop').toggleClass('btn-primary', true);
-			$('#matk-start-stop').toggleClass('btn-danger', false);
-			$('#matk-start-stop').html('Start');
-			
-		});
-
-		
-		$('body').on('ma:model-name-not-match', function() {
+		$('body').on('ma:ready', function() {
 			
 			running = false;
 			clear();
