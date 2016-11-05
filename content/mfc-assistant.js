@@ -231,7 +231,7 @@ var MAssist = (function() {
 	$('body').on('ma:ready', function() {
 		readMessages();
 		chrome.runtime.sendMessage({from: 'content', subject: 'ma:ready'});
-	);	
+	});
 	
 	// Inform the background page that this tab should have a page-action
 	chrome.runtime.sendMessage({
@@ -243,7 +243,8 @@ var MAssist = (function() {
 		init: init,
 		sendMsg: sendMsg,
 		fakeTip: fakeTip,
-		debug: debug
+		debug: debug,
+		running: running
 	};
 	
 })();
@@ -256,26 +257,30 @@ chrome.runtime.onMessage.addListener(function (request, sender, response) {
 	
 	// probably overkill, but fuck it!
 	if(	0 === window.location.href.indexOf('http://www.myfreecams.com/modelweb') || 0 === window.location.href.indexOf('https://www.myfreecams.com/modelweb') ) {
-
+		
 		switch(request.subject) {
 			case 'ma:fake-tip':
 				document.body.dispatchEvent(new CustomEvent('ma:fake-tip', {detail: request}));
+				return true;
 				break;
 			case 'ma:send-msg':
 				document.body.dispatchEvent(new CustomEvent('ma:send-msg', {detail: request}));
+				return true;
 				break;
 			case 'ma:debug':
 				document.body.dispatchEvent(new CustomEvent('ma:debug', {detail: request}));
+				return true;
 				break;
 			case 'ma:update-settings':
 				document.body.dispatchEvent(new CustomEvent('ma:update-settings', {detail: request}));
+				return true;
 				break;
+			case 'ma:init':
+				response({running: MAssist.running});
 			default:
 				break;
 		}
 		
 	}
-		
-	return true;
-		
+	
 });
