@@ -1,5 +1,9 @@
 MIT License
 
+https://github.com/KradekMFC/MFCAssistant
+Copyright (c) 2013 KradekMFC
+
+https://github.com/Moros1138/MFC-Assistant-Chrome-Extension
 Copyright (c) 2016 moros1138@gmail.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
