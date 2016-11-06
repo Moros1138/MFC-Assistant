@@ -288,6 +288,7 @@ var MAssistOptions = (function() {
 		
 		$('body').on('ma:ready', function(e) {
 			MANavigation.navigateTo('#home');
+			sendToTab({from: 'options-page', subject: 'ma:update-settings', s: settings});
 		});
 		
 	});
