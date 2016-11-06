@@ -35,7 +35,8 @@ This software is released under the MIT License, see LICENSE.md for full details
 Special thanks to [@KradekMFC](https://www.twitter.com/KradekMFC) for his work on the MFC Assistant userscript which served as inspiration when I was in the early stages of developing this software. Plus he's just awesome!
 
 ## Version History
-
+* 1.0.9
+  * Fixed chat emote/image stripping!
 * 1.0.8
   * Switched content/injected script to run inside MyFreeCams' Model Web instead of the member's site
   * Removed chat page
