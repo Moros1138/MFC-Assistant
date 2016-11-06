@@ -85,7 +85,22 @@ var MAssist = (function() {
 					if($(this).children().length == 2) {
 						
 						var memberName = $(this).find('> a').text();
-						var message = $(this).find('> font').text();
+						var message = $(this).find('> font');
+						
+						// replace images with their title, if title is not set, replace with src
+						message.find('img').each(function() {
+							
+							// if we have a title, it's probably an emote
+							if($(this).attr('title') !== undefined) {
+								$(this).html($(this).attr('title'));	
+							} else {
+								$(this).html('#~'+$(this).attr('src')+'~#');
+							}
+							
+						});
+						
+						// trim off the first 2 chars ": " from the message
+						message = message.text().substr(2);
 						
 						if(memberName && message) {
 							chrome.runtime.sendMessage({from: 'content', subject: 'ma:chat-message', mfcMsg: {memberName: memberName, message: message}});
@@ -99,7 +114,7 @@ var MAssist = (function() {
 				$(this).toggleClass('ma-processed', true);
 				
 			}); // each message
-
+		
 			readingMessages = false;
 			
 		}); // DOMNodeInserted
