@@ -84,6 +84,22 @@ fieldset,
 	padding: 0px 5px;
 }
 
+#home .jumbotron p {
+	font-size: 14px;
+}
+
+#home .jumbotron h1,
+#home .jumbotron h2,
+#home .jumbotron h5 {
+	text-align: left !important;
+}
+
+#home .jumbotron h2 {
+	border-bottom: 1px solid #c3c3c3;
+	padding-bottom: 5px;
+}
+
+
 @media screen and (max-width: 499px) {
 	#saved-messages {
 }
