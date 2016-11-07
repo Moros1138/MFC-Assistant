@@ -68,11 +68,20 @@ var MAssist = (function() {
 					
 					if(tipInfo) {
 						
+						// we have a tip!
 						var memberName = tipInfo[2];
 						tipInfo[1] = parseInt(tipInfo[1]);
 						
 						if( $(this).find('span[style="display: inline; background-color: #C8C8C8;"]').length == 0 ) {
+							
+							// public/visible tip
 							chrome.runtime.sendMessage({from: 'content', subject: 'ma:tip', mfcMsg: {memberName: memberName, tipAmount: tipInfo[1]}});
+							
+						} else {
+							
+							// private/ninja tip
+							chrome.runtime.sendMessage({from: 'content', subject: 'ma:ninja-tip', mfcMsg: {memberName: memberName, tipAmount: tipInfo[1]}});
+							
 						}
 						
 					}
