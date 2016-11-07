@@ -1,6 +1,7 @@
+
 // probably overkill, but fuck it!
-if(	0 === window.location.href.indexOf('http://www.myfreecams.com/modelweb') || 0 === window.location.href.indexOf('https://www.myfreecams.com/modelweb') ) {
-	
+if(	-1 !== window.location.href.indexOf('//www.myfreecams.com/modelweb') ) {
+
 var MAssist = (function() {
 	
 	var initInterval = null;
@@ -204,7 +205,6 @@ var MAssist = (function() {
 			return;
 		}
 		
-		
 		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext']").append([
 			'<p class="uid16212199 sid176065692">',
 			'<font face="Arial" color="#DC0000" style="font-size:34px">',
@@ -218,38 +218,10 @@ var MAssist = (function() {
 		
 	}
 	
-	/**
-	 * Event listener for: ma:send-msg
-	 ******************************************************************/
-	document.body.addEventListener('ma:debug', function(e) {
-		debug('MA: debug');
-		debug(e.detail);
-	}, false );
-
-	/**
-	 * Event listener for: ma:send-msg
-	 ******************************************************************/
-	document.body.addEventListener('ma:send-msg', function(e) {
-		debug('MA: send message listener');
-		sendMsg(e.detail.msg);
-	}, false );
-
-	/**
-	 * Event listener for: ma:fake-tip
-	 ******************************************************************/
-	document.body.addEventListener('ma:fake-tip', function(e) {
-		debug('MA: fake tip listener');
-		fakeTip(e.detail.tip_amount);
-	}, false );
-
-	/**
-	 * Event listener for: ma:update-settings
-	 ******************************************************************/
-	document.body.addEventListener('ma:update-settings', function(e) {
-		debug('MA: update settings listener');
-		settings = e.detail.s;
-	}, false );
-
+	function updateSettings(s) {
+		settings = s;
+	}
+	
 	/**
 	 * Get our settings.
 	 ******************************************************************/
@@ -261,13 +233,14 @@ var MAssist = (function() {
 	});
 	
 	// Inform the background page that this tab should have a page-action
-	chrome.runtime.sendMessage({from:    'content', subject: 'openOptionsPage'});
+	chrome.runtime.sendMessage({from: 'content', subject: 'openOptionsPage'});
 
 	return {
 		init: init,
 		sendMsg: sendMsg,
 		fakeTip: fakeTip,
 		debug: debug,
+		updateSettings: updateSettings,
 		isRunning: isRunning
 	};
 	
@@ -279,24 +252,26 @@ MAssist.init();
 
 chrome.runtime.onMessage.addListener(function (request, sender, response) {
 	
-	// probably overkill, but fuck it!
-	if(	0 === window.location.href.indexOf('http://www.myfreecams.com/modelweb') || 0 === window.location.href.indexOf('https://www.myfreecams.com/modelweb') ) {
+	if(	-1 !== window.location.href.indexOf('//www.myfreecams.com/modelweb') ) {
 		
 		switch(request.subject) {
 			case 'ma:fake-tip':
-				document.body.dispatchEvent(new CustomEvent('ma:fake-tip', {detail: request}));
+				console.log('MA: fake tip');
+				MAssist.fakeTip(request.tip_amount);
 				return true;
 				break;
 			case 'ma:send-msg':
-				document.body.dispatchEvent(new CustomEvent('ma:send-msg', {detail: request}));
+				console.log('MA: send message');
+				MAssist.sendMsg(request.msg);
 				return true;
 				break;
 			case 'ma:debug':
-				document.body.dispatchEvent(new CustomEvent('ma:debug', {detail: request}));
+				MAssist.debug(request);
 				return true;
 				break;
 			case 'ma:update-settings':
-				document.body.dispatchEvent(new CustomEvent('ma:update-settings', {detail: request}));
+				console.log('MA: update settings');
+				MAssist.updateSettings(request.s);
 				return true;
 				break;
 			case 'ma:init':
@@ -309,4 +284,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, response) {
 	}
 	
 	return true;
+	
 });
+
