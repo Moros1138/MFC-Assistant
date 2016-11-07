@@ -280,6 +280,12 @@ var MAssistOptions = (function() {
 		
 		init();
 		
+		$('#ma-send-msg-form').submit(function(e) {
+			e.preventDefault();
+			sendMsg($('#ma-send-msg-text').val());
+			$('#ma-send-msg-text').val('');
+		});		
+		
 		$('#ma-fake-tip-form').submit(function(e) {
 			e.preventDefault();
 			fakeTip(parseInt($('#ma-fake-tip-amount').val()));
