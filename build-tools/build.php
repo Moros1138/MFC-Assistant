@@ -2,27 +2,17 @@
 
 require('config.php');
 
-// CHROME
+/**
+ * CHROME EXTENSION
+ ******************************************/
 rcopy( SRCPATH, DISTPATH.'/chrome');
+update_home_page('chrome');
 
-if(file_exists(DISTPATH.'/chrome/options/options.html')) {
+/**
+ * FIREFOX EXTENSION
+ ******************************************/
+rcopy( SRCPATH, DISTPATH.'/firefox');
+update_home_page('firefox');
 
-	$readme = file_get_contents( ABSPATH . '/README.md' );
-	$readme = $pd->text($readme);
-
-	$options = file_get_contents(DISTPATH.'/chrome/options/options.html');
-	
-$options = str_replace('		<div id="home" class="page container" style="display: none;">
-			<div class="jumbotron">
-			</div>
-		</div>',
-		'		<div id="home" class="page container" style="display: none;">
-			<div class="jumbotron">
-				'.$readme.'
-			</div>
-		</div>', $options );
-	
-	
-	file_put_contents(DISTPATH.'/chrome/options/options.html', $options);
-	
-}
+chdir(DISTPATH.'/firefox');
+//system( 'web-ext sign --api-key='.$jwt_issuer.' --api-secret='.$jwt_secret );
