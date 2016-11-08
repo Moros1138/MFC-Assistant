@@ -22,3 +22,25 @@ function rcopy($src, $dst) {
   }
   else if (file_exists($src)) copy($src, $dst);
 }
+
+function update_home_page($browser='chrome') {
+
+	if(file_exists(DISTPATH.'/'.$browser.'/options/options.html')) {
+	
+		$pd = new Parsedown();
+		$readme = file_get_contents( ABSPATH . '/README.md' );
+		$readme = $pd->text($readme);
+
+		$options = file_get_contents(DISTPATH.'/'.$browser.'/options/options.html');
+		
+		$options = str_replace(
+			'<div id="home" class="page container" style="display: none;"><div class="jumbotron"></div></div>',
+			'<div id="home" class="page container" style="display: none;"><div class="jumbotron">'.$readme.'</div></div>',
+			$options
+		);
+		
+		file_put_contents(DISTPATH.'/'.$browser.'/options/options.html', $options);
+	
+	}
+	
+}
