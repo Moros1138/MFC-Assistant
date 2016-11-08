@@ -279,10 +279,17 @@ var MATipWars = (function() {
 			
 			running = false;
 			clear();
-			
+
 			$('#matw-start-stop').toggleClass('btn-danger', false);
 			$('#matw-start-stop').toggleClass('btn-primary', true);
 			$('#matw-start-stop').html('Start');
+			
+		});
+		
+		$('body').on('ma:not-ready', function() {
+			
+			if(running)
+				stop();
 			
 		});
 		
