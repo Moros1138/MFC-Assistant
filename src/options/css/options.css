@@ -99,11 +99,6 @@ fieldset,
 	padding-bottom: 5px;
 }
 
-
-@media screen and (max-width: 499px) {
-	#saved-messages {
-}
-
 @media screen and (min-width: 500px) {
 	#saved-messages .sortable {
 		display: flex;
