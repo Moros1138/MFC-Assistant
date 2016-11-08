@@ -2,7 +2,7 @@
 
 The MFC Chat bot that puts you in charge of your room!
 
-## Key Features:
+## Key Features
 
 * <b>Point and Click</b> - No confusing commands to learn. Just change a few options and then it's all point and click!
 * <b>Ease of Use</b> - Our straight forward design makes the MFC Assistant extremely easy to learn!
@@ -35,6 +35,10 @@ This software is released under the MIT License, see LICENSE.md for full details
 Special thanks to [@KradekMFC](https://www.twitter.com/KradekMFC) for his work on the MFC Assistant userscript which served as inspiration when I was in the early stages of developing this software. Plus he's just awesome!
 
 ## Version History
+* 1.0.10
+  * Added ninja tip event
+  * Fixed private show bug by adding not-ready event
+  * not-ready event stops all games and timers
 * 1.0.9
   * Fixed chat emote/image stripping!
 * 1.0.8
