@@ -282,29 +282,9 @@ var MASavedMessages = (function () {
 		});
 		
 		/**
-		 * model changed
+		 * not ready
 		 ******************************************************************/
-		$('body').on('ma:model-changed', function() {
-			
-			/**
-			 * kill all intervals
-			 ******************************************************************/
-			$('.start-timer').each(function() {
-				
-				if( $(this).find('span:last-child').html() == 'Stop Timer' ) {
-					
-					$(this).trigger('click');
-					
-				}
-				
-			});
-			
-		});
-
-		/**
-		 * model changed
-		 ******************************************************************/
-		$('body').on('ma:model-name-not-match', function() {
+		$('body').on('ma:not-ready', function() {
 			
 			/**
 			 * kill all intervals
