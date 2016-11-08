@@ -1,4 +1,5 @@
 # Distributed Files
+build-tools/inc/mozilla-api.php
 dist/chrome/
 dist/firefox/
 
