@@ -4,10 +4,7 @@ if(	-1 !== window.location.href.indexOf('//www.myfreecams.com/modelweb') ) {
 
 var MAssist = (function() {
 	
-	var initInterval = null;
-	
 	var running = false;
-	
 	var readingMessages = false;
 	
 	// default settings
@@ -21,21 +18,24 @@ var MAssist = (function() {
 	 */
 	function init() {
 		
-		initInterval = setInterval(function() {
+		var initInterval = setInterval(function() {
 			
 			if($("#centertabs-body div[id$='channeltab'] div[id$='channeltext']").length > 0) {
-				$('body').trigger('ma:ready');
+				readMessages();
+				chrome.runtime.sendMessage({from: 'content', subject: 'ma:ready'});
 				console.log('MA: ma:ready triggered');
 				clearInterval(initInterval);
 				running = true;
 			}
 			
-		}, 1000);		
+		}, 1000);
 		
 	}
 	
 	function isRunning() {
+		
 		return running;
+		
 	}
 
 	/**
@@ -128,6 +128,19 @@ var MAssist = (function() {
 			readingMessages = false;
 			
 		}); // DOMNodeInserted
+		
+		// if the chat disappears, re-run the init
+		var sanityCheck = setInterval(function() {
+			
+			if($("#centertabs-body div[id$='channeltab'] div[id$='channeltext']").length == 0) {
+				init();
+				console.log('MA: we lost the chatbox.');
+				clearInterval(sanityCheck);
+				chrome.runtime.sendMessage({from: 'content', subject: 'ma:not-ready'});
+				running = false;
+			}
+			
+		}, 1000);
 		
 	}
 	
@@ -226,11 +239,6 @@ var MAssist = (function() {
 	 * Get our settings.
 	 ******************************************************************/
 	document.body.dispatchEvent(new Event('ma:get-settings'));
-
-	$('body').on('ma:ready', function() {
-		readMessages();
-		chrome.runtime.sendMessage({from: 'content', subject: 'ma:ready'});
-	});
 	
 	// Inform the background page that this tab should have a page-action
 	chrome.runtime.sendMessage({from: 'content', subject: 'openOptionsPage'});
