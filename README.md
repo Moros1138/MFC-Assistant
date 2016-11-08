@@ -35,6 +35,9 @@ This software is released under the MIT License, see LICENSE.md for full details
 Special thanks to [@KradekMFC](https://www.twitter.com/KradekMFC) for his work on the MFC Assistant userscript which served as inspiration when I was in the early stages of developing this software. Plus he's just awesome!
 
 ## Version History
+* 1.0.11
+  * Tweaked manifest.json for Firefox compatibility.
+  * First Firefox release!
 * 1.0.10
   * Added ninja tip event
   * Fixed private show bug by adding not-ready event
