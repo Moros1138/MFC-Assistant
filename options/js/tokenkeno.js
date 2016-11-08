@@ -347,7 +347,6 @@ var MATokenKeno = (function () {
 		
 	}
 
-
 	$(document).ready(function() {
 		
 		init();
@@ -384,6 +383,14 @@ var MATokenKeno = (function () {
 			$('#matk-start-stop').html('Start');
 			
 		});
+		
+		$('body').on('ma:not-ready', function() {
+			
+			if(running)
+				stop();
+			
+		});
+		
 		
 	});
 
