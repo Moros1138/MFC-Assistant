@@ -1,6 +1,7 @@
 # Distributed Files
 build-tools/inc/mozilla-api.php
-dist/*
+dist/chrome/
+dist/firefox/
 
 # Windows image file caches
 Thumbs.db
