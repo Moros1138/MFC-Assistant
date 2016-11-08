@@ -47,7 +47,7 @@ var MANavigation = (function() {
 			navigateTo('#home');
 		});
 		
-		$('body').on('ma:not-ready' function(e) {
+		$('body').on('ma:not-ready', function(e) {
 			ready = false;
 			navigateTo('#not-ready');
 		})
