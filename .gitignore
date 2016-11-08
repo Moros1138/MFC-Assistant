@@ -1,3 +1,7 @@
+# Distributed Files
+dist/chrome/
+dist/firefox/
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
