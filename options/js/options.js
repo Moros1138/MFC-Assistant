@@ -228,8 +228,12 @@ var MAssistOptions = (function() {
 		/**
 		 * MFC Assistant is ready, spread the word!
 		 ******************************************************************/
-		if(request.sugject == 'ma:ready') {
+		if(request.subject == 'ma:ready') {
 			$('body').trigger('ma:ready');
+		}
+		
+		if(request.subject == 'ma:not-ready') {
+			$('body').trigger('ma:not-ready');
 		}
 		
 	});
@@ -295,6 +299,18 @@ var MAssistOptions = (function() {
 		$('body').on('ma:ready', function(e) {
 			MANavigation.navigateTo('#home');
 			sendToTab({from: 'options-page', subject: 'ma:update-settings', s: settings});
+		});
+		
+		$('body').on('ma:not-ready', function(e) {
+
+			dialog(
+				'All game variables will be cleared and timers will stopped.',
+				'Lost Contact with Model Web!',
+				function() {
+					$(this).dialog('close');
+				}
+			);
+		
 		});
 		
 	});
