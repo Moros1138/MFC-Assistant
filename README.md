@@ -1,4 +1,4 @@
-# Myfreecams Assistant (Chrome Extension)
+# Myfreecams Assistant
 
 The MFC Chat bot that puts you in charge of your room!
 
