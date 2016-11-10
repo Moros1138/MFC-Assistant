@@ -1,27 +1,29 @@
 <?php
+date_default_timezone_set('America/New_York');
 
 require('config.php');
 
-// make sure DISTPATH exists
-if( !file_exists(DISTPATH)) mkdir(DISTPATH);
+switch( $argv[1] ) {
+	case 'update-home':
+		update_home_page();
+		break;
 
-/**
- * CHROME EXTENSION
- ******************************************/
-if( !file_exists(DISTPATH.'/chrome')) mkdir(DISTPATH.'/chrome');
-rcopy( SRCPATH, DISTPATH.'/chrome');
-update_home_page('chrome');
-
-$path = str_replace( '/', '\\', DISTPATH.'/chrome' );
-chdir($path);
-system( 'zip -r "..\MFC Assistant (Chrome).zip" .' );
-
-/**
- * FIREFOX EXTENSION
- ******************************************/
-if( !file_exists(DISTPATH.'/firefox')) mkdir(DISTPATH.'/firefox');
-rcopy( SRCPATH, DISTPATH.'/firefox');
-update_home_page('firefox');
-
-chdir(DISTPATH.'/firefox');
-//system( 'web-ext sign --api-key='.$jwt_issuer.' --api-secret='.$jwt_secret );
+	case 'chrome':
+		chrome();
+		break;
+	
+	case 'firefox':
+		firefox();
+		break;
+		
+	case 'buildall':
+		update_home_page();
+		chrome();
+		firefox();
+		break;
+		
+	default:
+		usage();
+		break;
+		
+}
