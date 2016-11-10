@@ -295,7 +295,6 @@ var MATokenKeno = (function () {
 		
 	}
 	
-	
 	/**
 	 * handle tips
 	 ******************************************************************/
@@ -308,6 +307,7 @@ var MATokenKeno = (function () {
 		
 		// Find and remove item from an array
 		i = remaining.indexOf(mfcMsg.tipAmount);
+		
 		if(i != -1) {
 			
 			remaining.splice(i, 1);
@@ -321,7 +321,7 @@ var MATokenKeno = (function () {
 				
 			} else {
 				
-				if( (mfcMsg.Data.tokens >= settings.start) || (mfcMsg.Data.tokens <= settings.end) ) {
+				if( (mfcMsg.tipAmount >= settings.start) || (mfcMsg.tipAmount <= settings.end) ) {
 					
 					MAssistOptions.sendMsg(mfcMsg.tipAmount+' is not a winner, sorry!');
 					repost();
