@@ -169,7 +169,7 @@ var MAssistOptions = (function() {
 			
 			for(var i=0; i < tabs.length; i++) {
 				if(tabs[i].url !== undefined) {
-					if(-1 !== tabs[i].url.indexOf('//www.myfreecams.com/modelweb')) {
+					if(-1 !== tabs[i].url.indexOf('//www.myfreecams.com')) {
 						if(callback === undefined) {
 							chrome.tabs.sendMessage(tabs[i].id, object);
 						} else {
@@ -215,10 +215,6 @@ var MAssistOptions = (function() {
 
 			var tipMsg = '<p>';
 			tipMsg += '<b>'+request.mfcMsg.memberName+'</b> has tipped you '+request.mfcMsg.tipAmount+' tokens. ';
-			if(request.mfcMsg.Data.msg !== undefined) {
-				tipMsg += filterEmotes(request.mfcMsg.Data.msg);
-			}
-			
 			tipMsg += '</p>';
 
 			$('#chatbox').append(tipMsg);
