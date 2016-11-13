@@ -38,6 +38,7 @@ function update_home_page() {
 		$pd = new Parsedown();
 		$readme = file_get_contents( ABSPATH . '/README.md' );
 		$readme = $pd->text($readme);
+		$readme .= '<h2>Feeling Generous?</h2><p>Buy me Mountain Dew?</p><p style="text-align: center;"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QUT8YSH5M3H3G" target="_blank"><img src="images/btn_donateCC_LG.gif" alt="PayPal - The safer, easier way to pay online!"></a></p>';
 
 		$options = file_get_contents(SRCPATH.'/options/options.html');
 		
