@@ -1,3 +1,27 @@
+// probably overkill, but fuck it!
+if(	-1 !== window.location.href.indexOf('//www.myfreecams.com/_html/top.html') ) {
+	
+	$(document).ready(function() {
+		
+		setInterval(function() {
+			
+			var member = $('a[title="Go to My Account"]').text();
+			var model = window.top.window.location.hash.substr(1);
+			
+			document.body.dispatchEvent(new CustomEvent(
+				'ma:names', {
+					detail: {
+						member: member,
+						model: model
+					}
+				}
+			));
+			
+		}, 1000);
+		
+	});
+
+}
 
 // probably overkill, but fuck it!
 if(	-1 !== window.location.href.indexOf('//www.myfreecams.com/_html/player.html') ) {
@@ -6,40 +30,51 @@ var MAssist = (function() {
 	
 	var running = false;
 	var readingMessages = false;
+
 	var myName = null;
+	var oldModelName = null;
 	var currentModelName = null;
+	
+	var initInterval = null;
+	var sanityCheckInterval = null;
 	
 	// default settings
 	var settings = {
 		debug_mode: true,
 		send_messages: false
 	}
+
+	parent.document.body.addEventListener('ma:names', function(e) {
+		myName = e.detail.member;
+		
+		oldModelName = currentModelName;
+		currentModelName = e.detail.model;
+	}, false);
+
+	parent.document.body.addEventListener('ma:not-ready', function(e) {
+		if(running) {
+			chrome.runtime.sendMessage({from: 'content', subject: 'ma:not-ready'});
+		}
+	}, false);
 	
 	/**
 	 * Initializes MFC Assistant
 	 */
 	function init() {
 		
-		var initInterval = setInterval(function() {
+		initInterval = setInterval(function() {
 			
 			if($("#chat_contents").length > 0) {
 
-				// get my name
-				myName = window.top.window.$('#top_level')[0].contentWindow.$('a[title="Go to My Account"]').text();
-				
-				// get model name
-				currentModelName = window.top.window.location.hash.substr(1);
-				
 				if(myName != 'Moros1138') {
 					
-					if(myName == currentModelName) {
+					if((myName == currentModelName) && (myName != null) && (currentModelName != null)) {
 						running = true;
 					}
 					
 				} else {
 					running = true;
 				}
-				
 				
 				debug('MA: my name is - '+myName);
 				debug('MA: model name is - '+currentModelName);
@@ -139,14 +174,12 @@ var MAssist = (function() {
 		}); // DOMNodeInserted
 		
 		// if the chat disappears, re-run the init
-		var sanityCheck = setInterval(function() {
+		sanityCheckInterval = setInterval(function() {
 			
-			var tempName = window.top.window.location.hash.substr(1);
-			
-			if(tempName != currentModelName) {
-				currentModelName = tempName;
+			if(oldModelName != currentModelName) {
 				init();
-				clearInterval(sanityCheck);
+				console.log('MA: room changed.');
+				clearInterval(sanityCheckInterval);
 				chrome.runtime.sendMessage({from: 'content', subject: 'ma:not-ready'});
 				running = false;
 				return;
@@ -155,7 +188,7 @@ var MAssist = (function() {
 			if($("#chat_contents").length == 0) {
 				init();
 				console.log('MA: we lost the chatbox.');
-				clearInterval(sanityCheck);
+				clearInterval(sanityCheckInterval);
 				chrome.runtime.sendMessage({from: 'content', subject: 'ma:not-ready'});
 				running = false;
 				return;
@@ -280,7 +313,10 @@ var MAssist = (function() {
 	
 })();
 
-MAssist.init();
+$(document).ready(function() {
+	MAssist.init();	
+});
+
 
 }
 
