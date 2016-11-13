@@ -229,6 +229,7 @@ var MAssistOptions = (function() {
 		}
 		
 		if(request.subject == 'ma:not-ready') {
+			$('#chatbox').html('');
 			$('body').trigger('ma:not-ready');
 		}
 		
