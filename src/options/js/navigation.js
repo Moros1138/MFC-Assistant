@@ -39,7 +39,9 @@ var MANavigation = (function() {
 		
 		// link click navigation
 		$('a').click(function(e) {
-			navigateTo($(this).attr('href'));	
+			if(!$(this).hasClass('dropdown-toggle')) {
+				navigateTo($(this).attr('href'));
+			}
 		});
 		
 		$('body').on('ma:ready', function(e) {
