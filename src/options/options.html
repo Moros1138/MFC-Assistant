@@ -56,8 +56,8 @@
 								<li><a href="#tokenkeno">Token Keno</a></li>
 							</ul>
 						</li>
+						<li><a href="#savedMsg">Messages</a></li>
 						<li><a href="#options">Options</a></li>
-						<li><a href="#savedMsg">Saved/Timed Messages</a></li>
 					</ul>
 				</div>
 			</div>
@@ -250,13 +250,26 @@
 		</div><!-- /page -->
 			
 		<div id="savedMsg" class="page container" style="display: none;">
-			<h1>Saved/Timed Messages</h1>
+			<h1>Messages</h1>
 			<div id="saved-messages">
-				<ul class="sortable"></ul>
+				<ul class="sortable">
+				</ul>
 				<p style="text-align: center;">
 					<button type="button" id="add-message" class="pb-setting btn btn-sm btn-default"><span class="glyphicon glyphicon-plus">&nbsp;</span> Add Message</button><br>
 				</p>
 			</div>
+			
+			<h1>Message Carousel</h1>
+			<fieldset>
+				<p>
+					<label>Carousel Delay (Minutes)</label>
+					<input class="form-control" type="text" id="mamc-delay" placeholder="Type in the carousel delay...">
+				</p>
+				<p class="buttons">
+					<button type="button" class="btn btn-primary" id="mamc-start-stop">Start</button>
+				</p>
+			</fieldset>
+			
 		</div><!-- /page -->
 
 		<div id="tipwar" class="page container" style="display: none;">
@@ -336,6 +349,17 @@
 				</p>
 			</fieldset>
 		</div><!-- /page -->
+		
+		<footer class="footer">
+			<div class="container" style="text-align: center;">
+				<p class="text-muted">
+					The MFC Assistant is FREE! However if you'd like to buy me a Mountain Dew or an afternoon snack, feel free to donate.
+				</p>
+				<p>
+					<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QUT8YSH5M3H3G" target="_blank"><img src="images/btn_donateCC_LG.gif" alt="PayPal - The safer, easier way to pay online!"></a>
+				</p>
+			</div>
+		</footer>
 		
 		<div id="modal-dialog" style="display: none;">
 			<p></p>

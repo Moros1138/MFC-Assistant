@@ -310,9 +310,13 @@ var MAssistOptions = (function() {
 		
 		});
 		
+		// resize the body's padding based on footer's height
+		$(window).resize(function() {
+			$('body').css('padding-bottom', $('.footer').height()+'px');
+		});
+		
 	});
 	
-
 	return {
 		init: init,
 		sendMsg: sendMsg,
