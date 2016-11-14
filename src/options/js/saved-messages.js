@@ -2,11 +2,16 @@
 var MASavedMessages = (function () {
 	
 	var running = false;
-	var repostInterval = null;
+	
+	var carouselInterval = null;
+	var carouselCurrent = null;
+	var carouselMessages = [];
+	
 	var intervals = [];
 	
 	var settings = {
 		messages: [],
+		carouselDelay: 5,
 	};
 	
 	function init() {
@@ -20,9 +25,20 @@ var MASavedMessages = (function () {
 			settings = JSON.parse(localStorage.maSavedMessagesSettings);
 		}
 		
+		// added version 1.0.13
+		if(settings.carouselDelay == null) {
+			settings.carouselDelay = 5;
+		}
+		
 		for(var i=0; i<settings.messages.length; i++) {
 			renderMessageDOM(settings.messages[i]);
 		}
+		
+		$('#mamc-delay').val( settings.carouselDelay );
+
+		$('body').on('keyup', '#mamc-delay', function() {
+			updateSettings();
+		});
 		
 	}
 	
@@ -37,7 +53,7 @@ var MASavedMessages = (function () {
 			
 			// desc
 			if($(elem).prop("name") == 'saved-messages-desc[]') {
-				$(elem).parent().parent().prev().find('h3').html($(elem).val());
+				$(elem).parent().parent().prev().prev().html($(elem).val());
 				$(elem).parent().parent().parent().data('desc', $(elem).val());
 			}
 			
@@ -53,8 +69,8 @@ var MASavedMessages = (function () {
 				} else {
 					$(elem).parent().parent().parent().data('delay', $(elem).val());
 				}
-			}			
-
+			}
+			
 		}
 		
 		settings.messages = [];
@@ -63,15 +79,22 @@ var MASavedMessages = (function () {
 			
 			var data = $(this).data();
 			
+			if(data.carousel == null)
+				data.carousel = false;
+			
 			settings.messages.push({
 				id: data.id,
 				desc: data.desc,
 				msg: data.msg,
-				delay: data.delay
+				delay: data.delay,
+				carousel: data.carousel
 			});
 			
 		});
 
+		settings.carouselDelay = parseInt($('#mamc-delay').val());
+		$('#mamc-delay').checkNaN();
+		
 		localStorage.maSavedMessagesSettings = JSON.stringify(settings);
 		
 	}
@@ -117,7 +140,8 @@ var MASavedMessages = (function () {
 				id: getNewId(),
 				desc: 'New Message',
 				msg: '',
-				delay: 1
+				delay: 1,
+				carousel: false
 			};
 			
 			settings.messages.push(savedMsg);
@@ -127,14 +151,16 @@ var MASavedMessages = (function () {
 		$('#saved-messages .sortable').append([
 '<li class="message" data-id="'+savedMsg.id+'">',
 	'<div class="handle">',
-		'<h3>'+savedMsg.desc+'</h3>',
-		'<button type="button" class="btn btn-sm btn-primary glyphicon glyphicon-cog edit"data-id="'+savedMsg.id+'"></button> ',
-		'<button type="button" class="btn btn-sm btn-danger glyphicon glyphicon-remove-sign delete"data-id="'+savedMsg.id+'"></button> ',
-		'<button type="button" class="btn btn-sm btn-info start-timer" data-id="'+savedMsg.id+'"><span class="glyphicon glyphicon-play"></span> <span>Start Timer</span></button> ',
-		'<button type="button" class="btn btn-sm btn-info post-now" data-id="'+savedMsg.id+'"><span class="glyphicon glyphicon-send"></span> <span>Post Now</span></button>',
+		savedMsg.desc,
+	'</div>',
+	'<div class="buttons">',
+		'<button type="button" title="Edit this message" class="btn btn-sm btn-primary edit" data-id="'+savedMsg.id+'"><span class="glyphicon glyphicon-cog"></span> <span>Edit Message</span></button> ',
+		'<button type="button" title="Delete this message" class="btn btn-sm btn-danger delete" data-id="'+savedMsg.id+'"><span class="glyphicon glyphicon-remove-sign"></span> <span>Remove Message</span></button> ',
+		'<button type="button" title="Start/Stop this message\'s timer" class="btn btn-sm btn-info start-timer" data-id="'+savedMsg.id+'"><span class="glyphicon glyphicon-play"></span> <span>Start Timer</span></button> ',
+		'<button type="button" title="Post this message now" class="btn btn-sm btn-info post-now" data-id="'+savedMsg.id+'"><span class="glyphicon glyphicon-send"></span> <span>Post Now</span></button> ',
+		'<button type="button" title="Add/Remove this message to the carousel" class="btn btn-sm btn-info add-to-carousel" data-id="'+savedMsg.id+'"><span class="glyphicon glyphicon-plus"></span> <span>Add to Carousel</span></button>',
 	'</div>',
 	'<div class="edit-box">',
-		
 		'<input type="hidden" name="saved-messages-id[]" value="'+savedMsg.id+'">',
 		'<p>',
 			'<label>Message Description:</label>',
@@ -152,14 +178,106 @@ var MASavedMessages = (function () {
 '</li>'
 		].join(''));
 		
-
 		$('.message:last-child').data('desc', savedMsg.desc);
 		$('.message:last-child').data('msg', savedMsg.msg);
 		$('.message:last-child').data('delay', savedMsg.delay);
+		$('.message:last-child').data('carousel', savedMsg.carousel);
 		$('.message:last-child input[name="saved-messages-delay[]"]').checkNaN();
+		
+		if(savedMsg.carousel) {
+			$('.message:last-child').find('.add-to-carousel').toggleClass('btn-warning', true);
+			$('.message:last-child').find('.add-to-carousel').toggleClass('btn-info', false);
+			$('.message:last-child').find('.add-to-carousel').find('span:first-child').toggleClass('glyphicon-plus', false);
+			$('.message:last-child').find('.add-to-carousel').find('span:first-child').toggleClass('glyphicon-minus', true);
+			$('.message:last-child').find('.add-to-carousel').find('span:last-child').html('Remove from Carousel');
+		}
 		
 	}
 
+	/* Start the Message Carousel
+	 ******************************************************/
+	function start() {
+		
+		// no delay?
+		if(isNaN(settings.carouselDelay)) {
+			settings.carouselDelay = 5;
+		}
+		
+		running = true;
+		carousel();
+		
+		carouselInterval = setInterval(function() {
+			carousel();
+		}, (1000 * 60 * settings.carouselDelay));
+
+		$('#mamc-start-stop').toggleClass('btn-danger', true);
+		$('#mamc-start-stop').toggleClass('btn-primary', false);
+		$('#mamc-start-stop').html('Stop');
+
+	}	
+	
+	/* Stop the Message Carousel
+	 ******************************************************/
+	function stop() {
+		
+		running = false;
+		clear();
+
+		$('#mamc-start-stop').toggleClass('btn-danger', false);
+		$('#mamc-start-stop').toggleClass('btn-primary', true);
+		$('#mamc-start-stop').html('Start');
+
+		clearInterval(carouselInterval);
+		
+	}
+
+	function clear() {
+		carouselMessages = [];
+		carouselCurrent = null;
+		debug('Message Carousel: cleared.');
+	}
+
+	/* Carousel
+	 ******************************************************/
+	function carousel() {
+		
+		if(!running)
+			return;
+		
+		if(carouselCurrent == null) {
+			
+			$('.message').each(function() {
+				carouselMessages.push($(this).data('id'));
+			});
+			
+			carouselCurrent = 0;
+			
+		}
+		
+		var messageFlag = false;
+		
+		$('.message').each(function() {
+			
+			var message = $(this).data();
+			
+			if( message.id == carouselMessages[carouselCurrent] ) {
+				MAssistOptions.sendMsg(message.msg);
+				messageFlag = true;
+			}
+			
+		});
+
+		if(messageFlag) {
+			
+			carouselCurrent++;
+			
+			if(carouselCurrent > carouselMessages.length-1)
+				carouselCurrent = 0;
+			
+		}
+		
+	}
+	
 	$(document).ready(function() {
 		
 		init();
@@ -188,17 +306,18 @@ var MASavedMessages = (function () {
 		 ******************************************************************/
 		$("#saved-messages .sortable").on('click', '.edit', function() {
 			
-			var current = $(this).parent().next()[0];
+			var current = $(this).parent().parent()[0];
 			
 			// close all
-			$("#saved-messages .sortable .edit-box").each(function() {
-				if( this !== current ) {
-					$(this).toggleClass('collapsed', true);
-				}
+			$(".message").each(function() {
+				
+				if(this != current)				
+					$(this).find('.edit-box').toggleClass('collapsed', true);
+				
 			});
 			
 			// open/close
-			$(current).toggleClass('collapsed');
+			$(current).find('.edit-box').toggleClass('collapsed');
 			
 		});
 
@@ -228,9 +347,7 @@ var MASavedMessages = (function () {
 		 * Update the messages when keys are released
 		 ******************************************************************/
 		$('#saved-messages .sortable').on('keyup', '.edit-box input[type="text"],.edit-box textarea', function() {
-
 			updateSettings(this);
-			
 		});
 		
 		// sortable
@@ -245,7 +362,7 @@ var MASavedMessages = (function () {
 
 			var message = $(this).parent().parent();
 			
-			if(message.find('span:last-child').html() == 'Start Timer') {
+			if($(this).find('span:last-child').html() == 'Start Timer') {
 				
 				MAssistOptions.sendMsg(message.data('msg'));
 				
@@ -262,7 +379,7 @@ var MASavedMessages = (function () {
 				
 			}
 			
-			if(message.find('span:last-child').html() == 'Stop Timer') {
+			if($(this).find('span:last-child').html() == 'Stop Timer') {
 				
 				clearInterval(intervals[message.data('id')]);
 				
@@ -281,11 +398,83 @@ var MASavedMessages = (function () {
 			MAssistOptions.sendMsg(message.data('msg'));
 		});
 		
+		
+		$('body').on('click', '.add-to-carousel', function() {
+			
+			var message = $(this).parent().parent();
+			
+			if($(this).find('span:last-child').html() == 'Add to Carousel') {
+				
+				message.data('carousel', true);
+				
+				$(this).toggleClass('btn-warning', true);
+				$(this).toggleClass('btn-info', false);
+				$(this).find('span:first-child').toggleClass('glyphicon-plus', false);
+				$(this).find('span:first-child').toggleClass('glyphicon-minus', true);
+				$(this).find('span:last-child').html('Remove from Carousel');
+				updateSettings();
+				return;
+				
+			}
+			
+			if($(this).find('span:last-child').html() == 'Remove from Carousel') {
+				
+				message.data('carousel', false);
+				
+				$(this).toggleClass('btn-warning', false);
+				$(this).toggleClass('btn-info', true);
+				$(this).find('span:first-child').toggleClass('glyphicon-plus', true);
+				$(this).find('span:first-child').toggleClass('glyphicon-minus', false);
+				$(this).find('span:last-child').html('Add to Carousel');
+				updateSettings();
+				return;
+			}
+			
+		});
+		
+		$('#mamc-start-stop').click(function() {
+			
+			if($(this).html() == 'Start') {
+				start();
+				return;
+			}
+			
+			if($(this).html() == 'Stop') {
+				stop();
+				return;
+			}
+			
+		});			
+
+
+		
+		/**
+		 * ready
+		 ******************************************************************/
+		$('body').on('ma:ready', function() {
+			
+			running = false;
+			clear();
+
+			$('#mamc-start-stop').toggleClass('btn-danger', false);
+			$('#mamc-start-stop').toggleClass('btn-primary', true);
+			$('#mamc-start-stop').html('Start');
+			
+		});
+		
+		
 		/**
 		 * not ready
 		 ******************************************************************/
 		$('body').on('ma:not-ready', function() {
 			
+			running = false;
+			clear();
+
+			$('#mamc-start-stop').toggleClass('btn-danger', false);
+			$('#mamc-start-stop').toggleClass('btn-primary', true);
+			$('#mamc-start-stop').html('Start');
+
 			/**
 			 * kill all intervals
 			 ******************************************************************/
