@@ -35,6 +35,14 @@ This software is released under the MIT License, see LICENSE.md for full details
 Special thanks to [@KradekMFC](https://www.twitter.com/KradekMFC) for his work on the MFC Assistant userscript which served as inspiration when I was in the early stages of developing this software. Plus he's just awesome!
 
 ## Version History
+* 1.0.13
+  * Tweak Firefox deployment.
+  * Fix token keno bug.
+  * Added Footer and Donate button.
+  * Fixed dropdown menu click bug.
+  * Remove autocomplete from chat and fake tip.
+  * Added member's site module.
+  * Added Message Carousel to Saved/Timed Messages.
 * 1.0.12f
   * Firefox first release!
 * 1.0.12a-e
