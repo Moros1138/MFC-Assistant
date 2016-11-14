@@ -15,15 +15,18 @@ var MANavigation = (function() {
 	function navigateTo(page) {
 		
 		if(!ready && page != '#not-ready')
-			return;
+			return false;
 		
 		if( pages.indexOf(page) != -1 ) {
 			for(var i = 0; i < pages.length; i++) {
 				$(pages[i]).hide();
 			}
 			$(page).show();
+			$(window).scrollTop(0);
+			return true;
 		} else {
 			navigateTo('#home');
+			return false;
 		}
 		
 	}
@@ -40,7 +43,8 @@ var MANavigation = (function() {
 		// link click navigation
 		$('a').click(function(e) {
 			if(!$(this).hasClass('dropdown-toggle')) {
-				navigateTo($(this).attr('href'));
+				if( navigateTo($(this).attr('href')) )
+					e.preventDefault();
 			}
 		});
 		
