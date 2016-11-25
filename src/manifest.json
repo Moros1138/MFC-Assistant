@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "MFCAssistant",
-	"version": "1.0.13",
+	"version": "1.0.14",
 	"background": {
 		"scripts": [ "background/background.js" ],
 		"persistent": true
@@ -15,7 +15,7 @@
 		}
 	},
 	"content_scripts": [{
-		"js": [ "content/jquery.js", "content/mfc-assistant-model-web.js", "content/mfc-assistant-member-web.js" ],
+		"js": [ "content/jquery.min.js", "content/mfc-assistant-model-web.js", "content/mfc-assistant-member-web.js" ],
 		"matches": [ "*://www.myfreecams.com/*" ],
 		"all_frames": true
 	}],
@@ -24,5 +24,6 @@
 		"48": "options/images/icon48.png",
 		"128": "options/images/icon128.png"
 	},
+	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
 	"permissions": [ "tabs", "activeTab" ]
 }

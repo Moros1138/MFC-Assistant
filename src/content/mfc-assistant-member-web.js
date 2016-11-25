@@ -143,7 +143,7 @@ var MAssist = (function() {
 					message = message.text().trim();
 					
 					// chat message
-					chrome.runtime.sendMessage({from: 'content', subject: 'ma:chat-message', mfcMsg: {memberName: memberName, message: message}});
+					chrome.runtime.sendMessage({from: 'content', subject: 'ma:chat-message', mfcMsg: {memberName: memberName, message: unescape(message)}});
 					
 				}
 				
@@ -213,25 +213,29 @@ var MAssist = (function() {
 	 * Send a chat message
 	 ******************************************************************/
 	function sendMsg(msg) {
-
+		
+		var oldMsg = '';
+		
 		if(!running) {
 			debug('MA: error sending message. not running');
 			return;
 		}
 	
 		/**
-		 * Split strings into 100(ish) long string arrays
+		 * Split strings into 160(ish) long string arrays
 		 *
 		 * Originally By: georg on Stack Overflow
 		 * http://stackoverflow.com/questions/16246031/how-do-i-split-a-string-at-a-space-after-a-certain-number-of-characters-in-javas
 		 ******************************************************************/
-		msg = msg.replace(/.{100}\S*\s+/g, "$&@").split(/\s+@/);
+		msg = msg.replace(/.{160}\S*\s+/g, "$&#mfcASplit#").split(/\s+#mfcASplit#/);
 		
 		if(settings.send_messages) {
+			oldMsg = $("#message_input").val();
 			for(var i=0; i<msg.length;i++) {
 				$("#message_input").val(msg[i]);
 				$("#send_button").trigger('click');
 			}
+			$("#message_input").val(oldMsg);
 		} else {
 			for(var i=0; i<msg.length;i++) {
 				fakeMsg(msg[i]);
@@ -253,7 +257,7 @@ var MAssist = (function() {
 				'<div class="chat_container">',
 					'<a href="#" style="text-decoration:none;">',
 						'<span class="name_premium name_other" style="text-decoration:none;font-family:Arial;color:#2F2F4F !important;font-weight:bold;">MFCAssistant:</span>',
-					'</a>',
+					'</a> ',
 					'<span class="chat chat_premium chat_other" style="font-family:Arial;color:#2F2F4F ! important;font-weight:bold;">',
 						msg,
 					'</span>',

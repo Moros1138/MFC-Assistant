@@ -1,6 +1,10 @@
-# Distributed Files
-build-tools/inc/mozilla-api.php
+# Distribution/Built Files
+config/*
 dist/*
+node_modules/*
+src/options/vendor/*
+src/options/js/components.js
+src/options/js/components.js.map
 
 # Windows image file caches
 Thumbs.db

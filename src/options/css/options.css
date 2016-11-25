@@ -20,6 +20,9 @@ h2 {
 	display: none;
 }
 
+.debug {
+	background: rgba(255,0,0,0.5);
+}
 
 
 /* FIELDSET AND SAVED MESSAGES CONTAINER
@@ -32,6 +35,7 @@ fieldset {
 	margin: 10px 0px;
 	padding: 20px;
 	border: 1px solid #dedede;
+	border-radius: 4px;
 }
 
 /* CHATBOX
@@ -42,6 +46,7 @@ fieldset {
 	overflow: hidden;
 	overflow-y: auto;
 	border: 1px solid #dedede;
+	border-radius: 4px;
 	margin-bottom: 10px;
 	padding: 0px 5px;
 }
@@ -76,6 +81,7 @@ fieldset {
 	height: auto;
 	margin-bottom: 5px;
 	border: 1px solid #3a0606;
+	border-radius: 4px;
 	background: #fafafa;
 }
 
@@ -109,11 +115,7 @@ fieldset {
 	display: none;
 }
 
-.edit span:last-child,
-.delete span:last-child,
-.start-timer span:last-child,
-.post-now span:last-child,
-.add-to-carousel span:last-child {
+.sortable .btn span:last-child {
 	display: none;
 }
 
@@ -143,6 +145,7 @@ fieldset {
 	}
 
 }
+
 
 /* FOOTER STYLE
  *******************************************************************************/

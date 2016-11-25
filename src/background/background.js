@@ -7,7 +7,7 @@
 function openOrFocusOptionsPage() {
 	
 	var extensionURL = {
-		url: chrome.extension.getURL('options/options.html'),
+		url: chrome.extension.getURL('options/index.html'),
 		found: false
 	};
 	
