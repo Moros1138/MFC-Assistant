@@ -33,4 +33,4 @@ npm build
 
 ## Important Notes
 
-You are required to install this in Developer Mode (Google Chrome, Opera) or Load Temporary extension via about:debugging in Firefox because this uses the chrome/extension api and will not work in a standalone server environment!
+You are required to install this in Developer Mode (Google Chrome, Opera) or Load Temporary extension via about:debugging in Firefox because this uses the chrome/extension api and will not work in a standalone server environment! I use `webpack --watch` to recompile the vue components as I edit them.
