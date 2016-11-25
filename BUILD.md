@@ -8,8 +8,7 @@ npm install
 * Runs default gulp task which copies vendor files to the src/options directory
 * Runs webpack to compile vue components
 
-
-Edit config/jwt.js
+Edit config/jwt.js (For building Firefox Web Extension)
 
 ```javascript
 const appID = '<MOZILLA ADDON ID HERE>';
