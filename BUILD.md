@@ -11,7 +11,8 @@ npm install
 
 Edit config/jwt.js
 
-`const appID = '<MOZILLA ADDON ID HERE>';
+```javascript
+const appID = '<MOZILLA ADDON ID HERE>';
 const issuer = '<MOZILLA ADDON ISSUER HERE>';
 const secret = '<MOZILLA ADDON SECRET HERE>';
 const updateURL = '<AUTO UPDATE (updates.json) URL HERE>';
@@ -21,7 +22,8 @@ module.exports = {
 	issuer,
 	secret,
 	updateURL,
-}`
+}
+```
 
 npm build
 
