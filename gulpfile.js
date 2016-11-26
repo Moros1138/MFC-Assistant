@@ -1,20 +1,23 @@
+const fs = require("fs")
 const gulp = require("gulp")
 const bump = require("gulp-bump")
 const clean = require("gulp-clean")
 const replace = require("gulp-replace")
 const jeditor = require("gulp-json-editor")
+const zip = require('gulp-zip')
 const runSequence = require('run-sequence')
 
 /**
  * This configuration contains exported
  * constants
  *
- * appID - Firefox App ID
- * issuer - JWT Issuer
- * secret - JWT Secret
- * updateURL - Auto Update URL
+ * appID      - Mozilla Firefox Add-on/Web Extension ID
+ * issuer     - JWT Issuer
+ * secret     - JWT Secret
+ * updateURL  - Auto Update URL
+ * betaDeploy - Destination to copy the beta zip archive
  */
-const jwt = require("./config/jwt.js");
+const config = require("./config/config.js");
 
 /**
  * Copies vender files to the src/vendors directory.
@@ -97,35 +100,71 @@ gulp.task('build', () => {
 			'src/manifest.json'
 		])
 		.pipe(gulp.dest("dist/chrome"))
+		.on('finish', () => {
+			
+			setTimeout(() => {
+				var date = new Date();
+				var version = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+'.'+date.getMinutes()+'.'+date.getSeconds()
+				
+				gulp.src([
+					"dist/chrome/**"
+				])
+				.pipe(zip('mfc-assistant-chrome.'+version+'.zip'))
+				.pipe(gulp.dest('dist'))
+				.on('finish', () => {
+
+					setTimeout(() => {
+
+						if(config.betaDeploy != undefined) {
+						
+							gulp.src([
+								"dist/mfc-assistant-chrome.*.zip"
+							])
+							.pipe(gulp.dest(config.betaDeploy))
+							
+						}
+						
+						console.log('Finished Chrome.')
+						
+					}, 1000)
+					
+				})
+			}, 1000);
+			
+		});
 		
-		console.log('Finished Chrome.')
 
 		// firefox manifest
 		return gulp.src([
 			'src/manifest.json'
 		])
 		.pipe(jeditor(function(json){
-			json.applications = {
-				gecko: {
-					id: jwt.appID,
-					strict_min_version: '42.0',
-					strict_max_version: '50.*',
-					update_url: jwt.updateURL
-				}
-			};
+			
+			if(config.appID && config.updateURL) {
+				json.applications = {
+					gecko: {
+						id: config.appID,
+						strict_min_version: '42.0',
+						strict_max_version: '50.*',
+						update_url: config.updateURL
+					}
+				};
+			}
 			
 			return json;
 		}))
 		.pipe(gulp.dest("dist/firefox"))
 		.on('finish', () => {
 			setTimeout(() => {
-				gulp.src('src/firefox-build.cmd')
-					.pipe(replace('JWT_ISSUER', jwt.issuer))
-					.pipe(replace('JWT_SECRET', jwt.secret))
-					.pipe(gulp.dest('dist/firefox'))
-					.on('finish', () => {
-						console.log('Finished Firefox.');
-					});
+				if(config.issuer && config.secret) {
+					gulp.src('src/firefox-build.cmd')
+						.pipe(replace('JWT_ISSUER', config.issuer))
+						.pipe(replace('JWT_SECRET', config.secret))
+						.pipe(gulp.dest('dist/firefox'))
+						.on('finish', () => {
+							console.log('Finished Firefox.');
+						});
+				}
 			}, 1000);
 		})
 		
