@@ -1,4 +1,4 @@
-<template><div class="container"><div class="jumbotron"><h1 id="myfreecams-assistant">Myfreecams Assistant</h1>
+<template><div id="home" class="container"><div class="jumbotron"><h1 id="myfreecams-assistant">Myfreecams Assistant</h1>
 <p>The MFC Chat bot that puts you in charge of your room!</p>
 <h2 id="key-features">Key Features</h2>
 <ul>
@@ -33,6 +33,15 @@
 <ul>
 <li>1.0.14<ul>
 <li>Switched to Vue.js for components and page routing</li>
+<li>Added NumberInput component for form fields requiring numbers</li>
+<li>Added TextInput component for form fields requiring text</li>
+<li>Added YesNoInput component for form fields requiring Yes/No radios</li>
+<li>All form components now have built in validation!</li>
+<li>Fixed chat form submit bug.</li>
+<li>Fixed icon toggles for Start/Stop Timer in Messages</li>
+<li>Fixed icon toggles for Add to/Remove from Carousel in Message</li>
+<li>Added Disable all message inputs and message removal while the Message Carousel is running</li>
+<li>Added Disable all game inputs while the game is running.</li>
 </ul>
 </li>
 <li>1.0.13<ul>

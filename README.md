@@ -37,6 +37,15 @@ Special thanks to [@KradekMFC](https://www.twitter.com/KradekMFC) for his work o
 ## Version History
 * 1.0.14
   * Switched to Vue.js for components and page routing
+  * Added NumberInput component for form fields requiring numbers
+  * Added TextInput component for form fields requiring text
+  * Added YesNoInput component for form fields requiring Yes/No radios
+  * All form components now have built in validation!
+  * Fixed chat form submit bug.
+  * Fixed icon toggles for Start/Stop Timer in Messages
+  * Fixed icon toggles for Add to/Remove from Carousel in Message
+  * Added Disable all message inputs and message removal while the Message Carousel is running
+  * Added Disable all game inputs while the game is running.
 * 1.0.13
   * Tweak Firefox deployment.
   * Fix token keno bug.
