@@ -1,10 +1,10 @@
+const archiver		= require('archiver')
 const fs			= require('fs');
 const gulp			= require("gulp")
 const bump			= require("gulp-bump")
 const clean			= require("gulp-clean")
 const replace		= require("gulp-replace")
 const jeditor		= require("gulp-json-editor")
-const zip			= require('gulp-zip')
 const marked		= require("marked")
 const runSequence	= require('run-sequence')
 
@@ -138,13 +138,13 @@ gulp.task('build', () => {
 					var date = new Date();
 					var version = date.getFullYear()+'-'+pad(date.getMonth()+1)+'-'+pad(date.getDate())+' '+pad(date.getHours())+'.'+pad(date.getMinutes())+'.'+pad(date.getSeconds())
 					
-					gulp.src([
-						"dist/chrome/**"
-					])
-					.pipe(zip('mfc-assistant-chrome.'+version+'.zip'))
-					.pipe(gulp.dest('dist'))
-					.on('finish', () => {
+					var output = fs.createWriteStream('dist/mfc-assistant-chrome.'+version+'.zip');
+					var archive = archiver('zip');
 
+					output.on('close', function () {
+						console.log(archive.pointer() + ' total bytes');
+						console.log('archiver has been finalized and the output file descriptor has closed.');
+						
 						setTimeout(() => {
 
 							if(config.betaDeploy != undefined) {
@@ -160,7 +160,18 @@ gulp.task('build', () => {
 							
 						}, 1000)
 						
-					})
+					});
+
+					archive.on('error', function(err){
+						throw err;
+					});
+
+					archive.pipe(output);
+					archive.bulk([
+						{expand: true, cwd: 'dist/chrome', src: ['**'], dest: ''}
+					]);
+					archive.finalize();
+					
 				}, 1000);
 				
 			});
