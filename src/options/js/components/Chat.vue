@@ -71,11 +71,13 @@ export default {
 			
 			return false;
 		},
-		sendMsg: function() {
+		sendMsg: function(e) {
+			e.preventDefault();
 			MAssistOptions.sendMsg(this.msg);
 			this.msg = '';
 		},
-		fakeTip: function() {
+		fakeTip: function(e) {
+			e.preventDefault();
 			MAssistOptions.fakeTip(this.tipAmount);
 			this.tipAmount = '';
 		}
