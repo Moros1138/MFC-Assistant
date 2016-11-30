@@ -96,7 +96,11 @@ gulp.task('bump', () => {
 
 gulp.task('build', () => {
 	
-	runSequence('clean', 'bump', 'default', () => {
+	runSequence(
+		'clean',
+		//'bump',
+		'default',
+		() => {
 			
 		// copy extension files
 		gulp.src([
@@ -118,8 +122,12 @@ gulp.task('build', () => {
 			.on('finish', () => {
 		
 				setTimeout(() => {
+					function pad(n) {
+						return (n<10) ? '0'+n : n;
+					}
+
 					var date = new Date();
-					var version = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+'.'+date.getMinutes()+'.'+date.getSeconds()
+					var version = date.getFullYear()+'-'+pad(date.getMonth()+1)+'-'+pad(date.getDate())+' '+pad(date.getHours())+'.'+pad(date.getMinutes())+'.'+pad(date.getSeconds())
 					
 					gulp.src([
 						"dist/chrome/**"
