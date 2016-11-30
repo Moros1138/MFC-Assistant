@@ -1,6 +1,6 @@
 {
   "name": "mfc-assistant",
-  "version": "1.0.14",
+  "version": "1.0.18",
   "description": "The MFC Chat bot that puts you in charge of your room!",
   "scripts": {
     "postinstall": "gulp && webpack",
@@ -8,7 +8,7 @@
   },
   "author": "Moros1138 <moros1138@gmail.com>",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "Sortable": "git+https://github.com/RubaXa/Sortable.git",
     "Vue.Draggable": "git+https://github.com/SortableJS/Vue.Draggable.git",
     "babel-core": "^6.18.2",
@@ -18,12 +18,10 @@
     "bowser": "^1.5.0",
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",
-    "fs": "0.0.1-security",
     "gulp": "^3.9.1",
     "gulp-bump": "^2.5.1",
     "gulp-changed": "^1.3.2",
     "gulp-clean": "^0.3.2",
-    "gulp-jscs": "^4.0.0",
     "gulp-json-editor": "^2.2.1",
     "gulp-replace": "^0.5.4",
     "gulp-uglify": "^2.0.0",
