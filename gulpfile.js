@@ -1,9 +1,11 @@
+const fs			= require('fs');
 const gulp			= require("gulp")
 const bump			= require("gulp-bump")
 const clean			= require("gulp-clean")
 const replace		= require("gulp-replace")
 const jeditor		= require("gulp-json-editor")
 const zip			= require('gulp-zip')
+const marked		= require("marked")
 const runSequence	= require('run-sequence')
 
 /**
@@ -94,11 +96,19 @@ gulp.task('bump', () => {
 	
 });
 
+gulp.task('homepage', () => {
+	var readme = fs.readFileSync(__dirname+'/README.md', {encoding: 'utf8'})
+	
+	return gulp.src('src/options/js/components/Home.vue')
+		.pipe(replace(/<template>([\s\S]*)<\/template>/g, '<template><div class="container"><div class="jumbotron">'+marked(readme)+'</div></div></template>'))
+		.pipe(gulp.dest('src/options/js/components'))
+
+});
+
 gulp.task('build', () => {
 	
 	runSequence(
 		'clean',
-		//'bump',
 		'default',
 		() => {
 			
@@ -113,7 +123,6 @@ gulp.task('build', () => {
 		.pipe(gulp.dest('dist/chrome'))
 		.pipe(gulp.dest('dist/firefox'))
 		.on('finish', () => {
-			
 			// chrome manifest
 			gulp.src([
 				'src/manifest.json'
