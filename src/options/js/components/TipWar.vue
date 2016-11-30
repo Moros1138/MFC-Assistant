@@ -111,7 +111,7 @@ export default {
 					clearInterval(this.repostInterval);
 				} else {
 					MAssistOptions.dialog(
-						'This will reset the game!\nAre you sure?',
+						'This will reset the game! Are you sure?',
 						'Are you Sure?',
 						function() { // yesCallback
 							$('body').off('ma:tip', _self.handleTip);
