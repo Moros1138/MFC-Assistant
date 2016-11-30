@@ -2,6 +2,7 @@
 config/*
 dist/*
 node_modules/*
+src/content/jquery.min.js
 src/options/vendor/*
 src/options/js/components.js
 src/options/js/components.js.map
