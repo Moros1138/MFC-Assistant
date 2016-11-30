@@ -46,6 +46,7 @@ Special thanks to [@KradekMFC](https://www.twitter.com/KradekMFC) for his work o
   * Fixed icon toggles for Add to/Remove from Carousel in Message
   * Added Disable all message inputs and message removal while the Message Carousel is running
   * Added Disable all game inputs while the game is running.
+  * Added Confirm dialogs to Remove Message and Stop buttons for the games
 * 1.0.13
   * Tweak Firefox deployment.
   * Fix token keno bug.

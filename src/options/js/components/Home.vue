@@ -42,6 +42,7 @@
 <li>Fixed icon toggles for Add to/Remove from Carousel in Message</li>
 <li>Added Disable all message inputs and message removal while the Message Carousel is running</li>
 <li>Added Disable all game inputs while the game is running.</li>
+<li>Added Confirm dialogs to Remove Message and Stop buttons for the games</li>
 </ul>
 </li>
 <li>1.0.13<ul>
