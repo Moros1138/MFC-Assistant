@@ -2,15 +2,15 @@
 	<div id="tokenkeno">
 		<h1>Token Keno</h1>
 		<fieldset>
-			<text-input type="textarea" label="Game Message" placeholder="Type a game message..." maxlength="160" v-model="settings.msg" @input="updateSettings"></text-input>
-			<number-input label="Start #" placeholder="Type in a winning amount..." v-model="settings.start" @input="updateSettings"></number-input>
-			<number-input label="End #" placeholder="Type the ending number..." v-model="settings.end" @input="updateSettings"></number-input>
+			<text-input type="textarea" :disabled="(running) ? 'disabled' : ''" label="Game Message" placeholder="Type a game message..." maxlength="160" v-model="settings.msg" @input="updateSettings"></text-input>
+			<number-input :disabled="(running) ? 'disabled' : ''" label="Start #" placeholder="Type in a winning amount..." v-model="settings.start" @input="updateSettings"></number-input>
+			<number-input :disabled="(running) ? 'disabled' : ''" label="End #" placeholder="Type the ending number..." v-model="settings.end" @input="updateSettings"></number-input>
 			<p>
 				<label>Maximum (If all numbers are tipped):</label>
 				<input class="form-control" type="text" :value="calculateMax" disabled>
 			</p>
-			<number-input label="Number of Prizes" placeholder="Type the number of prizes..." v-model="settings.prizes" @input="updateSettings"></number-input>
-			<number-input v-bind:label="((isDebugMode) ? 'Repost Delay (Seconds)' : 'Repost Delay (Minutes)')" placeholder="Type in the repost delay..." v-model="settings.repostDelay" @input="updateSettings"></number-input>
+			<number-input :disabled="(running) ? 'disabled' : ''" label="Number of Prizes" placeholder="Type the number of prizes..." v-model="settings.prizes" @input="updateSettings"></number-input>
+			<number-input :disabled="(running) ? 'disabled' : ''" :label="((isDebugMode) ? 'Repost Delay (Seconds)' : 'Repost Delay (Minutes)')" placeholder="Type in the repost delay..." v-model="settings.repostDelay" @input="updateSettings"></number-input>
 			<p class="buttons">
 				<button type="button" class="btn" v-bind:class="(running) ? 'btn-danger' : 'btn-primary'" @click="startStopTokenKeno">{{ (running) ? 'Stop' : 'Start' }}</button>
 				<button type="button" class="btn btn-info" @click="repost">Repost</button>

@@ -2,14 +2,14 @@
 	<div id="tipwar">
 		<h1>Tip War</h1>
 		<fieldset>
-			<text-input type="textarea" label="Game Message" placeholder="Type a game message..." maxlength="160" v-model="settings.msg" @input="updateSettings"></text-input>
-			<text-input label="Team Evens" placeholder="Type the name of Team Evens..." v-model="settings.teamEvens" @input="updateSettings"></text-input>
-			<text-input label="Team Odds" placeholder="Type the name of Team Odds..." v-model="settings.teamOdds" @input="updateSettings"></text-input>
-			<yes-no-input name="use-winning" label="Use Winning Amount?" v-model="settings.useWinning" @input="updateSettings"></yes-no-input>
-			<number-input label="Winning Amount" placeholder="Type in a winning amount..." v-model="settings.winningAmount" @input="updateSettings"></number-input>
-			<number-input v-bind:label="((isDebugMode) ? 'Repost Delay (Seconds)' : 'Repost Delay (Minutes)')" placeholder="Type in the repost delay..." v-model="settings.repostDelay" @input="updateSettings"></number-input>
+			<text-input type="textarea" :disabled="(running) ? 'disabled' : ''" label="Game Message" placeholder="Type a game message..." maxlength="160" v-model="settings.msg" @input="updateSettings"></text-input>
+			<text-input :disabled="(running) ? 'disabled' : ''" label="Team Evens" placeholder="Type the name of Team Evens..." v-model="settings.teamEvens" @input="updateSettings"></text-input>
+			<text-input :disabled="(running) ? 'disabled' : ''" label="Team Odds" placeholder="Type the name of Team Odds..." v-model="settings.teamOdds" @input="updateSettings"></text-input>
+			<yes-no-input :disabled="(running) ? 'disabled' : ''" name="use-winning" label="Use Winning Amount?" v-model="settings.useWinning" @input="updateSettings"></yes-no-input>
+			<number-input :disabled="(running) ? 'disabled' : ''" label="Winning Amount" placeholder="Type in a winning amount..." v-model="settings.winningAmount" @input="updateSettings"></number-input>
+			<number-input :disabled="(running) ? 'disabled' : ''" :label="((isDebugMode) ? 'Repost Delay (Seconds)' : 'Repost Delay (Minutes)')" placeholder="Type in the repost delay..." v-model="settings.repostDelay" @input="updateSettings"></number-input>
 			<p class="buttons">
-				<button type="button" class="btn" v-bind:class="(running) ? 'btn-danger' : 'btn-primary'" @click="startStopWar">{{ (running) ? 'Stop' : 'Start' }}</button>
+				<button type="button" class="btn" :class="(running) ? 'btn-danger' : 'btn-primary'" @click="startStopWar">{{ (running) ? 'Stop' : 'Start' }}</button>
 				<button type="button" class="btn btn-info" @click="repost">Repost</button>
 			</p>
 		</fieldset>
