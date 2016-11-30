@@ -3,12 +3,12 @@
 		<label>{{ label }}</label>
 		<p style="padding-left: 20px;">
 			<label class="custom-control custom-radio">
-				<input ref="inputTrue" type="radio" :name="name" class="custom-control-input" value="true" :checked="(val) ? 'checked' : ''" @click="updateValue($event.target.value)">
+				<input ref="inputTrue" type="radio" :disabled="validation.disabled" :name="name" class="custom-control-input" value="true" :checked="(val) ? 'checked' : ''" @click="updateValue($event.target.value)">
 				<span class="custom-control-indicator"></span>
 				<span class="custom-control-description">Yes</span>
 			</label>
 			<label class="custom-control custom-radio">
-				<input ref="inputFalse" type="radio" :name="name" class="custom-control-input" value="false" :checked="(!val) ? 'checked' : ''" @click="updateValue($event.target.value)">
+				<input ref="inputFalse" type="radio" :disabled="validation.disabled" :name="name" class="custom-control-input" value="false" :checked="(!val) ? 'checked' : ''" @click="updateValue($event.target.value)">
 				<span class="custom-control-indicator"></span>
 				<span class="custom-control-description">No</span>
 			</label>
@@ -29,6 +29,10 @@ export default {
 			default: ''
 		},
 		'label': {
+			type: String,
+			default: ''
+		},
+		'disabled': {
 			type: String,
 			default: ''
 		}
@@ -60,7 +64,8 @@ export default {
 			return {
 				value: (this.value != '') ? true : false,
 				label: (this.label != '') ? true : false,
-				name: (this.name != '') ? true : false
+				name: (this.name != '') ? true : false,
+				disabled: (this.disabled != '') ? true : false
 			};
 			
 		}

@@ -5,8 +5,8 @@
 			<span v-if="maxlength != ''" :class="{'alert-danger': charDanger,'alert-warning': charWarning }">(Chars Remaining: {{ charCount }})</span>
 		</label>
 		
-		<textarea v-if="(type == 'textarea')" ref="inputTextarea" class="form-control" :class="{'alert-danger': !validation.value }" placeholder="Type a game message..." v-bind:value="value" v-on:input="updateValue($event.target.value)"></textarea>
-		<input v-if="(type == 'text')" ref="inputText" class="form-control" :class="{'alert-danger': !validation.value }" type="text" v-bind:placeholder="placeholder" v-bind:value="value" v-on:input="updateValue($event.target.value)">
+		<textarea v-if="(type == 'textarea')" ref="inputTextarea" :disabled="validation.disabled" class="form-control" :class="{'alert-danger': !validation.value }" placeholder="Type a game message..." v-bind:value="value" v-on:input="updateValue($event.target.value)"></textarea>
+		<input v-if="(type == 'text')" ref="inputText" :disabled="validation.disabled" class="form-control" :class="{'alert-danger': !validation.value }" type="text" v-bind:placeholder="placeholder" v-bind:value="value" v-on:input="updateValue($event.target.value)">
 	</p>
 </template>
 
@@ -33,6 +33,10 @@ export default {
 		'maxlength': {
 			type: String,
 			default: ''
+		},
+		'disabled': {
+			type: String,
+			default: ''
 		}
 	},
 	
@@ -41,7 +45,8 @@ export default {
 		validation: function() {
 			
 			return {
-				value: (this.value != '') ? true : false
+				value: (this.value != '') ? true : false,
+				disabled: (this.disabled != '') ? true : false
 			};
 			
 		},

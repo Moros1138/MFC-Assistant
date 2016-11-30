@@ -1,7 +1,7 @@
 <template>
 	<p>
 		<label v-if="label != ''">{{ label }} <span v-if="!validation.value" class="alert-danger">This must be a number!</span></label>
-		<input ref="input" class="form-control" :class="{'alert-danger': !validation.value }" type="text" v-bind:placeholder="placeholder" v-bind:value="value" v-on:input="updateValue($event.target.value)">
+		<input ref="input" class="form-control" :disabled="validation.disabled" :class="{'alert-danger': !validation.value }" type="text" v-bind:placeholder="placeholder" v-bind:value="value" v-on:input="updateValue($event.target.value)">
 	</p>	
 </template>
 
@@ -19,6 +19,10 @@ export default {
 		'label': {
 			type: String,
 			default: ''
+		},
+		'disabled': {
+			type: String,
+			default: ''
 		}
 	},
 	
@@ -27,7 +31,8 @@ export default {
 		validation: function() {
 			
 			return {
-				value: (this.value == '') ? false : this.conform(this.value)
+				value: (this.value == '') ? false : this.conform(this.value),
+				disabled: (this.disabled != '') ? true : false
 			};
 			
 		}
