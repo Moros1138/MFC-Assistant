@@ -100,7 +100,7 @@ gulp.task('homepage', () => {
 	var readme = fs.readFileSync(__dirname+'/README.md', {encoding: 'utf8'})
 	
 	return gulp.src('src/options/js/components/Home.vue')
-		.pipe(replace(/<template>([\s\S]*)<\/template>/g, '<template><div class="container"><div class="jumbotron">'+marked(readme)+'</div></div></template>'))
+		.pipe(replace(/<template>([\s\S]*)<\/template>/g, '<template><div id="home" class="container"><div class="jumbotron">'+marked(readme)+'</div></div></template>'))
 		.pipe(gulp.dest('src/options/js/components'))
 
 });
