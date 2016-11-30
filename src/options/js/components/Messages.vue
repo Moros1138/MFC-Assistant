@@ -15,7 +15,7 @@
 							<span>Remove Message</span>
 						</button>
 						<button type="button" v-bind:title="(message.timer) ? 'Stop this timer': 'Start this timer'" class="btn btn-sm" v-bind:class="(message.timer) ? 'btn-warning' : 'btn-info'" v-on:click="timerToggle(message.id)">
-							<span class="glyphicon glyphicon-play"></span>
+							<span class="glyphicon" :class="{'glyphicon-play': (message.timer == false),'glyphicon-stop': (message.timer) }"></span>
 							<span>{{ (message.timer != false) ? 'Stop Timer' : 'Start Timer' }}</span>
 						</button>
 						<button type="button" title="Post this message now" class="btn btn-sm btn-info" v-on:click="postNow($event, message.id)">
@@ -23,14 +23,14 @@
 							<span>Post Now</span>
 						</button>
 						<button type="button" v-bind:title="(message.carousel ? 'Remove this message from the carousel.' : 'Add this message to the carousel.')" class="btn btn-sm" v-bind:class="(message.carousel ? 'btn-warning' : 'btn-info')" v-on:click="carouselToggle(message.id)">
-							<span class="glyphicon glyphicon-plus"></span>
+							<span class="glyphicon" :class="{'glyphicon-plus': (message.carousel == false),'glyphicon-minus': (message.carousel) }"></span>
 							<span>{{ (message.carousel) ? 'Remove from Carousel' : 'Add to Carousel' }}</span>
 						</button>
 					</div>
 					<div class="edit-box collapsed">
-						<text-input type="text" label="Message Description" placeholder="Type in a short description..." v-model="message.desc" @input="updateSettings"></text-input>
-						<text-input type="textarea" label="Message" placeholder="Type in your saved message here..." maxlength="160" v-model="message.msg" @input="updateSettings"></text-input>
-						<number-input v-bind:label="((isDebugMode) ? 'Delay Time (Seconds)' : 'Delay Time (Minutes)')" placeholder="Type in the timer delay..." v-model="message.delay" @input="updateSettings"></number-input>
+						<text-input type="text" :disabled="(running) ? 'disabled' : ''" label="Message Description" placeholder="Type in a short description..." v-model="message.desc" @input="updateSettings"></text-input>
+						<text-input type="textarea" :disabled="(running) ? 'disabled' : ''" label="Message" placeholder="Type in your saved message here..." maxlength="160" v-model="message.msg" @input="updateSettings"></text-input>
+						<number-input :disabled="(running) ? 'disabled' : ''" :label="((isDebugMode) ? 'Delay Time (Seconds)' : 'Delay Time (Minutes)')" placeholder="Type in the timer delay..." v-model="message.delay" @input="updateSettings"></number-input>
 					</div>
 				</li>
 			</draggable>
@@ -45,7 +45,7 @@
 
 		<h1>Message Carousel</h1>
 		<fieldset>
-			<number-input v-bind:label="((isDebugMode) ? 'Carousel Delay (Seconds)' : 'Carousel Delay (Minutes)')" placeholder="Type in the carousel delay..." v-model="settings.carouselDelay" @input="updateSettings"></number-input>
+			<number-input :disabled="(running) ? 'disabled' : ''" v-bind:label="((isDebugMode) ? 'Carousel Delay (Seconds)' : 'Carousel Delay (Minutes)')" placeholder="Type in the carousel delay..." v-model="settings.carouselDelay" @input="updateSettings"></number-input>
 			<p class="buttons">
 				<button type="button" v-bind:title="(running) ? 'Stop the Message Carousel' : 'Start the Message Carousel'" class="btn" v-bind:class="(running) ? 'btn-danger' : 'btn-primary'" v-on:click="startStopCarousel">{{ (running != false) ? 'Stop Carousel' : 'Start Carousel' }}</button>
 			</p>
@@ -261,14 +261,36 @@ export default {
 		 * Remove a message
 		 ******************************************************************/
 		removeMessage: function(id) {
+
+			var _self = this;
 			
-			var i = this.getMessageIndex(id);
-			
-			if(i == -1)
+			if(this.running) {
+				MAssistOptions.dialog(
+					'The Message Carousel is Running!\nPlease stop it before making these changes!',
+					'Awwww fuck!'
+				)
 				return;
-			
-			this.settings.messages.splice(i, 1);
-			this.updateSettings();
+			}
+
+			MAssistOptions.dialog(
+				'Are you sure?',
+				'This action can not be undone!',
+				function() { // yesCallback
+				
+					var i = _self.getMessageIndex(id);
+					
+					if(i == -1)
+						return;
+					
+					_self.settings.messages.splice(i, 1);
+					_self.updateSettings();
+					$(this).dialog('close');
+				
+				},
+				function() { // noCallback
+					$(this).dialog('close');
+				}
+			);
 			
 		},
 		
@@ -324,10 +346,12 @@ export default {
 		carouselToggle: function(id) {
 			
 			if(this.running) {
-				alert('The Message Carousel is Running!\nPlease stop it before making these changes!');
+				MAssistOptions.dialog(
+					'The Message Carousel is Running!\nPlease stop it before making these changes!',
+					'Awwww fuck!'
+				)
 				return;
 			}
-				
 			
 			var i = this.getMessageIndex(id);
 			
