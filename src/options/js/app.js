@@ -33,7 +33,7 @@ $(document).ready(function() {
 		
 		MAssistOptions.dialog(
 			'All game variables will be cleared and timers will stopped.',
-			'Lost Contact with Model Web!',
+			'Lost Contact with Chat Room!',
 			function() {
 				$(this).dialog('close');
 			}
