@@ -92,6 +92,16 @@ var MAssist = (function() {
 		
 	}
 	
+	/**
+	 * Sent ma:not-ready right before the tab closes
+	 ******************************************************************/
+	window.addEventListener("beforeunload", function (event) {
+		chrome.runtime.sendMessage({from: 'content', subject: 'ma:not-ready'});
+	});	
+	
+	/**
+	 * Used externally to determine whether we're running or not
+	 ******************************************************************/
 	function isRunning() {
 		return running;
 	}
@@ -320,7 +330,6 @@ var MAssist = (function() {
 $(document).ready(function() {
 	MAssist.init();	
 });
-
 
 }
 
