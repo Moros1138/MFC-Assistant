@@ -1,6 +1,6 @@
 {
   "name": "mfc-assistant",
-  "version": "1.0.18",
+  "version": "1.0.14",
   "description": "The MFC Chat bot that puts you in charge of your room!",
   "scripts": {
     "postinstall": "gulp && webpack",
