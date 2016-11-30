@@ -129,7 +129,26 @@ export default {
 		startStopTokenKeno: function(e) {
 		
 			var _self = this;
-		
+
+			if(this.running) {
+				MAssistOptions.dialog(
+					'This will reset the game!\nAre you sure?',
+					'Are you Sure?',
+					function() { // yesCallback
+						$('body').off('ma:tip', _self.handleTip);
+						_self.running = false;
+						_self.clear();
+						_self.sendMsg('Token Keno has ended.');
+						clearInterval(this.repostInterval);
+						$(this).dialog('close');
+					},
+					function() { // noCallback
+						$(this).dialog('close');
+					}
+				)
+				return;
+			}
+			
 			if(!this.running) {
 				
 				for(var i = this.settings.start; i <= this.settings.end; i++) {
@@ -176,15 +195,7 @@ export default {
 					
 				}, (1000 * ((optionsData.settings.debug_mode) ? 1 : 60) * this.settings.repostDelay));
 				
-			} else {
-				
-				$('body').off('ma:tip', this.handleTip);
-				this.running = false;
-				this.clear();
-				
-				this.sendMsg('Token Keno has ended.');
-				clearInterval(this.repostInterval);				
-				
+				return;
 			}
 		
 		},
