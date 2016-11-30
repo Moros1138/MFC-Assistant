@@ -34,7 +34,13 @@ export default {
 		return window.optionsData;
 		
 	},
-	
+	beforeRouteEnter: function (to, from, next) {
+		if(window.maReady) {
+			next()
+		} else {
+			next(false)
+		}
+	},
 	methods: {
 		
 		/**

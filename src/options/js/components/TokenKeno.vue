@@ -61,6 +61,13 @@ export default {
 		return window.tokenKenoData;
 		
 	},
+	beforeRouteEnter: function (to, from, next) {
+		if(window.maReady) {
+			next()
+		} else {
+			next(false)
+		}
+	},
 	computed: {
 		
 		calculateMax: function() {

@@ -130,6 +130,13 @@
 
 <script>
 export default {
-	name: 'home'
+	name: 'home',
+	beforeRouteEnter: function (to, from, next) {
+		if(window.maReady) {
+			next()
+		} else {
+			next(false)
+		}
+	}
 }
 </script>

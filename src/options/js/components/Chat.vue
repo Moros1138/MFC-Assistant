@@ -63,6 +63,13 @@ export default {
 	data () {
 		return window.chatData;
 	},
+	beforeRouteEnter: function (to, from, next) {
+		if(window.maReady) {
+			next()
+		} else {
+			next(false)
+		}
+	},
 	methods: {
 		isTip: function(mfcMsg) {
 			if(mfcMsg.tipAmount !== undefined) {

@@ -96,6 +96,13 @@ export default {
 		return window.messagesData;
 		
 	},
+	beforeRouteEnter: function (to, from, next) {
+		if(window.maReady) {
+			next()
+		} else {
+			next(false)
+		}
+	},
 	computed: {
 		isDebugMode: function() {
 			return window.optionsData.settings.debug_mode;

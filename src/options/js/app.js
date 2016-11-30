@@ -1,3 +1,4 @@
+window.maReady = false;
 
 const router = new VueRouter({
 	routes: [
@@ -28,6 +29,7 @@ $(document).ready(function() {
 		}
 		
 		router.push('/notready');
+		window.maReady = false;
 		
 		MAssistOptions.dialog(
 			'All game variables will be cleared and timers will stopped.',
@@ -40,6 +42,7 @@ $(document).ready(function() {
 	});
 
 	$('body').on('ma:ready', function(e) {
+		window.maReady = true;
 		router.push('/');
 	});
 	

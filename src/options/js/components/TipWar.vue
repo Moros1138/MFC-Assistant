@@ -52,6 +52,13 @@ export default {
 		return window.tipWarData;
 		
 	},
+	beforeRouteEnter: function (to, from, next) {
+		if(window.maReady) {
+			next()
+		} else {
+			next(false)
+		}
+	},
 	mounted: function() {
 		
 		var _self = this;
