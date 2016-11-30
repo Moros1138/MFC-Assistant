@@ -126,30 +126,39 @@ export default {
 		/**
 		 * Start/Stop the Token Keno
 		 ******************************************************************/
-		startStopTokenKeno: function(e) {
+		startStopTokenKeno: function(e, bypass_dialog) {
 		
 			var _self = this;
+			
+			if(bypass_dialog === undefined)
+				bypass_dialog = false;
 
 			if(this.running) {
-				MAssistOptions.dialog(
-					'This will reset the game!\nAre you sure?',
-					'Are you Sure?',
-					function() { // yesCallback
-						$('body').off('ma:tip', _self.handleTip);
-						_self.running = false;
-						_self.clear();
-						_self.sendMsg('Token Keno has ended.');
-						clearInterval(this.repostInterval);
-						$(this).dialog('close');
-					},
-					function() { // noCallback
-						$(this).dialog('close');
-					}
-				)
+				if(bypass_dialog) {
+					$('body').off('ma:tip', this.handleTip);
+					this.running = false;
+					this.clear();
+					this.sendMsg('Token Keno has ended.');
+					clearInterval(this.repostInterval);
+				} else {
+					MAssistOptions.dialog(
+						'This will reset the game!\nAre you sure?',
+						'Are you Sure?',
+						function() { // yesCallback
+							$('body').off('ma:tip', _self.handleTip);
+							_self.running = false;
+							_self.clear();
+							_self.sendMsg('Token Keno has ended.');
+							clearInterval(_self.repostInterval);
+							$(this).dialog('close');
+						},
+						function() { // noCallback
+							$(this).dialog('close');
+						}
+					)
+				}
 				return;
-			}
-			
-			if(!this.running) {
+			} else {
 				
 				for(var i = this.settings.start; i <= this.settings.end; i++) {
 					this.remaining.push(i);
@@ -338,13 +347,13 @@ export default {
 
 			if(this.prizes.length == 0) {
 				this.sendMsg('All prizes have been WON!!');
-				this.startStopTokenKeno();
+				this.startStopTokenKeno(null, true);
 				return;
 			}
 			
 			if(this.remaining.length == 0) {
 				this.sendMsg('No more numbers remain!');
-				this.startStopTokenKeno();
+				this.startStopTokenKeno(null, true);
 				return;
 			}
 			

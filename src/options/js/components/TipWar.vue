@@ -95,30 +95,39 @@ export default {
 		/**
 		 * Start/Stop the Tip War
 		 ******************************************************************/
-		startStopWar: function(e) {
+		startStopWar: function(e, bypass_dialog) {
 			
 			var _self = this;
-
-			if(this.running) {
-				MAssistOptions.dialog(
-					'This will reset the game!\nAre you sure?',
-					'Are you Sure?',
-					function() { // yesCallback
-						$('body').off('ma:tip', _self.handleTip);
-						_self.running = false;
-						_self.clear();
-						_self.sendMsg('Tip War has ended.');
-						clearInterval(this.repostInterval);				
-						$(this).dialog('close');
-					},
-					function() { // noCallback
-						$(this).dialog('close');
-					}
-				)
-				return;
-			}
 			
-			if(!this.running) {
+			if(bypass_dialog === undefined)
+				bypass_dialog = false;
+			
+			if(this.running) {
+				if(bypass_dialog) {
+					$('body').off('ma:tip', this.handleTip);
+					this.running = false;
+					this.clear();
+					this.sendMsg('Tip War has ended.');
+					clearInterval(this.repostInterval);
+				} else {
+					MAssistOptions.dialog(
+						'This will reset the game!\nAre you sure?',
+						'Are you Sure?',
+						function() { // yesCallback
+							$('body').off('ma:tip', _self.handleTip);
+							_self.running = false;
+							_self.clear();
+							_self.sendMsg('Tip War has ended.');
+							clearInterval(_self.repostInterval);
+							$(this).dialog('close');
+						},
+						function() { // noCallback
+							$(this).dialog('close');
+						}
+					)
+				}
+				return;
+			} else {
 				
 				// no delay?
 				if(isNaN(this.settings.repostDelay)) {
@@ -156,7 +165,7 @@ export default {
 		repost: function(just_score) {
 			
 			if(just_score == undefined)
-				just_score == false;
+				just_score = false;
 			
 			if(!this.running)
 				return;
@@ -205,14 +214,14 @@ export default {
 				if( this.evenCounter >= this.settings.winningAmount ) {
 
 					MAssistOptions.sendMsg(this.settings.teamEvens+' is the winner!');
-					this.startStopWar();
+					this.startStopWar(null, true);
 					
 				}
 				
 				if( this.oddCounter >= this.settings.winningAmount ) {
 					
 					MAssistOptions.sendMsg(this.settings.teamOdds+' is the winner!');
-					this.startStopWar();
+					this.startStopWar(null, true);
 					
 				}
 				
