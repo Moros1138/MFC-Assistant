@@ -112,107 +112,115 @@ gulp.task('build', () => {
 		'default',
 		() => {
 			
-		// copy extension files
-		gulp.src([
-			'src/**',
-			'!src/manifest.json',
-			'!src/firefox-build.cmd',
-			'!src/options/js/components/**',
-			'!src/options/js/components'
-		])
-		.pipe(gulp.dest('dist/chrome'))
-		.pipe(gulp.dest('dist/firefox'))
-		.on('finish', () => {
-			// chrome manifest
+			// copy extension files
 			gulp.src([
-				'src/manifest.json'
+				'src/**',
+				'!src/manifest.json',
+				'!src/firefox-build.cmd',
+				'!src/options/js/components/**',
+				'!src/options/js/components'
 			])
-			.pipe(gulp.dest("dist/chrome"))
+			.pipe(gulp.dest('dist/chrome'))
+			.pipe(gulp.dest('dist/firefox'))
 			.on('finish', () => {
-		
-				setTimeout(() => {
-					function pad(n) {
-						return (n<10) ? '0'+n : n;
-					}
-
-					var date = new Date();
-					var version = date.getFullYear()+'-'+pad(date.getMonth()+1)+'-'+pad(date.getDate())+' '+pad(date.getHours())+'.'+pad(date.getMinutes())+'.'+pad(date.getSeconds())
-					
-					var output = fs.createWriteStream('dist/mfc-assistant-chrome.'+version+'.zip');
-					var archive = archiver('zip');
-
-					output.on('close', function () {
-						console.log(archive.pointer() + ' total bytes');
-						console.log('archiver has been finalized and the output file descriptor has closed.');
-						
-						setTimeout(() => {
-
-							if(config.betaDeploy != undefined) {
-							
-								gulp.src([
-									"dist/mfc-assistant-chrome.*.zip"
-								])
-								.pipe(gulp.dest(config.betaDeploy))
-								
-							}
-							
-							console.log('Finished Chrome.')
-							
-						}, 1000)
-						
-					});
-
-					archive.on('error', function(err){
-						throw err;
-					});
-
-					archive.pipe(output);
-					archive.bulk([
-						{expand: true, cwd: 'dist/chrome', src: ['**'], dest: ''}
-					]);
-					archive.finalize();
-					
-				}, 1000);
-				
-			});
-			
-			// firefox manifest
-			gulp.src([
-				'src/manifest.json'
-			])
-			.pipe(jeditor(function(json){
-				
-				if(config.appID && config.updateURL) {
-					json.applications = {
-						gecko: {
-							id: config.appID,
-							strict_min_version: '42.0',
-							strict_max_version: '50.*',
-							update_url: config.updateURL
-						}
-					};
-				}
-				
-				return json;
-			}))
-			.pipe(gulp.dest("dist/firefox"))
-			.on('finish', () => {
-				setTimeout(() => {
-					if(config.issuer && config.secret) {
-						gulp.src('src/firefox-build.cmd')
-							.pipe(replace('JWT_ISSUER', config.issuer))
-							.pipe(replace('JWT_SECRET', config.secret))
-							.pipe(gulp.dest('dist/firefox'))
-							.on('finish', () => {
-								console.log('Finished Firefox.');
-							});
-					}
-				}, 1000);
+				chromeManifest()
+				firefoxManifest()
 			})
-			
-		})
 		
-	});
-		
+		}); //runSequence
+
 });
 
+function chromeManifest() {
+	
+	// chrome manifest
+	return gulp.src([
+		'src/manifest.json'
+	])
+	.pipe(gulp.dest("dist/chrome"))
+	.on('finish', () => {
+
+		setTimeout(() => {
+			function pad(n) {
+				return (n<10) ? '0'+n : n;
+			}
+
+			var date = new Date();
+			var version = date.getFullYear()+'-'+pad(date.getMonth()+1)+'-'+pad(date.getDate())+' '+pad(date.getHours())+'.'+pad(date.getMinutes())+'.'+pad(date.getSeconds())
+			
+			var output = fs.createWriteStream('dist/mfc-assistant-chrome.'+version+'.zip');
+			var archive = archiver('zip');
+
+			output.on('close', function () {
+				
+				console.log(archive.pointer() + ' total bytes');
+				console.log('archiver has been finalized and the output file descriptor has closed.');
+				
+				setTimeout(() => {
+
+					if(config.betaDeploy != undefined) {
+					
+						gulp.src([
+							"dist/mfc-assistant-chrome.*.zip"
+						])
+						.pipe(gulp.dest(config.betaDeploy))
+						
+					}
+					
+					console.log('Finished Chrome.')
+					
+				}, 1000)
+				
+			});
+
+			archive.on('error', function(err){
+				throw err;
+			});
+
+			archive.pipe(output);
+			archive.directory('dist/chrome/', '');
+			archive.finalize();
+			
+		}, 1000);
+
+	});
+	
+}
+
+function firefoxManifest() {
+	
+	// firefox manifest
+	return gulp.src([
+		'src/manifest.json'
+	])
+	.pipe(jeditor(function(json){
+		
+		if(config.appID && config.updateURL) {
+			json.applications = {
+				gecko: {
+					id: config.appID,
+					strict_min_version: '42.0',
+					strict_max_version: '50.*',
+					update_url: config.updateURL
+				}
+			};
+		}
+		
+		return json;
+	}))
+	.pipe(gulp.dest("dist/firefox"))
+	.on('finish', () => {
+		setTimeout(() => {
+			if(config.issuer && config.secret) {
+				gulp.src('src/firefox-build.cmd')
+					.pipe(replace('JWT_ISSUER', config.issuer))
+					.pipe(replace('JWT_SECRET', config.secret))
+					.pipe(gulp.dest('dist/firefox'))
+					.on('finish', () => {
+						console.log('Finished Firefox.');
+					});
+			}
+		}, 1000);
+	})
+
+}
