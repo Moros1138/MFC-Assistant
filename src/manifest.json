@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "MFCAssistant",
-	"version": "1.0.14",
+	"version": "1.0.15",
 	"background": {
 		"scripts": [ "background/background.js" ],
 		"persistent": true
