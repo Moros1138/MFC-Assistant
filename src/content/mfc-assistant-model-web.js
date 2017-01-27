@@ -20,7 +20,7 @@ var MAssist = (function() {
 		
 		var initInterval = setInterval(function() {
 			
-			if($("#centertabs-body div[id$='channeltab'] div[id$='channeltext']").length > 0) {
+			if($("#centertabs-body div[id^='channeltab'] div[id^='channeltext']").length > 0) {
 				readMessages();
 				chrome.runtime.sendMessage({from: 'content', subject: 'ma:ready'});
 				console.log('MA: ma:ready triggered');
@@ -58,7 +58,7 @@ var MAssist = (function() {
 		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext'] p").toggleClass('ma-processed', true);
 		debug('MA: all chat messages prior to init have been set to processed and ignored.');
 		
-		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext']").on('DOMNodeInserted', function() {
+		$("#centertabs-body div[id^='channeltab'] div[id^='channeltext']").on('DOMNodeInserted', function() {
 		
 			// no double-ups please
 			if(readingMessages)
@@ -68,7 +68,7 @@ var MAssist = (function() {
 
 			debug('MA: new chat message arrived.');
 			
-			$("#centertabs-body div[id$='channeltab'] div[id$='channeltext'] p:not(.ma-processed)").each(function() {
+			$("#centertabs-body div[id^='channeltab'] div[id^='channeltext'] p:not(.ma-processed)").each(function() {
 				
 				// probably a tip, process it here
 				if( $(this).children()[0].tagName.toLowerCase() == 'font' ) {
@@ -142,7 +142,7 @@ var MAssist = (function() {
 		// if the chat disappears, re-run the init
 		var sanityCheck = setInterval(function() {
 			
-			if($("#centertabs-body div[id$='channeltab'] div[id$='channeltext']").length == 0) {
+			if($("#centertabs-body div[id^='channeltab'] div[id^='channeltext']").length == 0) {
 				init();
 				console.log('MA: we lost the chatbox.');
 				clearInterval(sanityCheck);
@@ -186,12 +186,12 @@ var MAssist = (function() {
 		msg = msg.replace(/.{160}\S*\s+/g, "$&#mfcASplit#").split(/\s+#mfcASplit#/);
 		
 		if(settings.send_messages) {
-			oldMsg = $("#centertabs-body div[id$='channeltab'] input[id$='message_input']").val();
+			oldMsg = $("#centertabs-body div[id^='channeltab'] input[id^='message_input']").val();
 			for(var i=0; i<msg.length;i++) {
-				$("#centertabs-body div[id$='channeltab'] input[id$='message_input']").val(msg[i]);
-				$("#centertabs-body div[id$='channeltab'] input[type='button']").trigger('click');
+				$("#centertabs-body div[id^='channeltab'] input[id^='message_input']").val(msg[i]);
+				$("#centertabs-body div[id^='channeltab'] input[type='button']").trigger('click');
 			}
-			$("#centertabs-body div[id$='channeltab'] input[id$='message_input']").val(oldMsg);
+			$("#centertabs-body div[id^='channeltab'] input[id^='message_input']").val(oldMsg);
 
 		} else {
 			for(var i=0; i<msg.length;i++) {
@@ -210,7 +210,7 @@ var MAssist = (function() {
 	function fakeMsg(msg) {
 		
 		// TODO: match DOM of an actual chat message.
-		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext']").append([
+		$("#centertabs-body div[id^='channeltab'] div[id^='channeltext']").append([
 			'<p>',
 				'<a onclick="UI.UserInfoDisplay(16212199,false, true);">',
 					'<font face="Palatino Linotype" color="#A62A2A" style="font-size:29px"><b>MFC Assistant</b></font>',
@@ -220,7 +220,7 @@ var MAssist = (function() {
 		].join(''));
 
 		// force the scroll down.
-		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext']")[0].scrollTop = $("#centertabs-body div[id$='channeltab'] div[id$='channeltext']")[0].scrollHeight;
+		$("#centertabs-body div[id^='channeltab'] div[id^='channeltext']")[0].scrollTop = $("#centertabs-body div[id^='channeltab'] div[id^='channeltext']")[0].scrollHeight;
 	}
 	
 	/**
@@ -233,7 +233,7 @@ var MAssist = (function() {
 			return;
 		}
 		
-		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext']").append([
+		$("#centertabs-body div[id^='channeltab'] div[id^='channeltext']").append([
 			'<p class="uid16212199 sid176065692">',
 			'<font face="Arial" color="#DC0000" style="font-size:34px">',
 			'<span style="display: inline; background-color: #FFFF00;">',
@@ -242,7 +242,7 @@ var MAssist = (function() {
 		].join(''));
 
 		// force the scroll down.
-		$("#centertabs-body div[id$='channeltab'] div[id$='channeltext']")[0].scrollTop = $("#centertabs-body div[id$='channeltab'] div[id$='channeltext']")[0].scrollHeight;
+		$("#centertabs-body div[id^='channeltab'] div[id^='channeltext']")[0].scrollTop = $("#centertabs-body div[id^='channeltab'] div[id^='channeltext']")[0].scrollHeight;
 		
 	}
 	
