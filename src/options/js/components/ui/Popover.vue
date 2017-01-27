@@ -42,13 +42,11 @@ export default {
 	methods: {
 		toggle: function() {
 			
-			var _self = this;
-			
 			if (!(this.show = !this.show)) { return }
 			setTimeout(() => {
 				
-				const popover = $(_self.$el)[0]
-				const trigger = $(_self.$el).next()[0]
+				const popover = $(this.$el)[0]
+				const trigger = $(this.$el).next()[0]
 				
 				switch (this.placement) {
 					case 'top' :

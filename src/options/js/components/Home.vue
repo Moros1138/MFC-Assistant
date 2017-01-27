@@ -31,6 +31,10 @@
 <p>Special thanks to <a href="https://www.twitter.com/KradekMFC">@KradekMFC</a> for his work on the MFC Assistant userscript which served as inspiration when I was in the early stages of developing this software. Plus he&#39;s just awesome!</p>
 <h2 id="version-history">Version History</h2>
 <ul>
+<li>1.0.15<ul>
+<li>Updated UI hooks.</li>
+</ul>
+</li>
 <li>1.0.14<ul>
 <li>Switched to Vue.js for components and page routing</li>
 <li>Added NumberInput component for form fields requiring numbers</li>

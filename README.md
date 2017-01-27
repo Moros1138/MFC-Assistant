@@ -35,6 +35,8 @@ This software is released under the MIT License, see LICENSE.md for full details
 Special thanks to [@KradekMFC](https://www.twitter.com/KradekMFC) for his work on the MFC Assistant userscript which served as inspiration when I was in the early stages of developing this software. Plus he's just awesome!
 
 ## Version History
+* 1.0.15
+  * Updated UI hooks.
 * 1.0.14
   * Switched to Vue.js for components and page routing
   * Added NumberInput component for form fields requiring numbers
