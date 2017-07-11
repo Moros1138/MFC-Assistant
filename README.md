@@ -1,3 +1,7 @@
+# No longer maintained!
+
+This repository is no longer being actively maintained. My motivation for developing this extension was because there was no free way for models to host games in their rooms. Myfreecams has since acquired CharlesBot and offered it to their models free of charge. If you can find for this code to be useful to you, you do so with my blessing as long as you abide by the MIT license this is released under.
+
 # Myfreecams Assistant
 
 The MFC Chat bot that puts you in charge of your room!
